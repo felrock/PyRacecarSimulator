@@ -24,6 +24,7 @@ class ScanSimulator2D:
         self.scan_std   = scan_std
         self.rt_e       = rt_e
         self.theta_disc = theta_disc
+        self.twopi      = math.pi * 2
 
         # the vars above should be ros params..
 
@@ -44,6 +45,17 @@ class ScanSimulator2D:
         self.omap = range_libc.PyOMap(map_msg)
 
     def scan(self, x, y, pose):
+
+        theta_index = self.theta_disc*(pose.theta - self.fov/2.0)/self.twopi
+        thetas = []
+        for _ in xrange(self.num_rays):
+
+            thetas.append(theta_index)
+
+            theta_index += self.theta_disc
+            # wrap around
+            while theta_index >= self.theta_disc:
+                theta_index -= self.theta_disc
 
         # create input vector
         # create output vector
