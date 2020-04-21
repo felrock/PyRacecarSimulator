@@ -5,7 +5,7 @@ class CarParams:
         This class is a container for parameters
     """
     def __init__(self, d):
-        self.w_b = d['wheelbase']
+        self.wb = d['wheelbase']
         self.f_c = d['friction_coeff']
         self.h_cg = d['height_cg']
         self.l_f = d['l_cg2front']

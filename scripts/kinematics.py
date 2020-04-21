@@ -3,6 +3,8 @@
 from car_config import *
 import math
 
+# Implementation based off of Single Track Dynamics defined in CommonRoad: Vehicle Models
+# https://gitlab.lrz.de/tum-cps/commonroad-vehicle-models/blob/master/vehicleModels_commonRoad.pdf
 
 def ST_update(start, accel, steer_ang_vel, p, dt):
     """
@@ -81,7 +83,7 @@ def ST_update_K(start, accel, steer_ang_vel, p, dt):
     x_dot = start.velocity * math.cos(start.theta)
     y_dot = start.velocity * math.sin(start.theta)
     v_dot = accel
-    steer_angle_dpt = steer_ang_vel # steer angle dot
+    steer_angle_dot = steer_ang_vel # steer angle dot
     theta_dot = start.velocity / p.wb * math.tan(start.steer_angle)
 
     theta_double_dot = (accel / p.wb * math.tan(start.steer_angle) +
@@ -101,6 +103,9 @@ def ST_update_K(start, accel, steer_ang_vel, p, dt):
             'st_dyn': False
         })
 
+
+# Implementation based off of Kinematic Single Track Dynamics defined in CommonRoad: Vehicle Models
+# https://gitlab.lrz.de/tum-cps/commonroad-vehicle-models/blob/master/vehicleModels_commonRoad.pdf
 
 def KS_update(start, accel, steer_ang_vel, p, dt):
     """
