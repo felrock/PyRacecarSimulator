@@ -85,80 +85,80 @@ class RacecarSimulator():
         print "Simulator constructed"
 
 
-        def update_pose(self):
-            self.compute_accel(self.desired_speed)
-            self.compute_steer_vel(self.desired_steer_ang)
+    def update_pose(self):
+        self.compute_accel(self.desired_speed)
+        self.compute_steer_vel(self.desired_steer_ang)
 
-            #update pose
-            self.state = kinematics.ST_update(
-                            self.state,
-                            self.accel,
-                            self.steer_ang_vel,
-                            self.params,
-                            0.001)# current-prev
-            self.state.velocity = set_bounded(self.state.velocity, self.max_speed)
-            self.state.steer_angle = set_bounded(self.state.steer_angle, self.max_steering_angle)
+        #update pose
+        self.state = kinematics.ST_update(
+                        self.state,
+                        self.accel,
+                        self.steer_ang_vel,
+                        self.params,
+                        0.001)# current-prev
+        self.state.velocity = set_bounded(self.state.velocity, self.max_speed)
+        self.state.steer_angle = set_bounded(self.state.steer_angle, self.max_steering_angle)
 
-            x = self.state.x + self.scan_distance_to_base_link * math.cos(self.state.theta)
-            y = self.state.y + self.scan_distance_to_base_link * math.sin(self.state.theta)
+        x = self.state.x + self.scan_distance_to_base_link * math.cos(self.state.theta)
+        y = self.state.y + self.scan_distance_to_base_link * math.sin(self.state.theta)
 
-            scan = self.scan_simulator.scan(x, y, self.state.theta)
+        scan = self.scan_simulator.scan(x, y, self.state.theta)
 
-            no_collision = True
+        no_collision = True
 
-            if(self.state.velocity != 0):
-                for( x in range(len(scan))):
-                    proj_velocity = self.state.velocity * self.cosines[x]
-                    ttc = (scan[x] - self.car_distances[x]) / proj_velocity
-                if((ttc < self.ttc_threshold) and (ttc >= 0.0)):
-                    if not(ttc):
-                        self.first_ttc_actions()
-                    no_collision = False
-                    self.TTC = True
+        if(self.state.velocity != 0):
+            for( x in range(len(scan))):
+                proj_velocity = self.state.velocity * self.cosines[x]
+                ttc = (scan[x] - self.car_distances[x]) / proj_velocity
+            if((ttc < self.ttc_threshold) and (ttc >= 0.0)):
+                if not(ttc):
+                    self.first_ttc_actions()
+                no_collision = False
+                self.TTC = True
 
-                    print("Collision detected")
+                print("Collision detected")
 
-            if(no_collision):
-                self.TTC = False
+        if(no_collision):
+            self.TTC = False
 
 
-        #SET FUNCTION
-        @static
-        def set_bounded(value, max_value):
-            return min(max(value, -max_value), max_value)
+    #SET FUNCTION
+    @static
+    def set_bounded(value, max_value):
+        return min(max(value, -max_value), max_value)
 
-        #HELPER FUNCTIONS
-        def compute_steer_vel(self, desired_angle):
-            dif = (desired_angle - self.state.steer_angle)
+    #HELPER FUNCTIONS
+    def compute_steer_vel(self, desired_angle):
+        dif = (desired_angle - self.state.steer_angle)
 
-            if(abs(dif) > 0.0001):
-                self.steer_angle_vel = set_bounded((dif / abs(dif) * self.max_steering_vel), self.max_steering_vel)
+        if(abs(dif) > 0.0001):
+            self.steer_angle_vel = set_bounded((dif / abs(dif) * self.max_steering_vel), self.max_steering_vel)
+        else:
+            self.steer_angle_vel = set_bounded(0, self.max_steering_vel)
+
+    def compute_accel(self, desired_velocity):
+        dif = desired_velocity - self.state.velocity
+
+        if(self.state.velocity > 0):
+            if(dif > 0):
+                kp = 2.0 * self.max_accel / self.max_speed
+                self.accel = set_bounded(kp*dif, self.max_accel)
             else:
-                self.steer_angle_vel = set_bounded(0, self.max_steering_vel)
-
-        def compute_accel(self, desired_velocity):
-            dif = desired_velocity - self.state.velocity
-
-            if(self.state.velocity > 0):
-                if(dif > 0):
-                    kp = 2.0 * self.max_accel / self.max_speed
-                    self.accel = set_bounded(kp*dif, self.max_accel)
-                else:
-                    accel = -self.max_decel #brake
+                accel = -self.max_decel #brake
+        else:
+            if (dif > 0):
+                accel = -self.max_decel #brake
             else:
-                if (dif > 0):
-                    accel = -self.max_decel #brake
-                else:
-                    kp = 2.0 * self.max_accel / self.max_speed
-                    self.accel = set_bounded(kp*dif, self.max_accel)
+                kp = 2.0 * self.max_accel / self.max_speed
+                self.accel = set_bounded(kp*dif, self.max_accel)
 
-        def first_ttc_actions(self):
-            #completely stop vehicle
-            self.state.velocity = 0.0
-            self.state.angular_velocity = 0.0
-            self.state.slip_angle = 0.0
-            self.state.steer_angle = 0.0
-            self.steer_angle_vel = 0.0
-            self.accel = 0.0
-            self.desired_speed = 0.0
-            self.desired_steer_ang = 0.0
+    def first_ttc_actions(self):
+        #completely stop vehicle
+        self.state.velocity = 0.0
+        self.state.angular_velocity = 0.0
+        self.state.slip_angle = 0.0
+        self.state.steer_angle = 0.0
+        self.steer_angle_vel = 0.0
+        self.accel = 0.0
+        self.desired_speed = 0.0
+        self.desired_steer_ang = 0.0
