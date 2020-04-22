@@ -47,6 +47,7 @@ class ScanSimulator2D:
         """
             Update current map
         """
+
         self.ros_map = ros_map
 
     def scan(self, x, y, theta):
