@@ -86,6 +86,20 @@ class RacecarSimulator():
 
         print "Simulator constructed"
 
+    def setState(state):
+        """
+            Set state to any previous state
+        """
+
+        self.state = state
+
+    def getState():
+        """
+            Maybe use this w/o deep copy
+        """
+
+        return copy.deepcopy(state)
+
     def drive(self, desired_speed, desired_steer_ang):
         """
             Update desired states
