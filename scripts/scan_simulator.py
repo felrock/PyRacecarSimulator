@@ -39,23 +39,15 @@ class ScanSimulator2D:
         # create ray marching object
         self.scan_method = range_libc.PyRayMarchingGPU(oMap, self.mrx)
 
+        # cache vectors to send to gpu
         self.output_vector = np.ones(self.num_rays)
+        self.input_vector = np.ones(self.num_rays*3).arrange(self.num_rays, 3)
 
-    def getMap(self):
+    def updateMap(self, ros_map):
         """
-            Read current map from ROS,
-            add dynamic map here aswell??
+            Update current map
         """
-
-        # this should not be here
-
-        map_service_name = rospy.get_param("~static_map", "static_map")
-        rospy.wait_for_server(map_service_name)
-        map_msg = rospy.ServiceProxy(map_service_name, GetMap)().map
-
-        self.map_info = map_msg.info
-        self.omap = range_libc.PyOMap(map_msg)
-        self.max_range_px = int(self.max_range_m / self.map_info.resolution)
+        self.ros_map = ros_map
 
     def scan(self, x, y, theta):
         """
