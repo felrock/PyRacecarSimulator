@@ -1,6 +1,6 @@
 #! /usr/bin/python2
 
-from car_config import *
+from car_config import CarState, CarParams
 import math
 
 # Implementation based off of Single Track Dynamics defined in CommonRoad: Vehicle Models
@@ -48,6 +48,7 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
         vel_ratio = start.angular_velocity / start.velocity
         first_term = p.f_c / (start.velocity * (p.l_r + p.l_f))
 
+    # use extra paranth for multi line
     theta_double_dot = ((p.f_c * p.mass / (p.I_z * p.wb)) *
                        (p.l_f * p.cs_f * start.steer_angle * (rear_val) +
                        start.slip_angle * (p.l_r * p.cs_r * (front_val) -
@@ -55,11 +56,11 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
                        p.cs_r * (front_val))))
 
     slip_angle_dot  = ((first_term) * (p.cs_f * start.steer_angle * (rear_val) -
-                      start.slip_angle * (p.cs_r * (front_val) + p.cs_f * p.l_f *
-                      (rear_val)) - vel_ratio * (math.pow(p.l_f, 2) * p.cs_f *
-                      (rear_val) + math.pow(p.l_r, 2) * p.cs_r * (front_val))))
+                      start.slip_angle * (p.cs_r * (front_val) + p.cs_f * (rear_val) +
+                      vel_ratio * (p.cs_r * p.cs_f * (front_val) - p.cs_f * p.l_r *
+                      (rear_val)))) - start.angular_velocity)
 
-    # return next state
+    # return computed state
     return CarState({
             'x': start.x + x_dot * dt,
             'y': start.y + y_dot * dt,
@@ -69,7 +70,7 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
             'angular_velocity': start.angular_velocity + theta_double_dot * dt,
             'slip_angle': start.slip_angle + slip_angle_dot * dt,
             'st_dyn': True
-        })
+    })
 
 
 def ST_update_K(start, accel, steer_ang_vel, p, dt):
@@ -80,6 +81,7 @@ def ST_update_K(start, accel, steer_ang_vel, p, dt):
         p - CarParams
         dt - time step
     """
+
     x_dot = start.velocity * math.cos(start.theta)
     y_dot = start.velocity * math.sin(start.theta)
     v_dot = accel
@@ -92,6 +94,7 @@ def ST_update_K(start, accel, steer_ang_vel, p, dt):
 
     slip_angle_dot = 0
 
+    # return computed state
     return CarState({
             'x': start.x + x_dot * dt,
             'y': start.y + y_dot * dt,
@@ -101,7 +104,7 @@ def ST_update_K(start, accel, steer_ang_vel, p, dt):
             'angular_velocity': 0, #start.angular_velocity + theta_double_dot * dt,
             'slip_angle': 0, #start.slip_angle + slip_angle_dot * dt,
             'st_dyn': False
-        })
+    })
 
 
 # Implementation based off of Kinematic Single Track Dynamics defined in CommonRoad: Vehicle Models
@@ -131,7 +134,7 @@ def KS_update(start, accel, steer_ang_vel, p, dt):
             'angular_velocity': start.angular_velocity,
             'slip_angle': start.slip_angle,
             'st_dyn': False
-        })
+    })
 
 
 if __name__ == '__main__':
