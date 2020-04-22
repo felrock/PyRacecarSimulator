@@ -45,6 +45,11 @@ class ScanSimulator2D:
         self.omap = range_libc.PyOMap(map_msg)
 
     def scan(self, x, y, pose):
+        """
+            TODO:
+                    Load map
+                    Test functionality
+        """
 
         theta_index = self.theta_disc*(pose.theta - self.fov/2.0)/self.twopi
         thetas = []
@@ -56,14 +61,14 @@ class ScanSimulator2D:
             # wrap around
             while theta_index >= self.theta_disc:
                 theta_index -= self.theta_disc
-
-        # create input vector
-        # create output vector
-
+        input_vector = map(thetas, lambda t:(x, y, t))
+        self.output_vector = np.ones(self.num_rays)
 
         # run ray marching
-        output = self.scan_method.numpy_calc_range((x, y, pose))
-        return output
+        self.scan_method.numpy_calc_range(input_vector, self.output_vector)
+
+
+        return self.output_vector
 
 
 if __name__ == '__main__':
