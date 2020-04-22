@@ -5,7 +5,9 @@ import numpy as np
 import edt
 
 """
-    Distance Transform
+    Distance Transform,
+
+    this is solved by range_libc
 """
 
 # some of these parameter maybe should be used
