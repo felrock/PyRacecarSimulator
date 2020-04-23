@@ -1,6 +1,7 @@
 import * from car_config
 import numpy as np
 import math
+import copy
 from scan_simulator import ScanSimulator2D
 import precompute
 import kinematics
@@ -122,7 +123,7 @@ class RacecarSimulator():
                         self.accel,
                         self.steer_ang_vel,
                         self.params,
-                        0.001)# current-prev
+                        0.001) # current-prev
         self.state.velocity = set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = set_bounded(self.state.steer_angle, self.max_steer_ang)
 
@@ -132,7 +133,6 @@ class RacecarSimulator():
         scan = self.scan_simulator.scan(x, y, self.state.theta)
 
         no_collision = True
-
         if self.state.velocity != 0:
             for i in xrange(len(scan)):
                 proj_velocity = self.state.velocity * self.cosines[i]
