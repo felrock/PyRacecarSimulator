@@ -8,12 +8,15 @@ import kinematics
 
 class RacecarSimulator():
 
-    def __init__(self, raw_map):
+    def __init__(self, config, params, ros_map, verbose=False):
+
+        self.verbose = verbose
 
         self.map_frame = "map"
         self.base_frame = "base_link"
         self.scan_frame = "laser"
 
+        # Init car state
         self.state = CarState({
             "x": 0,
             "y": 0,
@@ -24,68 +27,59 @@ class RacecarSimulator():
             "slip_angle": 0,
             "st_dyn": False
         })
-
-        self.scan_distance_to_base_link = 0.275
-        self.max_speed = 4.0
-        self.max_steer_ang = 0.4189
-        self.max_accel = 3.0
-        self.max_steer_vel = 5.0
-        self.max_decel = 20.0
         self.desired_speed = 0.0
         self.desired_steer_ang = 0.0
         self.accel = 0.0
         self.steer_ang_vel = 0.0
 
-        self.params = CarParams({
-            "wheelbase": 0.3302,
-            "friction_coeff": 1.0,
-            "height_cg": 0.08255,
-            "l_cg2front": 0.15875,
-            "l_cg2rear": 0.17145,
-            "C_S_front": 2.3,
-            "C_S_rear": 2.3,
-            "mass": 3.17,
-            "moment_inertia": .0398378
-        })
-        self.width = 0.2032
+        self.scan_dist_to_base = config["scan_dist_to_base"]
+        self.max_speed = config["max_speed"]
+        self.max_accel = config["max_accel"]
+        self.max_steer_ang = config["max_steer_ang"]
+        self.max_steer_vel = config["max_steer_vel"]
+        self.max_decel = config["max_decel"]
 
-        self.update_pose_rate = 0.001
-        self.scan_beams = 1081
-        self.scan_fov =  4.71 #6.2831853 # radians
-        self.scan_std_dev = 0.01
+        self.width = config["width"]
+
+        self.scan_beams = config["scan_beams"]
+        self.scan_fov =  config["scan_fov"] #4.71 #6.2831853 # radians
+        self.scan_std = config["scan_std"]
+
+        self.free_thresh = config["free_thresh"]
+        self.ttc_thresh = config["ttc_thresh"]
+
+        self.params = params
+
         self.scan_simulator = ScanSimulator2D(
                                 scan_beams,
                                 scan_fov,
                                 scan_std_dev)
-        self.map_free_threshold = 0.8
 
 
         #Safety margins for collision
         self.TTC = False
-        self.ttc_threshold = 0.01
+
         #precompute cosines of scan angles
-        self.PI = 3.14159
         self.scan_ang_incr = self.scan_fov/(self.scan_beams-1)
         self.cosines = precompute.get_cosines(
                             self.scan_beams,
                             -self.scan_fov/2.0,
                             self.scan_ang_incr)
+
         self.car_distances = precompute.get_car_distances(
                                 self.scan_beams, self.params.wb, self.width,
                                 self.scan_distance_to_base_link,
                                 -self.scan_fov/2.0, self.scan_ang_incr)
 
-        self.original_map = raw_map.map
-        self.current_map = raw_map.map
-
         #For obstacle collision
-        self.map_width = raw_map.width
-        self.map_height = raw_map.height
-        self.map_resolution = raw_map.resolution
-        self.origin_x = raw_map.origin_x
-        self.origin_y = raw_map.origin_y
+        self.map_width = ros_map.width
+        self.map_height = ros_map.height
+        self.map_resolution = ros_map.resolution
+        self.origin_x = ros_map.origin_x
+        self.origin_y = ros_map.origin_y
 
-        print "Simulator constructed"
+        if self.verbose:
+            print "Simulator constructed"
 
     def setState(state):
         """
@@ -109,7 +103,7 @@ class RacecarSimulator():
         self.desired_speed = desired_speed
         self.desired_steer_ang = desired_steer_ang
 
-    def update_pose(self):
+    def update_pose(self, dt=0.001):
         """
             Make one step in the simulation
         """
@@ -123,7 +117,7 @@ class RacecarSimulator():
                         self.accel,
                         self.steer_ang_vel,
                         self.params,
-                        0.001) # current-prev
+                        dt) # current-prev
         self.state.velocity = set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = set_bounded(self.state.steer_angle, self.max_steer_ang)
 
@@ -138,14 +132,14 @@ class RacecarSimulator():
                 proj_velocity = self.state.velocity * self.cosines[i]
                 ttc = (scan[i] - self.car_distances[i]) / proj_velocity
 
-            if ttc < self.ttc_threshold and ttc >= 0.0:
-                if not ttc:
-                    self.stop_car()
+                if ttc < self.ttc_threshold and ttc >= 0.0:
+                    if not ttc:
+                        self.stop_car()
 
-                no_collision = False
-                self.TTC = True
+                    no_collision = False
+                    self.TTC = True
 
-                print "Collision detected"
+                    print "Collision detected"
 
         if no_collision:
             self.TTC = False
