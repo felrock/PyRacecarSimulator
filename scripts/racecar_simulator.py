@@ -123,14 +123,18 @@ class RacecarSimulator():
                         self.steer_ang_vel,
                         self.params,
                         dt) # current-prev
+        # update with bounded values
         self.state.velocity = set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = set_bounded(self.state.steer_angle, self.max_steer_ang)
 
-        x = self.state.x + self.scan_distance_to_base_link * math.cos(self.state.theta)
-        y = self.state.y + self.scan_distance_to_base_link * math.sin(self.state.theta)
+        # update position
+        x = self.state.x + self.scan_dist_to_base * math.cos(self.state.theta)
+        y = self.state.y + self.scan_dist_to_base * math.sin(self.state.theta)
 
+        # run a scan from the new position
         scan = self.scan_simulator.scan(x, y, self.state.theta)
 
+        # check for collision, maybe this should be here?
         no_collision = True
         if self.state.velocity != 0:
             for i in xrange(len(scan)):

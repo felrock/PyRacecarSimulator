@@ -1,9 +1,11 @@
 import rospy
-from car_config import CarParams
+
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import PoseStamped, PointStamped
-from nav_msgs.msg import Odometry, OccupancyGrid
+from nav_msgs.msg import Odometry, OccupancyGrid, GetMap
+from std_msgs.msg import String, Header, Float32MultiArray
 
+from car_config import CarParams
 
 class RunSimulationViz:
 
@@ -72,19 +74,19 @@ class RunSimulationViz:
         self.pose_rviz_sub = rospy.Subscriber(self.pose_rviz_topic, self.poseRvizCallback)
         #self.obs_sub = rospy.Subscriber("/clicked_point", self.obsCallback)
 
-        # create map stuff
+        # read map
         map_service_name = rospy.get_param("~static_map", "static_map")
         rospy.wait_for_service(map_service_name)
-        map_msg = rospy.ServiceProxy(map_service_name, GetMap)().map
-        self.map_info = map_msg.info
+        ros_map = rospy.ServiceProxy(map_service_name, GetMap)().map.data
+        self.car_config["resoltion"] = map_msg.info.resolution
 
         # racecar object
-
+        self.rcs = RacecarSimulator(config, params, ros_map)
 
         rospy.INFO("Driver constructed.")
 
     def updatePoseCallback(self):
-        pass
+        self.rcs.update()
 
     def obsCallback(self):
         pass
