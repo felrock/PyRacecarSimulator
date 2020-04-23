@@ -38,7 +38,8 @@ class RunSimulationViz:
             "steer_ang_vel": rospy.get_param("steer_ang_vel"),
             "col_thresh": rospy.get_param("coll_threshold"),
             "ttc_threshold": rospy.get_param("ttc_threshold"),
-            "width": rospy.get_param("width")
+            "width": rospy.get_param("width"),
+            "scan_max_range": rospy.get_param("scan_max_range")
         }
 
         self.car_param = CarParams({

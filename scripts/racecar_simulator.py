@@ -44,6 +44,7 @@ class RacecarSimulator():
         self.scan_beams = config["scan_beams"]
         self.scan_fov =  config["scan_fov"] #4.71 #6.2831853 # radians
         self.scan_std = config["scan_std"]
+        self.scan_max_range = config["scan_max_range"]
 
         self.free_thresh = config["free_thresh"]
         self.ttc_thresh = config["ttc_thresh"]
@@ -51,9 +52,13 @@ class RacecarSimulator():
         self.params = params
 
         self.scan_simulator = ScanSimulator2D(
-                                scan_beams,
-                                scan_fov,
-                                scan_std_dev)
+                                self.scan_beams,
+                                self.scan_fov,
+                                self.scan_std,
+                                ros_map, # map from service proxy
+                                config["resolution"],
+                                config["scan_max_range"],
+                                )
 
 
         #Safety margins for collision

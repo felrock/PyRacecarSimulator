@@ -33,6 +33,9 @@ scan_std_dev: 0.01 # meters
 # rear axis (base_link) to the lidar
 scan_dist_to_base: 0.275 # meters
 
+# maximum range of the lidar
+scan_max_range: 15.0
+
 # The probability threshold for points
 # in the occupancy grid to be considered "free".
 # Used for the lidar simulator.
