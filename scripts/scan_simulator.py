@@ -9,7 +9,7 @@ import random
 
 class ScanSimulator2D:
 
-    def __init__(self, num_rays, fov, scan_std, theta_disc, ros_map, res, max_range_m):
+    def __init__(self, num_rays, fov, scan_std, ros_map, res, theta_disc=2000):
         """
             num_rays    - Number of beams for the simulated LiDAR.
             fov         - Field of view
