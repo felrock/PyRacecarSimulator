@@ -1,4 +1,4 @@
-import * from car_config
+from car_config import CarState, CarParams
 import numpy as np
 import math
 import copy
@@ -52,12 +52,12 @@ class RacecarSimulator():
         self.params = params
 
         self.scan_simulator = ScanSimulator2D(
-                                self.scan_beams,
-                                self.scan_fov,
-                                self.scan_std,
-                                ros_map, # map from service proxy
-                                config["resolution"],
-                                config["scan_max_range"],
+                                    self.scan_beams,
+                                    self.scan_fov,
+                                    self.scan_std,
+                                    ros_map, # map from service proxy
+                                    config["resolution"],
+                                    config["scan_max_range"],
                                 )
 
 
@@ -83,6 +83,8 @@ class RacecarSimulator():
         self.origin_x = ros_map.origin_x
         self.origin_y = ros_map.origin_y
 
+        self.scan = None
+
         if self.verbose:
             print "Simulator constructed"
 
@@ -99,6 +101,12 @@ class RacecarSimulator():
         """
 
         return copy.deepcopy(state)
+
+    def getScan(self):
+        """
+            get the 2d lidar scan of the most resent update
+        """
+        return self.scan
 
     def drive(self, desired_speed, desired_steer_ang):
         """
@@ -132,14 +140,14 @@ class RacecarSimulator():
         y = self.state.y + self.scan_dist_to_base * math.sin(self.state.theta)
 
         # run a scan from the new position
-        scan = self.scan_simulator.scan(x, y, self.state.theta)
+        self.scan = self.scan_simulator.scan(x, y, self.state.theta)
 
         # check for collision, maybe this should be here?
         no_collision = True
         if self.state.velocity != 0:
-            for i in xrange(len(scan)):
+            for i in xrange(len(self.scan)):
                 proj_velocity = self.state.velocity * self.cosines[i]
-                ttc = (scan[i] - self.car_distances[i]) / proj_velocity
+                ttc = (self.scan[i] - self.car_distances[i]) / proj_velocity
 
                 if ttc < self.ttc_threshold and ttc >= 0.0:
                     if not ttc:
