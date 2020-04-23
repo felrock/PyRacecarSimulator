@@ -86,7 +86,11 @@ class RunSimulationViz:
         rospy.INFO("Driver constructed.")
 
     def updatePoseCallback(self):
+
+        # update simulation
         self.rcs.update()
+
+        # publish lidar
 
     def obsCallback(self):
         pass
