@@ -59,9 +59,7 @@ class RacecarSimulator():
                                     config["resolution"],
                                     config["scan_max_range"],
                                 )
-
-
-        #Safety margins for collision
+        #Safety margins for collision, time to collision
         self.TTC = False
 
         #precompute cosines of scan angles
@@ -132,8 +130,8 @@ class RacecarSimulator():
                         self.params,
                         dt) # current-prev
         # update with bounded values
-        self.state.velocity = set_bounded(self.state.velocity, self.max_speed)
-        self.state.steer_angle = set_bounded(self.state.steer_angle, self.max_steer_ang)
+        self.state.velocity = self.set_bounded(self.state.velocity, self.max_speed)
+        self.state.steer_angle = self.set_bounded(self.state.steer_angle, self.max_steer_ang)
 
         # update position
         x = self.state.x + self.scan_dist_to_base * math.cos(self.state.theta)
@@ -150,19 +148,18 @@ class RacecarSimulator():
                 ttc = (self.scan[i] - self.car_distances[i]) / proj_velocity
 
                 if ttc < self.ttc_threshold and ttc >= 0.0:
-                    if not ttc:
+                    if not self.TTC:
                         self.stop_car()
 
                     no_collision = False
                     self.TTC = True
 
-                    print "Collision detected"
+                    if self.verbose:
+                        print "Collision detected"
 
         if no_collision:
             self.TTC = False
 
-
-    @static
     def set_bounded(value, max_value):
         """
             Will bound value between (-max_value, max_value)
@@ -178,11 +175,11 @@ class RacecarSimulator():
         dif = desired_angle - self.state.steer_angle
         # bounded value if it is a significant difference
         if abs(dif) > 0.0001:
-            return set_bounded(dif / abs(dif) * self.max_steer_vel,
+            return self.set_bounded(dif / abs(dif) * self.max_steer_vel,
                                self.max_steer_vel)
 
         else:
-            return set_bounded(0, self.max_steer_vel)
+            return self.set_bounded(0, self.max_steer_vel)
 
     def compute_accel(self, desired_velocity):
         """
@@ -194,10 +191,10 @@ class RacecarSimulator():
         if self.state.velocity > 0:
             if dif > 0:
                 kp = 2.0 * self.max_accel / self.max_speed
-                return set_bounded(kp*dif, self.max_accel)
+                return self.set_bounded(kp*dif, self.max_accel)
 
             else:
-                return = -self.max_decel #brake
+                return -self.max_decel #brake
 
         else:
             if dif > 0:
@@ -205,7 +202,7 @@ class RacecarSimulator():
 
             else:
                 kp = 2.0 * self.max_accel / self.max_speed
-                return set_bounded(kp*dif, self.max_accel)
+                return self.set_bounded(kp*dif, self.max_accel)
 
     def stop_car(self):
         """
