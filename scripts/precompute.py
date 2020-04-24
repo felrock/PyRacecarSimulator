@@ -5,13 +5,14 @@ def get_car_distances(scan_beams, wheelbase, width, scan_dist_to_base, angle_min
     """
         Precompute distances from lidar to the edge of the car
     """
-    distances = list(scan_beams)
+
+    distances = [0]*scan_beams
     d_s = width/2.0 # distance sides
     d_f = wheelbase - scan_dist_to_base # distance front
     d_b = scan_dist_to_base # distance back
     pi = math.pi
 
-    for i in range(scan_beams):
+    for i in xrange(scan_beams):
         ang = angle_min + i*scan_ang_inc
 
         if ang > 0:
@@ -28,14 +29,15 @@ def get_car_distances(scan_beams, wheelbase, width, scan_dist_to_base, angle_min
     # return as an numpy array
     return np.array(distances)
 
-def get_cosines(scan_beams, angle_min, scan_ang_inc):
+def get_cosines(num_rays, angle_min, scan_ang_inc):
     """
         Pre-compute lidar angles
     """
-    cosines = list(scan_beams)
 
-    for i in range(scan_beams):
-        scan_beams[i] = math.cos(angle_min + i*scan_ang_inc)
+    cosines = [0]*num_rays
+
+    for i in xrange(num_rays):
+        cosines[i] = math.cos(angle_min + i*scan_ang_inc)
 
     return np.array(cosines)
 

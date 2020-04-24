@@ -9,7 +9,7 @@ max_speed: 4. #  meters/second
 max_steer_ang: 0.4189 # radians
 max_accel: 3. # meters/second^2
 max_decel: 20 # meters/second^2
-max_steer_vel: 5.0 # radians/second
+max_steer_vel: 3.2 # radians/second
 friction_coeff: 1. # - (complete estimate)
 height_cg: 0.08255 # m (roughly measured to be 3.25 in)
 l_cg2rear: 0.17145 # m (decently measured to be 6.75 in)
@@ -27,7 +27,7 @@ scan_beams: 1080
 scan_fov: 6.2831853 #4.71 # radians
 # The standard deviation of the noise applied
 # to the lidar simulation
-scan_std_dev: 0.01 # meters
+scan_std: 0.01 # meters
 
 # The distance from the center of the
 # rear axis (base_link) to the lidar
@@ -117,3 +117,6 @@ scan_frame: "laser"
 
 # Turn this off for mapping
 broadcast_transform: true
+
+buffer_length: 10
+speed_clip_diff: 0.5

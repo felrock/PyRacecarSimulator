@@ -71,34 +71,34 @@ class RacecarSimulator():
 
         self.car_distances = precompute.get_car_distances(
                                 self.scan_beams, self.params.wb, self.width,
-                                self.scan_distance_to_base_link,
+                                self.scan_dist_to_base,
                                 -self.scan_fov/2.0, self.scan_ang_incr)
 
         #For obstacle collision
-        self.map_width = ros_map.width
-        self.map_height = ros_map.height
-        self.map_resolution = ros_map.resolution
-        self.origin_x = ros_map.origin_x
-        self.origin_y = ros_map.origin_y
+        #self.map_width = ros_map.width
+        #self.map_height = ros_map.height
+        #self.map_resolution = ros_map.resolution
+        #self.origin_x = ros_map.origin_x
+        #self.origin_y = ros_map.origin_y
 
         self.scan = None
 
         if self.verbose:
             print "Simulator constructed"
 
-    def setState(state):
+    def setState(self, state):
         """
             Set state to any previous state
         """
 
         self.state = state
 
-    def getState():
+    def getState(self):
         """
             Maybe use this w/o deep copy
         """
 
-        return copy.deepcopy(state)
+        return self.state
 
     def getScan(self):
         """
@@ -114,7 +114,7 @@ class RacecarSimulator():
         self.desired_speed = desired_speed
         self.desired_steer_ang = desired_steer_ang
 
-    def update_pose(self, dt=0.001):
+    def updatePose(self, dt=0.001):
         """
             Make one step in the simulation
         """
@@ -147,7 +147,7 @@ class RacecarSimulator():
                 proj_velocity = self.state.velocity * self.cosines[i]
                 ttc = (self.scan[i] - self.car_distances[i]) / proj_velocity
 
-                if ttc < self.ttc_threshold and ttc >= 0.0:
+                if ttc < self.ttc_thresh and ttc >= 0.0:
                     if not self.TTC:
                         self.stop_car()
 
@@ -159,8 +159,7 @@ class RacecarSimulator():
 
         if no_collision:
             self.TTC = False
-
-    def set_bounded(value, max_value):
+    def set_bounded(self, value, max_value):
         """
             Will bound value between (-max_value, max_value)
         """

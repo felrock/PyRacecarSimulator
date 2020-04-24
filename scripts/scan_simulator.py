@@ -9,7 +9,7 @@ import random
 
 class ScanSimulator2D:
 
-    def __init__(self, num_rays, fov, scan_std, ros_map, res, theta_disc=2000):
+    def __init__(self, num_rays, fov, scan_std, ros_map, res, scan_max_range, theta_disc=2000):
         """
             num_rays    - Number of beams for the simulated LiDAR.
             fov         - Field of view
@@ -26,22 +26,23 @@ class ScanSimulator2D:
         self.scan_std = scan_std
         self.theta_disc = theta_disc
         self.ros_map = ros_map
-        self.max_range_m = max_range_m
-        self.res = resolution
+        self.scan_max_range = scan_max_range
+        self.res = res
 
         # often used
         self.twopi = math.pi * 2
 
         # create map object
         self.omap = range_libc.PyOMap(ros_map)
-        self.mrx = int(self.max_range_m / self.res)
+        self.mrx = int(self.scan_max_range / self.res)
 
         # create ray marching object
-        self.scan_method = range_libc.PyRayMarchingGPU(oMap, self.mrx)
+        self.scan_method = range_libc.PyCDDTCast(self.omap, self.mrx, theta_disc)
+        #self.scan_method = range_libc.PyRayMarching(self.omap, self.mrx)
 
         # cache vectors to send to gpu
-        self.output_vector = np.ones(self.num_rays)
-        self.input_vector = np.ones(self.num_rays*3).arrange(self.num_rays, 3)
+        self.output_vector = np.ones(self.num_rays, dtype=np.float32)
+        self.input_vector = np.reshape(np.ones(self.num_rays*3), (self.num_rays, 3))
 
     def updateMap(self, ros_map):
         """
@@ -69,12 +70,11 @@ class ScanSimulator2D:
                 theta_index -= self.theta_disc
 
         # create numpy array
-        input_vector = np.array(map(thetas, lambda t:(x, y, t)))
+        input_vector = np.array(map(lambda t:(x, y, t), thetas), dtype=np.float32)
 
         # run ray marching
-        self.scan_method.numpy_calc_range(input_vector,
-                                          self.output_vector,
-                                          num_rays)
+        self.scan_method.calc_range_many(input_vector,
+                                         self.output_vector)
 
         # add some noise to the output
         self.output_vector = np.random.normal(self.output_vector,
