@@ -1,6 +1,8 @@
 import rospy
-import tf2_ros
 import numpy as np
+
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
+from tf2_ros import TransformBroadcaster
 
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import PoseStamped, PointStamped, Quarternion, Transform, TransformStamped
@@ -89,7 +91,7 @@ class RunSimulationViz:
         self.rcs = RacecarSimulator(self.car_config, self.car_param, map_msg.data)
 
         # transform broadcaster
-        self.br = tf2_ros.TransformBroadcaster()
+        self.br = TransformBroadcaster()
 
         rospy.INFO("Driver constructed.")
 
@@ -139,7 +141,8 @@ class RunSimulationViz:
                            msg.pose.orientation.y,
                            msg.pose.orientation.z,
                            msg.pose.orientation.w)
-        state.theta = tf2_ros.impl.getYaw(quat)
+        # yaw
+        state.theta = euler_from_quaternion(quat)[2]
 
         self.rcs.setState(state)
 
@@ -157,7 +160,7 @@ class RunSimulationViz:
             Map is changed, pass new map 2d-scanner
         """
 
-        height = msg.info.height
+        height = msg.info.heigh
         width = msg.info.width
         resolution = msg.info.resolution
 
@@ -168,7 +171,7 @@ class RunSimulationViz:
 
         origin = (msg.info.origin.position.x,
                   msg.info.origin.position.y,
-                  tf2_ros.impl.getYaw(quat))
+                  euler_from_quaternion(quat)[2]) # yaw
         ros_map = np.array(msg.data)
 
         # prob done a faster way
@@ -192,22 +195,21 @@ class RunSimulationViz:
         pt_msg = Transform()
         pt_msg.translation.x = state.x
         pt_msg.translation.y = state.y
-        quat = Quarternion()
-        quat.setEuler(0.0, 0.0, state.theta)
-        pt_msg.rotation.x = quat.x()
-        pt_msg.rotation.y = quat.y()
-        pt_msg.rotation.z = quat.z()
-        pt_msg.rotation.w = quat.w()
+        quat = quaternion_from_euler(0.0, 0.0, state.theta)
+        pt_msg.rotation.x = quat.x
+        pt_msg.rotation.y = quat.y
+        pt_msg.rotation.z = quat.z
+        pt_msg.rotation.w = quat.w
 
         # ground truth
         ps = PoseStamped()
         ps.header.frame_id = self.map_topic
         ps.pose.position.x = state.x
         ps.pose.position.y = state.y
-        ps.pose.orientation.x = quat.x()
-        ps.pose.orientation.y = quat.y()
-        ps.pose.orientation.z = quat.z()
-        ps.pose.orientation.w = quat.w()
+        ps.pose.orientation.x = quat.x
+        ps.pose.orientation.y = quat.y
+        ps.pose.orientation.z = quat.z
+        ps.pose.orientation.w = quat.w
 
         # add a header
         ts = TranformedStamped()
@@ -232,12 +234,11 @@ class RunSimulationViz:
         ts_msg = TransformStamped()
         ts_msg.header.stamp = timestamp
 
-        quat = Quarternion()
-        quat.setEuler(0.0, 0.0, state.theta)
-        ts_msg.rotation.x = quat.x()
-        ts_msg.rotation.y = quat.y()
-        ts_msg.rotation.z = quat.z()
-        ts_msg.rotation.w = quat.w()
+        quat = quaternion_from_euler(0.0, 0.0, state.theta)
+        ts_msg.rotation.x = quat.x
+        ts_msg.rotation.y = quat.y
+        ts_msg.rotation.z = quat.z
+        ts_msg.rotation.w = quat.w
 
         # publish for right and left steering
         ts_msg.header.frame_id = "front_left_hinge"
@@ -273,12 +274,11 @@ class RunSimulationViz:
         od_msg.header.stamp = timestamp
         od_msg.header.frame_id = self.map_frame
         od_msg.child_frame_id = self.base_frame
-        quat = Quarternion()
-        quat.setEuler(0.0, 0.0, state.theta)
-        od_msg.pose.pose.orientation.x = quat.x()
-        od_msg.pose.pose.orientation.y = quat.y()
-        od_msg.pose.pose.orientation.z = quat.z()
-        od_msg.pose.pose.orientation.w = quat.w()
+        quat = quaternion_from_euler(0.0, 0.0, state.theta)
+        od_msg.pose.pose.orientation.x = quat.x
+        od_msg.pose.pose.orientation.y = quat.y
+        od_msg.pose.pose.orientation.z = quat.z
+        od_msg.pose.pose.orientation.w = quat.w
         od_msg.pose.pose.position.x = state.x
         od_msg.pose.pose.position.y = state.y
         od_msg.twist.twist.linear.x = state.velocity
@@ -304,6 +304,10 @@ class RunSimulationViz:
         self.scan_pub.publish(scan_msg)
 
 def run():
+    """
+        Main func
+    """
+
     rospy.init_node('RunSimulationViz', anonymous=True)
     RunSimulationViz()
     rospy.sleep(0.1)
