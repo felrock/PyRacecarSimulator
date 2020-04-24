@@ -5,9 +5,10 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from tf2_ros import TransformBroadcaster
 
 from sensor_msgs.msg import LaserScan
-from geometry_msgs.msg import PoseStamped, PointStamped, Quarternion, Transform, TransformStamped
+from geometry_msgs.msg import PoseStamped, PointStamped, Quaternion, Transform, TransformStamped
 from nav_msgs.msg import Odometry, OccupancyGrid, GetMap
 from std_msgs.msg import String, Header, Float32MultiArray
+from nav_msgs.srv import GetMap
 
 from car_config import CarParams
 from racecar_simulator import RacecarSimulator
@@ -84,7 +85,7 @@ class RunSimulationViz:
         # read map
         map_service_name = rospy.get_param("~static_map", "static_map")
         rospy.wait_for_service(map_service_name)
-        map_msg = rospy.ServiceProxy(map_service_name, GetMap)().map
+        map_msg = rospy.ServiceProxy(map_service_name, OccupancyGrid)().map
         self.car_config["resoltion"] = map_msg.info.resolution
 
         # racecar object
@@ -137,7 +138,7 @@ class RunSimulationViz:
         state = self.rcs.getState()
         state.x = msg.pose.position.x
         state.y = msg.pose.position.y
-        quat = Quarternion(msg.pose.orientation.x,
+        quat = Quaternion(msg.pose.orientation.x,
                            msg.pose.orientation.y,
                            msg.pose.orientation.z,
                            msg.pose.orientation.w)
@@ -164,7 +165,7 @@ class RunSimulationViz:
         width = msg.info.width
         resolution = msg.info.resolution
 
-        quat = Quarternion(msg.info.origin.orientation.x,
+        quat = Quaternion(msg.info.origin.orientation.x,
                            msg.info.origin.orientation.y,
                            msg.info.origin.orientation.z,
                            msg.info.origin.orientation.w)
