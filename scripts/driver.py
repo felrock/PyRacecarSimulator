@@ -1,3 +1,4 @@
+#! /usr/bin/python
 import rospy
 import numpy as np
 
@@ -6,9 +7,8 @@ from tf2_ros import TransformBroadcaster
 
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import PoseStamped, PointStamped, Quaternion, Transform, TransformStamped
-from nav_msgs.msg import Odometry, OccupancyGrid, GetMap
+from nav_msgs.msg import Odometry, OccupancyGrid
 from std_msgs.msg import String, Header, Float32MultiArray
-from nav_msgs.srv import GetMap
 
 from car_config import CarParams
 from racecar_simulator import RacecarSimulator
@@ -20,7 +20,7 @@ class RunSimulationViz:
         self.vizualize = vizualize
 
         # topics
-        self.drive_topic = rospy.get_param("drive_topic")
+        self.drive_topic = rospy.get_param("~drive_topic")
         self.map_topic = rospy.get_param("map_topic")
         self.scan_topic = rospy.get_param("scan_topic")
         self.pose_topic = rospy.get_param("pose_topic")

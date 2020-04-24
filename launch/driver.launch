@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Launch the racecar model -->
+  <include file="$(find PyRacecarSimulator)/launch/racecar_model.launch"/>
+
+  <!-- Launch a map from the maps folder-->
+  <arg name="map" default="$(find PyRacecarSimulator)/maps/map.yaml"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map)"/>
+
+  <!-- Begin the simulator with the parameters from params.yaml -->
+  <node pkg="PyRacecarSimulator" name="PyRacecarSimulator" type="driver" output="screen">
+    <rosparam command="load" file="$(find PyRacecarSimulator)/params.yaml"/>
+  </node>
+
+  <!-- Launch RVIZ -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find PyRacecarSimulator)/launch/simulator.rviz" output="screen"/>
+</launch>
