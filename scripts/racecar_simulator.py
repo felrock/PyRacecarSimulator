@@ -8,7 +8,7 @@ import kinematics
 
 class RacecarSimulator():
 
-    def __init__(self, config, params, ros_map, verbose=False):
+    def __init__(self, config, params, verbose=False):
 
         self.verbose = verbose
 
@@ -54,11 +54,7 @@ class RacecarSimulator():
         self.scan_simulator = ScanSimulator2D(
                                     self.scan_beams,
                                     self.scan_fov,
-                                    self.scan_std,
-                                    ros_map, # map from service proxy
-                                    config["resolution"],
-                                    config["scan_max_range"],
-                                )
+                                    self.scan_std)
         #Safety margins for collision, time to collision
         self.TTC = False
 
@@ -73,13 +69,6 @@ class RacecarSimulator():
                                 self.scan_beams, self.params.wb, self.width,
                                 self.scan_dist_to_base,
                                 -self.scan_fov/2.0, self.scan_ang_incr)
-
-        #For obstacle collision
-        #self.map_width = ros_map.width
-        #self.map_height = ros_map.height
-        #self.map_resolution = ros_map.resolution
-        #self.origin_x = ros_map.origin_x
-        #self.origin_y = ros_map.origin_y
 
         self.scan = None
 
@@ -104,7 +93,14 @@ class RacecarSimulator():
         """
             get the 2d lidar scan of the most resent update
         """
+
         return self.scan
+
+    def runScan(self):
+        """
+
+        """
+        self.scan = self.scan_simulator.scan(self.state.x, self.state.y, self.state.theta)
 
     def drive(self, desired_speed, desired_steer_ang):
         """
@@ -129,18 +125,17 @@ class RacecarSimulator():
                         self.steer_ang_vel,
                         self.params,
                         dt) # current-prev
+
         # update with bounded values
         self.state.velocity = self.set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = self.set_bounded(self.state.steer_angle, self.max_steer_ang)
 
-        # update position
-        x = self.state.x + self.scan_dist_to_base * math.cos(self.state.theta)
-        y = self.state.y + self.scan_dist_to_base * math.sin(self.state.theta)
 
-        # run a scan from the new position
-        self.scan = self.scan_simulator.scan(x, y, self.state.theta)
+    def checkCollision(self):
+        """
 
-        # check for collision, maybe this should be here?
+        """
+
         no_collision = True
         if self.state.velocity != 0:
             for i in xrange(len(self.scan)):
@@ -159,6 +154,7 @@ class RacecarSimulator():
 
         if no_collision:
             self.TTC = False
+
     def set_bounded(self, value, max_value):
         """
             Will bound value between (-max_value, max_value)
@@ -216,3 +212,23 @@ class RacecarSimulator():
         self.accel = 0.0
         self.desired_speed = 0.0
         self.desired_steer_ang = 0.0
+
+    def setMap(self, ros_map, resolution, origin):
+        """
+            Pass map along to Scan simulator
+        """
+
+        # map, max range in pixels, origin
+        max_range_px = int(self.scan_max_range/resolution)
+
+        self.scan_simulator.setMap(ros_map, max_range_px, resolution, origin)
+
+    def setRaytracingMethod(self, method="CDDT"):
+        """
+            Pass ray-tracing method to Scan simulator
+        """
+
+        self.scan_simulator.setRaytracingMethod(method)
+
+if __name__ == '__main__':
+    pass
