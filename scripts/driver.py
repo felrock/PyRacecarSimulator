@@ -56,7 +56,8 @@ class RunSimulationViz:
             #"col_thresh": rospy.get_param("~coll_threshold"),
             "ttc_thresh": rospy.get_param("~ttc_thresh"),
             "width": rospy.get_param("~width"),
-            "scan_max_range": rospy.get_param("~scan_max_range")
+            "scan_max_range": rospy.get_param("~scan_max_range"),
+            "update_pose_rate": self.update_pose_rate
         }
 
         self.car_param = CarParams({
@@ -106,7 +107,7 @@ class RunSimulationViz:
 
         # subscribers
         self.update_simulation = rospy.Timer(rospy.Duration(self.update_pose_rate), self.updateSimulationCallback)
-        self.drive_sub = rospy.Subscriber(self.drive_topic, AckermannDriveStamped, self.driveCallback)
+        self.drive_sub = rospy.Subscriber(self.drive_topic, AckermannDriveStamped, self.driveCallback, queue_size=1)
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
         self.pose_sub = rospy.Subscriber(self.pose_topic, PoseStamped, self.poseCallback)
         self.pose_rviz_sub = rospy.Subscriber(self.pose_rviz_topic, PoseWithCovarianceStamped,  self.poseRvizCallback)
@@ -120,15 +121,11 @@ class RunSimulationViz:
             Updates simulatio one step
         """
 
-        if self.verbose:
-            print "updateSimulationCallback"
-
         # create timestamp
         timestamp = rospy.get_rostime()
 
         # update simulation
         self.rcs.updatePose()
-
 
         # pub pose as transform
         self.poseTransformPub(timestamp)
@@ -148,6 +145,7 @@ class RunSimulationViz:
         t2 = rospy.get_time()
         if self.verbose:
             print "TIME TO SCAN IS %f" % (t2-t1)
+            pass
 
         # publish lidar
         self.lidarPub(timestamp)
@@ -163,6 +161,7 @@ class RunSimulationViz:
         """
         if self.verbose:
             print "driveCallback, speed %f, steering %f" %(msg.drive.speed, msg.drive.steering_angle)
+
         self.rcs.drive(msg.drive.speed, msg.drive.steering_angle)
 
 
@@ -185,9 +184,6 @@ class RunSimulationViz:
 
         self.rcs.setState(state)
 
-        if self.verbose:
-            print "[+] pose updated callback"
-
 
     def poseRvizCallback(self, msg):
         """
@@ -198,9 +194,6 @@ class RunSimulationViz:
         ps_msg.pose = msg.pose.pose
         poseCallback(ps_msg)
 
-
-        if self.verbose:
-            print "[+] pose rviz callback"
 
     def mapCallback(self, map_msg):
         """
@@ -225,8 +218,6 @@ class RunSimulationViz:
         # pass map info to racecar instance
         self.rcs.setMap(ros_omap, map_msg.info.resolution, origin)
 
-        if self.verbose:
-            print "[+] map updated callback"
 
     def poseTransformPub(self, timestamp):
         """
@@ -266,14 +257,9 @@ class RunSimulationViz:
         if self.broadcast_transform:
             self.br.sendTransform(ts)
 
-            if self.verbose:
-                print "[+] transform broadcast published"
-
         if self.pub_gt_pose:
             self.pose_pub.publish(ps)
 
-            if self.verbose:
-                print "[+] gt pose published"
 
     def steerAngTransformPub(self, timestamp):
         """
@@ -300,10 +286,6 @@ class RunSimulationViz:
         ts_msg.child_frame_id = "front_right_wheel"
         self.br.sendTransform(ts_msg)
 
-        if self.verbose:
-
-            print "[+] steering angle transform published"
-
 
     def laserLinkTransformPub(self, timestamp):
         """
@@ -314,13 +296,9 @@ class RunSimulationViz:
         ts_msg.header.stamp = timestamp
         ts_msg.header.frame_id = self.base_frame
         ts_msg.child_frame_id = self.scan_frame
-        ts_msg.transform.translation.x = 0#self.car_config["scan_dist_to_base"]
+        ts_msg.transform.translation.x = self.car_config["scan_dist_to_base"]
         ts_msg.transform.rotation.w = 1
         self.br.sendTransform(ts_msg)
-
-        if self.verbose:
-
-            print "[+] laser transform published"
 
     def odomPub(self, timestamp):
         """
@@ -345,9 +323,6 @@ class RunSimulationViz:
         od_msg.twist.twist.linear.z = state.angular_velocity
         self.odom_pub.publish(od_msg)
 
-        if self.verbose:
-            print "[+] Odometry published"
-
 
     def lidarPub(self, timestamp):
         """
@@ -367,9 +342,6 @@ class RunSimulationViz:
         scan_msg.intensities = scan
         self.scan_pub.publish(scan_msg)
 
-        if self.verbose:
-            print "[+] lidar published, with length %i" % len(scan)
-
 
 def run():
     """
@@ -377,7 +349,7 @@ def run():
     """
 
     rospy.init_node('RunSimulationViz', anonymous=True)
-    RunSimulationViz(verbose=True, visualize=True)
+    RunSimulationViz(verbose=False, visualize=True)
     rospy.sleep(0.1)
     rospy.spin()
 

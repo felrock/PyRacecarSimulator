@@ -32,7 +32,7 @@ class Policy():
 
     def predict_action(self, lidar):
         lidar = np.array([[ self.lidar_proc(i) / MAX_DISTANCE for i in lidar ]])
-        return self.sess.run(self.output_, feed_dict={ self.input_ : lidar })
+        return self.sess.run(self.output_, feed_dict={ self.input_ : lidar })[0][0]
 
 
 #Example use

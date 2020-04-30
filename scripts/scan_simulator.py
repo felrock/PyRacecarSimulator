@@ -41,7 +41,6 @@ class ScanSimulator2D:
 
         self.omap = ros_map
 
-        print origin[0], origin[1]
         self.origin_x = origin[0]
         self.origin_y = origin[1]
         self.origin_c = math.cos(origin[2])
@@ -50,8 +49,6 @@ class ScanSimulator2D:
         self.mrx = max_range_px
         self.res = resolution
         self.hasMap = True
-
-        print self.mrx
 
     def setRaytracingMethod(self, method="CDDT"):
         """

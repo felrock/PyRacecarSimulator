@@ -5,6 +5,7 @@ import copy
 from scan_simulator import ScanSimulator2D
 import precompute
 import kinematics
+import time
 
 class RacecarSimulator():
 
@@ -16,11 +17,13 @@ class RacecarSimulator():
         self.base_frame = "base_link"
         self.scan_frame = "laser"
 
+        self.config = config
+        self.params = params
+
         # Init car state
         self.state = CarState({
             "x": 0,
-            "y": 0,
-            "theta": 0,
+            "y": 0, "theta": 0,
             "velocity": 0,
             "steer_angle": 0,
             "angular_velocity": 0,
@@ -101,8 +104,9 @@ class RacecarSimulator():
         """
 
         """
-        x = self.state.x + self.scan_dist_to_base * math.cos(state.theta)
-        y = self.state.y + self.scan_dist_to_base * math.sin(state.theta)
+
+        x = self.state.x + self.scan_dist_to_base * math.cos(self.state.theta)
+        y = self.state.y + self.scan_dist_to_base * math.sin(self.state.theta)
         theta = self.state.theta
 
         self.scan = self.scan_simulator.scan(x,y,theta)
@@ -115,7 +119,7 @@ class RacecarSimulator():
         self.desired_speed = desired_speed
         self.desired_steer_ang = desired_steer_ang
 
-    def updatePose(self, dt=0.001):
+    def updatePose(self, dt=None):
         """
             Make one step in the simulation
         """
@@ -123,18 +127,24 @@ class RacecarSimulator():
         self.accel = self.compute_accel(self.desired_speed)
         self.steer_ang_vel = self.compute_steer_vel(self.desired_steer_ang)
 
+        print "speed"
+        print self.desired_speed, self.state.velocity
+        print "steer"
+        print self.desired_steer_ang, self.state.steer_angle, self.steer_ang_vel
+
         #update pose
         self.state = kinematics.ST_update(
                         self.state,
                         self.accel,
                         self.steer_ang_vel,
                         self.params,
-                        dt) # current-prev
+                        self.config["update_pose_rate"]) # current-prev
 
-        # update with bounded values
+        # limit steer and speed
         self.state.velocity = self.set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = self.set_bounded(self.state.steer_angle, self.max_steer_ang)
 
+        self.checkCollision()
 
     def checkCollision(self):
         """
@@ -175,11 +185,12 @@ class RacecarSimulator():
         dif = desired_angle - self.state.steer_angle
         # bounded value if it is a significant difference
         if abs(dif) > 0.0001:
-            return self.set_bounded(dif / abs(dif) * self.max_steer_vel,
-                               self.max_steer_vel)
-
+            if dif > 0:
+                return self.max_steer_vel
+            else:
+                return -self.max_steer_vel
         else:
-            return self.set_bounded(0, self.max_steer_vel)
+            return 0
 
     def compute_accel(self, desired_velocity):
         """
@@ -188,8 +199,8 @@ class RacecarSimulator():
 
         dif = desired_velocity - self.state.velocity
 
-        if self.state.velocity > 0:
-            if dif > 0:
+        if self.state.velocity > 0.0:
+            if dif > 0.0:
                 kp = 2.0 * self.max_accel / self.max_speed
                 return self.set_bounded(kp*dif, self.max_accel)
 
@@ -197,8 +208,8 @@ class RacecarSimulator():
                 return -self.max_decel #brake
 
         else:
-            if dif > 0:
-                return -self.max_decel #brake
+            if dif > 0.0:
+                return self.max_decel # MAX SPEED
 
             else:
                 kp = 2.0 * self.max_accel / self.max_speed
@@ -225,7 +236,6 @@ class RacecarSimulator():
 
         # map, max range in pixels, origin
         max_range_px = int(self.scan_max_range/resolution)
-
         self.scan_simulator.setMap(ros_map, max_range_px, resolution, origin)
 
     def setRaytracingMethod(self, method="CDDT"):

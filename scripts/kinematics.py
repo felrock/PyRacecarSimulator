@@ -33,13 +33,13 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
 
     # first derivatives
     x_dot = start.velocity * math.cos(start.theta + start.slip_angle)
-    y_dot = start.velocity * math.cos(start.theta + start.slip_angle)
+    y_dot = start.velocity * math.sin(start.theta + start.slip_angle)
     v_dot = accel
     steer_angle_dot = steer_ang_vel # steer angle dot
     theta_dot = start.angular_velocity # theta dot
 
-    rear_val = g*p.l_r - accel * p.h_cg
-    front_val = g*p.l_f + accel * p.h_cg
+    rear_val = (g * p.l_r) - (accel * p.h_cg)
+    front_val = (g * p.l_f) + (accel * p.h_cg)
 
     if start.velocity == 0:
         vel_ratio = 0
@@ -57,7 +57,7 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
 
     slip_angle_dot  = ((first_term) * (p.cs_f * start.steer_angle * (rear_val) -
                       start.slip_angle * (p.cs_r * (front_val) + p.cs_f * (rear_val) +
-                      vel_ratio * (p.cs_r * p.cs_f * (front_val) - p.cs_f * p.l_r *
+                      vel_ratio * (p.cs_r * p.l_r * (front_val) - p.cs_f * p.l_r *
                       (rear_val)))) - start.angular_velocity)
 
     # return computed state
