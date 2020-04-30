@@ -1,7 +1,6 @@
 import numpy as np
 import range_libc
 import math
-import random
 import sys
 
 """
@@ -88,8 +87,8 @@ class ScanSimulator2D:
         if not self.hasMap:
             print "Doing a scan without a defined map"
 
-        theta_min = - self.fov/2.0
-        theta_max = self.fov/2.0
+        theta_min = theta - self.fov/2.0
+        theta_max = theta +self.fov/2.0
 
         # create numpy array
         self.input_vector[:, 0] = x
@@ -104,9 +103,11 @@ class ScanSimulator2D:
         #    self.output_vector[i] = self.scan_method.calc_range(*self.input_vector[i])
 
         # add some noise to the output
-        #self.noise = np.array(np.random.normal(self.output_vector,scale=self.scan_std), dtype=np.float32)
+        self.noise = np.random.uniform(low=-self.scan_std,
+                                       high=self.scan_std,
+                                       size=self.num_rays-1)
 
-        return self.output_vector #+ self.noise
+        return self.output_vector #+ np.array(self.noise, dtype=np.float32)
 
     def transformToGrid(self, x, y, theta):
         """

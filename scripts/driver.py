@@ -13,6 +13,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped, TransformStamped
 from nav_msgs.msg import Odometry, OccupancyGrid
 from std_msgs.msg import String, Header, Float32MultiArray
 from nav_msgs.srv import GetMap
+from ackermann_msgs.msg import AckermannDriveStamped
 
 from car_config import CarParams
 from racecar_simulator import RacecarSimulator
@@ -105,7 +106,7 @@ class RunSimulationViz:
 
         # subscribers
         self.update_simulation = rospy.Timer(rospy.Duration(self.update_pose_rate), self.updateSimulationCallback)
-        ##self.drive_sub = rospy.Subscriber(self.drive_topic, self.driveCallback)
+        self.drive_sub = rospy.Subscriber(self.drive_topic, AckermannDriveStamped, self.driveCallback)
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
         self.pose_sub = rospy.Subscriber(self.pose_topic, PoseStamped, self.poseCallback)
         self.pose_rviz_sub = rospy.Subscriber(self.pose_rviz_topic, PoseWithCovarianceStamped,  self.poseRvizCallback)
@@ -145,8 +146,8 @@ class RunSimulationViz:
         t1 = rospy.get_time()
         self.rcs.runScan()
         t2 = rospy.get_time()
-
-        print "TIME TO SCAN IS %f" % (t2-t1)
+        if self.verbose:
+            print "TIME TO SCAN IS %f" % (t2-t1)
 
         # publish lidar
         self.lidarPub(timestamp)
@@ -155,6 +156,12 @@ class RunSimulationViz:
         # publish the transform
         self.laserLinkTransformPub(timestamp)
 
+
+    def driveCallback(self, msg):
+        """
+
+        """
+        self.rcs.drive(msg.speed, msg.angle)
 
 
     def poseCallback(self, msg):
@@ -305,7 +312,7 @@ class RunSimulationViz:
         ts_msg.header.stamp = timestamp
         ts_msg.header.frame_id = self.base_frame
         ts_msg.child_frame_id = self.scan_frame
-        ts_msg.transform.translation.x = self.car_config["scan_dist_to_base"]
+        ts_msg.transform.translation.x = 0#self.car_config["scan_dist_to_base"]
         ts_msg.transform.rotation.w = 1
         self.br.sendTransform(ts_msg)
 
