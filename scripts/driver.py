@@ -159,9 +159,11 @@ class RunSimulationViz:
 
     def driveCallback(self, msg):
         """
-
+            Pass actions for driving
         """
-        self.rcs.drive(msg.speed, msg.angle)
+        if self.verbose:
+            print "driveCallback, speed %f, steering %f" %(msg.drive.speed, msg.drive.steering_angle)
+        self.rcs.drive(msg.drive.speed, msg.drive.steering_angle)
 
 
     def poseCallback(self, msg):
@@ -375,7 +377,7 @@ def run():
     """
 
     rospy.init_node('RunSimulationViz', anonymous=True)
-    RunSimulationViz(verbose=False, visualize=True)
+    RunSimulationViz(verbose=True, visualize=True)
     rospy.sleep(0.1)
     rospy.spin()
 

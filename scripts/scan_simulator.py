@@ -27,8 +27,8 @@ class ScanSimulator2D:
         self.twopi = math.pi * 2
 
         # cache vectors to send to gpu
-        self.output_vector = np.ones(self.num_rays-1, dtype=np.float32)
-        self.input_vector = np.zeros((self.num_rays-1, 3), dtype=np.float32)
+        self.output_vector = np.ones(self.num_rays, dtype=np.float32)
+        self.input_vector = np.zeros((self.num_rays, 3), dtype=np.float32)
 
         self.hasMap = False
 
@@ -93,7 +93,7 @@ class ScanSimulator2D:
         # create numpy array
         self.input_vector[:, 0] = x
         self.input_vector[:, 1] = y
-        self.input_vector[:, 2] = np.linspace(theta_min, theta_max, self.num_rays-1)
+        self.input_vector[:, 2] = np.linspace(theta_min, theta_max, self.num_rays)
 
         # run ray marching
         self.scan_method.calc_range_many(self.input_vector,

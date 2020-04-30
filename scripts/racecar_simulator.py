@@ -55,6 +55,7 @@ class RacecarSimulator():
                                     self.scan_beams,
                                     self.scan_fov,
                                     self.scan_std)
+
         #Safety margins for collision, time to collision
         self.TTC = False
 
@@ -100,7 +101,11 @@ class RacecarSimulator():
         """
 
         """
-        self.scan = self.scan_simulator.scan(self.state.x, self.state.y, self.state.theta)
+        x = self.state.x + self.scan_dist_to_base * math.cos(state.theta)
+        y = self.state.y + self.scan_dist_to_base * math.sin(state.theta)
+        theta = self.state.theta
+
+        self.scan = self.scan_simulator.scan(x,y,theta)
 
     def drive(self, desired_speed, desired_steer_ang):
         """
