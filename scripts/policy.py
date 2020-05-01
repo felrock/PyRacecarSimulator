@@ -24,8 +24,8 @@ class Policy():
         self.trt_graph = self.read_pb_graph(TRT_MODEL_PATH)
 
         tf.import_graph_def(self.trt_graph, name='')
-        self.input_ = self.sess.graph.get_tensor_by_name('input_1:0')
-        self.output_ = self.sess.graph.get_tensor_by_name('dense_3/BiasAdd:0')
+        self.input_ = self.sess.graph.get_tensor_by_name('input_layer:0')
+        self.output_ = self.sess.graph.get_tensor_by_name('output_layer/BiasAdd:0')
 
         self.lidar_proc = lambda x : x if x <= MAX_DISTANCE else MAX_DISTANCE
 
@@ -37,7 +37,7 @@ class Policy():
 
 #Example use
 if __name__ == '__main__':
-    policy = Policy()
+	policy = Policy()
 
 	act = pd.read_csv('benchmark/straight_left_turn/actions.txt', sep=' ')
 	lid = pd.read_csv('benchmark/straight_left_turn/actions.txt', sep=' ')

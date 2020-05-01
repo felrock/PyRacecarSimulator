@@ -24,7 +24,7 @@ error = 0.0
 integral = 0.0
 
 #PARAMS
-VELOCITY = 2.00 # meters per second
+VELOCITY = 2.50 # meters per second
 CAR_LENGTH = 0.50 # Traxxas Rally is 20 inches or 0.5 meters
 
 class PolicyDriver:
