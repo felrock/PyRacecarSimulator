@@ -6,20 +6,20 @@ import time
 
 MAX_DISTANCE = 15.0
 TRT_MODEL_PATH = '../model/TensorRT_model.pb'
-GPU_MEMORY_FRACTION = 0.5
+GPU_MEMORY_FRACTION = 0.75
 
 class Policy():
 
     def read_pb_graph(self, model):
         with gfile.FastGFile(model,'rb') as f:
-            graph_def = tf.GraphDef()
+            graph_def = tf.compat.v1.GraphDef()
             graph_def.ParseFromString(f.read())
         return graph_def
 
     def __init__(self):
         self.graph = tf.Graph().as_default()
-        self.sess = tf.Session(config=tf.ConfigProto(
-                        gpu_options=tf.GPUOptions(
+        self.sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(
+                        gpu_options=tf.compat.v1.GPUOptions(
                         per_process_gpu_memory_fraction=GPU_MEMORY_FRACTION)))
         self.trt_graph = self.read_pb_graph(TRT_MODEL_PATH)
 
@@ -39,16 +39,34 @@ class Policy():
 if __name__ == '__main__':
     policy = Policy()
 
-    lidar = np.array(np.random.rand(360) * 10)
-    out_pred = policy.predict_action(lidar)
+	act = pd.read_csv('benchmark/straight_left_turn/actions.txt', sep=' ')
+	lid = pd.read_csv('benchmark/straight_left_turn/actions.txt', sep=' ')
 
-    tot_time = 0
-    number_of_iter = 100
-    for i in range(number_of_iter):
-        lidar = np.array(np.random.rand(360) * 10)
-        start = time.time()
-        out_pred = policy.predict_action(lidar)
-        end = time.time()
-        tot_time = tot_time + (end-start)
-        print("Prediction: ", out_pred[0],"time: ", (end-start))
-    print("avg time: ", tot_time/number_of_iter)
+	X = lid.iloc[:,:].values
+	y= act.iloc[:,0].values
+
+	tot_time = 0
+	
+	for i in range(len(X)):
+		start = time.time()
+		
+		lidar = []
+		for j in range(180,900):
+			if(j % 2 == 0):
+				lidar.append(np.clip(X[i][j], 0, 15.0))
+
+		pred = self.sess.run(self.output_, feed_dict={input_:lidar})
+
+		end = time.time()
+		pred_time = end-start
+		tot_time = tot_time +pred_time
+		print("Time: ", pred_time)
+
+	print("Average time: ", tot_time/len(X))
+
+
+
+
+
+
+
