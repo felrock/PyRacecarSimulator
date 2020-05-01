@@ -19,12 +19,12 @@ kp = -0.4#TODO
 kd = 0.0#TODO
 ki = 0.0#TODO
 servo_offset = 0.0
-prev_error = 0.0 
+prev_error = 0.0
 error = 0.0
 integral = 0.0
 
 #PARAMS
-VELOCITY = 2.50 # meters per second
+VELOCITY = 3.0 # meters per second
 CAR_LENGTH = 0.50 # Traxxas Rally is 20 inches or 0.5 meters
 
 class PolicyDriver:
@@ -37,9 +37,9 @@ class PolicyDriver:
         drive_topic = '/drive'
 
 	self.pol = pl.Policy()
-        
+
         self.lidar_sub = rospy.Subscriber(lidarscan_topic, LaserScan, self.lidar_callback)
-        self.drive_pub = rospy.Publisher(drive_topic, AckermannDriveStamped, queue_size=20) 
+        self.drive_pub = rospy.Publisher(drive_topic, AckermannDriveStamped, queue_size=20)
 
 
     def pid_control(self, error, velocity):
@@ -56,7 +56,7 @@ class PolicyDriver:
         drive_msg = AckermannDriveStamped()
         drive_msg.header.stamp = rospy.Time.now()
         drive_msg.header.frame_id = "laser"
-        drive_msg.drive.steering_angle = angle
+        drive_msg.drive.steering_angle = -angle
         #angle = abs(math.degrees(angle))
         """if angle >= 0 and angle < 10:
             if VELOCITY < 4.0:
@@ -64,7 +64,7 @@ class PolicyDriver:
         elif angle >= 10 and angle < 20:
             if VELOCITY < 4.0 and VELOCITY > 3.5:
                 VELOCITY = VELOCITY - 0.1
-        else: 
+        else:
             if VELOCITY < 3.5 and VELOCITY > 3.0:
                 VELOCITY = VELOCITY - 0.1
             else:
@@ -86,7 +86,7 @@ class PolicyDriver:
 def main(args):
     rospy.init_node("WallFollow_node", anonymous=True)
     pd = PolicyDriver()
-   
+
     rospy.sleep(0.1)
     rospy.spin()
 

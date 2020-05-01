@@ -127,11 +127,6 @@ class RacecarSimulator():
         self.accel = self.compute_accel(self.desired_speed)
         self.steer_ang_vel = self.compute_steer_vel(self.desired_steer_ang)
 
-        print "speed"
-        print self.desired_speed, self.state.velocity
-        print "steer"
-        print self.desired_steer_ang, self.state.steer_angle, self.steer_ang_vel
-
         #update pose
         self.state = kinematics.ST_update(
                         self.state,
@@ -144,7 +139,7 @@ class RacecarSimulator():
         self.state.velocity = self.set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = self.set_bounded(self.state.steer_angle, self.max_steer_ang)
 
-        self.checkCollision()
+        #self.checkCollision()
 
     def checkCollision(self):
         """

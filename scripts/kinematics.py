@@ -41,9 +41,9 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
     rear_val = (g * p.l_r) - (accel * p.h_cg)
     front_val = (g * p.l_f) + (accel * p.h_cg)
 
-    if start.velocity == 0:
-        vel_ratio = 0
-        first_term = 0
+    if start.velocity == 0.0:
+        vel_ratio = 0.0
+        first_term = 0.0
     else:
         vel_ratio = start.angular_velocity / start.velocity
         first_term = p.f_c / (start.velocity * (p.l_r + p.l_f))
@@ -52,13 +52,14 @@ def ST_update(start, accel, steer_ang_vel, p, dt):
     theta_double_dot = ((p.f_c * p.mass / (p.I_z * p.wb)) *
                        (p.l_f * p.cs_f * start.steer_angle * (rear_val) +
                        start.slip_angle * (p.l_r * p.cs_r * (front_val) -
-                       p.l_f * p.cs_f*(rear_val)) - vel_ratio*(math.pow(p.l_f, 2) *
-                       p.cs_r * (front_val))))
-
+                       p.l_f * p.cs_f * (rear_val)) - vel_ratio *
+                       (math.pow(p.l_f, 2) * p.cs_f * (rear_val) +
+                       math.pow(p.l_r, 2) * p.cs_r * (front_val))))
+    #
     slip_angle_dot  = ((first_term) * (p.cs_f * start.steer_angle * (rear_val) -
-                      start.slip_angle * (p.cs_r * (front_val) + p.cs_f * (rear_val) +
-                      vel_ratio * (p.cs_r * p.l_r * (front_val) - p.cs_f * p.l_r *
-                      (rear_val)))) - start.angular_velocity)
+                      start.slip_angle * (p.cs_r * (front_val) + p.cs_f *
+                      (rear_val) + vel_ratio * (p.cs_r * p.l_r * (front_val) -
+                      p.cs_f * p.l_r * (rear_val)))) - start.angular_velocity)
 
     # return computed state
     return CarState({

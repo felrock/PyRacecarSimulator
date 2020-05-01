@@ -5,7 +5,7 @@ wheelbase: 0.3302 # meters
 width: 0.2032 # meters
 
 # Limits on the speed and steering angle
-max_speed: 2.0 #  meters/second
+max_speed: 7.0 #  meters/second
 max_steer_ang: 0.4189 # radians
 max_accel: 7.51 # meters/second^2
 max_decel: 8.26 # meters/second^2
@@ -16,8 +16,8 @@ l_cg2rear: 0.17145 # m (decently measured to be 6.75 in)
 l_cg2front: 0.15875 # m (decently measured to be 6.25 in)
 C_S_front: 4.718 #.79 # 1/rad ? (estimated weight/4)
 C_S_rear: 5.4562 #.79 # 1/rad ? (estimated weight/4)
-mass: 3.17 # kg (measured on car 'lidart')
-moment_inertia: .0398378 # kg m^2 (estimated as a rectangle with width and height of car and evenly distributed mass, then shifted to account for center of mass location)
+mass: 3.47 # kg (measured on car 'lidart')
+moment_inertia: .04712 # kg m^2 (estimated as a rectangle with width and height of car and evenly distributed mass, then shifted to account for center of mass location)
 
 # The rate at which the pose and the lidar publish
 update_pose_rate: 0.001

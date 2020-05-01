@@ -27,7 +27,8 @@ class ScanSimulator2D:
         self.twopi = math.pi * 2
 
         # cache vectors to send to gpu
-        self.output_vector = np.ones(self.num_rays, dtype=np.float32)
+        self.output_vector = np.zeros(self.num_rays, dtype=np.float32)
+        self.noise = np.zeros(self.num_rays, dtype=np.float32)
         self.input_vector = np.zeros((self.num_rays, 3), dtype=np.float32)
 
         self.hasMap = False
@@ -66,6 +67,8 @@ class ScanSimulator2D:
         elif method == "RM":
             self.scan_method = range_libc.PyRayMarching(self.omap, self.mrx)
 
+        elif method == "RMGPU":
+            self.scan_method = range_libc.PyRayMarchingGPU(self.omap, self.mrx)
 
     def updateMap(self, ros_map):
         """
@@ -100,11 +103,8 @@ class ScanSimulator2D:
         #    self.output_vector[i] = self.scan_method.calc_range(*self.input_vector[i])
 
         # add some noise to the output
-        self.noise = np.random.uniform(low=-self.scan_std,
-                                       high=self.scan_std,
-                                       size=self.num_rays-1)
-
-        return self.output_vector #+ np.array(self.noise, dtype=np.float32)
+        self.noise = np.array(np.random.normal(0, self.scan_std, self.num_rays), dtype=np.float32)
+        return self.output_vector + self.noise
 
     def transformToGrid(self, x, y, theta):
         """

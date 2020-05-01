@@ -121,6 +121,7 @@ class RunSimulationViz:
             Updates simulatio one step
         """
 
+        t1 = rospy.get_time()
         # create timestamp
         timestamp = rospy.get_rostime()
 
@@ -140,12 +141,7 @@ class RunSimulationViz:
         # todo
 
         # sim lidar
-        t1 = rospy.get_time()
         self.rcs.runScan()
-        t2 = rospy.get_time()
-        if self.verbose:
-            print "TIME TO SCAN IS %f" % (t2-t1)
-            pass
 
         # publish lidar
         self.lidarPub(timestamp)
@@ -154,7 +150,9 @@ class RunSimulationViz:
         # publish the transform
         self.laserLinkTransformPub(timestamp)
 
+        t2 = rospy.get_time()
 
+        print "TIME TO run SIM IS %f" % (t2-t1)
     def driveCallback(self, msg):
         """
             Pass actions for driving
