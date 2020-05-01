@@ -76,6 +76,15 @@ class RacecarSimulator():
 
         self.scan = None
 
+        self.scan_time = 0
+        self.scan_time_cnt = 0
+
+        self.coll_time = 0
+        self.coll_time_cnt = 0
+
+        self.update_time = 0
+        self.update_time_cnt = 0
+
         if self.verbose:
             print "Simulator constructed"
 
@@ -102,14 +111,20 @@ class RacecarSimulator():
 
     def runScan(self):
         """
-
+            Run a scan
         """
 
+        t1 = time.time()
         x = self.state.x + self.scan_dist_to_base * math.cos(self.state.theta)
         y = self.state.y + self.scan_dist_to_base * math.sin(self.state.theta)
         theta = self.state.theta
 
         self.scan = self.scan_simulator.scan(x,y,theta)
+        t2 = time.time()
+
+        self.scan_time += (t2-t1)
+        self.scan_time_cnt += 1
+        print "Avg Time in runScan(): %f" % (self.scan_time/self.scan_time_cnt)
 
     def drive(self, desired_speed, desired_steer_ang):
         """
@@ -123,6 +138,7 @@ class RacecarSimulator():
         """
             Make one step in the simulation
         """
+        t1 = time.time()
 
         self.accel = self.compute_accel(self.desired_speed)
         self.steer_ang_vel = self.compute_steer_vel(self.desired_steer_ang)
@@ -138,17 +154,30 @@ class RacecarSimulator():
         # limit steer and speed
         self.state.velocity = self.set_bounded(self.state.velocity, self.max_speed)
         self.state.steer_angle = self.set_bounded(self.state.steer_angle, self.max_steer_ang)
+        t2 = time.time()
+        self.update_time += (t2-t1)
+        self.update_time_cnt += 1
 
-        #self.checkCollision()
+        print "Avg Time in updatePose(): %f" % (self.update_time/self.update_time_cnt)
+
+        # this could be moved out of here
+        self.checkCollision()
 
     def checkCollision(self):
         """
+            This takes some computation to perform.
 
+            Scan coulds be checked for collision in parrallel
+
+            If any on the scans indicate a crash then run stop_car()
         """
+        t1 = time.time()
 
         no_collision = True
         if self.state.velocity != 0:
-            for i in xrange(len(self.scan)):
+            # 180-900 is the steering span
+            for i in xrange(180, 900, 10):
+
                 proj_velocity = self.state.velocity * self.cosines[i]
                 ttc = (self.scan[i] - self.car_distances[i]) / proj_velocity
 
@@ -165,6 +194,11 @@ class RacecarSimulator():
         if no_collision:
             self.TTC = False
 
+        t2 = time.time()
+        self.coll_time += (t2-t1)
+        self.coll_time_cnt += 1
+        print "Time spend in checkCollision(): %f" %(self.coll_time/self.coll_time_cnt)
+
     def set_bounded(self, value, max_value):
         """
             Will bound value between (-max_value, max_value)
@@ -179,6 +213,7 @@ class RacecarSimulator():
 
         dif = desired_angle - self.state.steer_angle
         # bounded value if it is a significant difference
+        # change direction for steering velo
         if abs(dif) > 0.0001:
             if dif > 0:
                 return self.max_steer_vel
