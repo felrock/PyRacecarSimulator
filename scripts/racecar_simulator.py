@@ -114,17 +114,11 @@ class RacecarSimulator():
             Run a scan
         """
 
-        t1 = time.time()
         x = self.state.x + self.scan_dist_to_base * math.cos(self.state.theta)
         y = self.state.y + self.scan_dist_to_base * math.sin(self.state.theta)
         theta = self.state.theta
 
         self.scan = self.scan_simulator.scan(x,y,theta)
-        t2 = time.time()
-
-        self.scan_time += (t2-t1)
-        self.scan_time_cnt += 1
-        print "Avg Time in runScan(): %f" % (self.scan_time/self.scan_time_cnt)
 
     def drive(self, desired_speed, desired_steer_ang):
         """

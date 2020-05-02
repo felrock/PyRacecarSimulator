@@ -343,7 +343,7 @@ def run():
     """
 
     rospy.init_node('RunSimulationViz', anonymous=True)
-    RunSimulationViz(verbose=False, visualize=True)
+    RunSimulationViz(verbose=False, visualize=False)
     rospy.sleep(0.1)
     rospy.spin()
 
