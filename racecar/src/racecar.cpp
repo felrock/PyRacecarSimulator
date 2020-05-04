@@ -12,6 +12,11 @@ Car::Car(double WB, double FC, double H_CG, double L_F, double L_R, double CS_F,
         double LENGTH, double MAX_STEER_VEL, double MAX_STEER_ANG, double MAX_SPEED,
         double MAX_ACCEL, double MAX_DECEL)
 {
+    /*
+     * Contructor for the Car class, for now it takes the car parameters as
+     * function parameters.
+     *
+     */
 
     // Init car state
     cs = {.x=0.0, .y=0.0, .theta=0.0, .velocity=0.0, .steer_angle=0.0,\
@@ -48,22 +53,30 @@ void Car::updatePosition(double dt)
     /*
         double dt : time delta
 
-        determine which kinetic method to use based on which was used
-        previously(st_dyn) and the current velocity. When the current
-        velocity is low, slippage is marginal.
+        Updates the car one step
     */
 
     computeFromInput();
 
-    double thresh = 0.5;
-    double err = 0.03;
+    // change threshold to avoid flip flop
+    double thresh;
     if(cs.st_dyn)
-        thresh += err;
-
-    if(cs.velocity < thresh)
-        updateNormal(dt); // low speeds use kinetic update without slip
+    {
+        thresh = ST_THRESH;
+    }
     else
+    {
+        thresh = K_THRESH;
+    }
+    // low speeds use kinetic update without slip
+    if(cs.velocity < thresh)
+    {
+        updateNormal(dt);
+    }
+    else
+    {
         updateSingle(dt);
+    }
 
     // limit values steering and speed
     cs.velocity = std::min(std::max(cs.velocity, -MAX_SPEED), MAX_SPEED);
@@ -73,6 +86,11 @@ void Car::updatePosition(double dt)
 
 void Car::computeFromInput()
 {
+    /*
+     * Sets the actions values to bounded values and acts like a pid
+     * controller for acceleration.
+     */
+
     // update accel and steer with inputs
     double dif_speed = input_speed - cs.velocity;
     if(cs.velocity > 0)
@@ -100,22 +118,32 @@ void Car::computeFromInput()
 
     // rate of steering is fixed, either max right or left
     double dif_steer = input_steer - cs.steer_angle;
-    double steer_vel;
     if(std::abs(dif_steer) > 0.0001)
     {
-        steer_vel = dif_steer / std::abs(dif_steer) * MAX_STEER_VEL;
+        if(dif_steer > 0)
+        {
+            steer_ang_vel = MAX_STEER_VEL;
+        }
+        else
+        {
+            steer_ang_vel = -MAX_STEER_VEL;
+
+        }
+
     }
     else
     {
-        steer_vel = 0;
+        steer_ang_vel = 0;
     }
-
-    steer_ang_vel = std::min(std::max(steer_vel, -MAX_STEER_VEL), MAX_STEER_VEL);
-
 }
 
 void Car::updateNormal(double dt)
 {
+    /*
+     * dt : time delta
+     * Single track dynamics, the same as racecar_simulator
+     */
+
     // compute first derivatives
     double x_dot = cs.velocity * std::cos(cs.theta);
     double y_dot = cs.velocity * std::sin(cs.theta);
@@ -136,6 +164,9 @@ void Car::updateNormal(double dt)
 
 void Car::updateSingle(double dt)
 {
+    /*
+     * Simpler Single track dynamic, excluded slippage
+     */
 
     // compute first derivatives
     double x_dot = cs.velocity * std::cos(cs.theta + cs.slip_angle);
@@ -177,6 +208,11 @@ void Car::updateSingle(double dt)
 void Car::setCarEdgeDistances(int num_rays, double min_ang, double scan_ang_inc,
                              double scan_dist_to_base)
 {
+    /*
+     * Gets distanced from the center of the car(+offset) to the edges.
+     * This is to know where the lidar is outside the car.
+     */
+
     edge_distances = std::vector<double>(num_rays);
     double d1, d2;
     double dist_to_side = WIDTH / 2.0;
@@ -226,6 +262,11 @@ void Car::setCarEdgeDistances(int num_rays, double min_ang, double scan_ang_inc,
 
 void Car::control(double speed, double steer_vel)
 {
+    /*
+     * speed : desired speed as an action
+     * steer : desired angle of the "steering wheel"
+     */
+
     input_speed = speed;
     input_steer = steer_vel;
 }
@@ -259,6 +300,11 @@ bool Car::isCrashed(float* rays, int num_rays)
 
 void Car::setState(float *state)
 {
+    /*
+     * Set state to the CarState, used as a float array to
+     * pass it to python(numpy)
+     */
+
     cs.x = state[0];
     cs.y = state[1];
     cs.theta = state[2];
@@ -278,6 +324,10 @@ void Car::setState(float *state)
 
 void Car::getState(float *state)
 {
+    /*
+     * Same as the set function
+     */
+
     // write state
     state[0] = cs.x;
     state[1] = cs.y;
@@ -292,6 +342,10 @@ void Car::getState(float *state)
 
 void Car::getScanPose(double scan_dist_to_base, float* pose)
 {
+    /*
+     * Get a position with an offset to the center
+     */
+
     pose[0] = cs.x + scan_dist_to_base * std::cos(cs.theta);
     pose[1] = cs.y + scan_dist_to_base * std::sin(cs.theta);
     pose[2] = cs.theta;

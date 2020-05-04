@@ -15,7 +15,6 @@ from std_msgs.msg import String, Header, Float32MultiArray
 from nav_msgs.srv import GetMap
 from ackermann_msgs.msg import AckermannDriveStamped
 
-from car_config import CarParams
 from racecar_simulator_v2 import RacecarSimulator
 
 class RunSimulationViz:
