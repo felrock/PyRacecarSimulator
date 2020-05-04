@@ -4,7 +4,7 @@ import racecar
 
 class RacecarSimulator():
 
-    def __init__(self, config, params, verbose=False):
+    def __init__(self, config, verbose=False):
 
         self.verbose = verbose
 
@@ -13,7 +13,6 @@ class RacecarSimulator():
         self.scan_frame = "laser"
 
         self.config = config
-        self.params = params
 
         self.scan_dist_to_base = config["scan_dist_to_base"]
         self.max_speed = config["max_speed"]
@@ -34,10 +33,11 @@ class RacecarSimulator():
         self.ttc_thresh = config["ttc_thresh"]
 
         # car object
-        self.car = racecar.Car(config['wheelbase'], config['friction_coeff'],
+        self.car = racecar.PyCar(config['wb'], config['fc'],
                                config['h_cg'], config['l_f'], config['l_r'],
-                               config['csÄf'], config['cs_r'], config['mass'],
-                               config['I_z'], config['ttcÄthresh'],
+                               config['cs_f'], config['cs_r'], config['mass'],
+                               config['I_z'], config['ttc_thresh'],
+                               config['width'], config['length'],
                                config['max_steer_vel'], config['max_steer_ang'],
                                config['max_speed'], config['max_accel'],
                                config['max_decel'])
@@ -49,6 +49,11 @@ class RacecarSimulator():
 
         #precompute cosines of scan angles
         self.scan = None
+
+        # user input
+        self.desired_speed = 0.0
+        self.desired_steer_ang = 0.0
+
 
         if self.verbose:
             print "Simulator constructed"
@@ -64,9 +69,8 @@ class RacecarSimulator():
         """
             Maybe use this w/o deep copy
         """
-
         state = np.zeros(8, dtype=np.float32)
-        self.car.setState(state)
+        self.car.getState(state)
 
         return state
 
@@ -92,13 +96,16 @@ class RacecarSimulator():
             Update desired states
         """
 
-        self.car.control(desired_speed, desired_steer_ang)
+        self.desired_speed = desired_speed
+        self.desired_steer_ang = desired_steer_ang
+        #self.car.control(desired_speed, desired_steer_ang)
 
-    def updatePose(self, dt=None):
+    def updatePose(self, dt=0.001):
         """
             Make one step in the simulation
         """
 
+        self.car.control(self.desired_speed, self.desired_steer_ang)
         self.car.updatePosition(dt)
 
     def checkCollision(self):

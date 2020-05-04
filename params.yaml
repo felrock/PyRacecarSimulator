@@ -3,6 +3,7 @@
 wheelbase: 0.3302 # meters
 # width of racecar
 width: 0.2032 # meters
+length: 0.4064 # meters
 
 # Limits on the speed and steering angle
 max_speed: 7.0 #  meters/second

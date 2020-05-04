@@ -1,0 +1,12 @@
+CarState
+0:x
+1:y
+2:theta
+3:velocity
+4:steer_angle
+5:angular_velocity
+6:slip_angle
+7:st_dyn
+
+PyCar(wb, fc, h_cg, l_f,l_r, cs_f, cs_r, mass, i_z, crash_thresh, width,
+    length, max_steer_vel, max_steer_ang, max_speed, max_accel, max_decel)

@@ -16,7 +16,7 @@ from nav_msgs.srv import GetMap
 from ackermann_msgs.msg import AckermannDriveStamped
 
 from car_config import CarParams
-from racecar_simulator import RacecarSimulator
+from racecar_simulator_v2 import RacecarSimulator
 
 class RunSimulationViz:
 
@@ -25,7 +25,7 @@ class RunSimulationViz:
         self.visualize = visualize
         self.verbose = verbose
 
-        # topics
+        # parameters for simulation
         self.drive_topic = rospy.get_param("~drive_topic")
         self.map_topic = rospy.get_param("~map_topic")
         self.scan_topic = rospy.get_param("~scan_topic")
@@ -41,7 +41,7 @@ class RunSimulationViz:
         self.scan_frame = rospy.get_param("~scan_frame")
         self.update_pose_rate = rospy.get_param("~update_pose_rate")
 
-        # config
+        # parameters for car/s
         self.car_config = {
             "scan_beams": rospy.get_param("~scan_beams"),
             "scan_fov": rospy.get_param("~scan_fov"),
@@ -56,24 +56,22 @@ class RunSimulationViz:
             #"col_thresh": rospy.get_param("~coll_threshold"),
             "ttc_thresh": rospy.get_param("~ttc_thresh"),
             "width": rospy.get_param("~width"),
+            "length": rospy.get_param("~length"),
             "scan_max_range": rospy.get_param("~scan_max_range"),
-            "update_pose_rate": self.update_pose_rate
+            "update_pose_rate": self.update_pose_rate,
+            "wb": rospy.get_param("~wheelbase"),
+            "fc": rospy.get_param("~friction_coeff"),
+            "h_cg": rospy.get_param("~height_cg"),
+            "l_r": rospy.get_param("~l_cg2rear"),
+            "l_f": rospy.get_param("~l_cg2front"),
+            "cs_f": rospy.get_param("~C_S_front"),
+            "cs_r": rospy.get_param("~C_S_rear"),
+            "I_z": rospy.get_param("~moment_inertia"),
+            "mass": rospy.get_param("~mass")
         }
 
-        self.car_param = CarParams({
-            "wheelbase": rospy.get_param("~wheelbase"),
-            "friction_coeff": rospy.get_param("~friction_coeff"),
-            "height_cg": rospy.get_param("~height_cg"),
-            "l_cg2rear": rospy.get_param("~l_cg2rear"),
-            "l_cg2front": rospy.get_param("~l_cg2front"),
-            "C_S_front": rospy.get_param("~C_S_front"),
-            "C_S_rear": rospy.get_param("~C_S_rear"),
-            "moment_inertia": rospy.get_param("~moment_inertia"),
-            "mass": rospy.get_param("~mass")
-        })
-
         # racecar object
-        self.rcs = RacecarSimulator(self.car_config, self.car_param)
+        self.rcs = RacecarSimulator(self.car_config)
 
         # read and create OMap
         map_service_name = rospy.get_param("~static_map", "static_map")
@@ -167,14 +165,15 @@ class RunSimulationViz:
         """
 
         state = self.rcs.getState()
-        state.x = msg.pose.position.x
-        state.y = msg.pose.position.y
+        state[0] = msg.pose.position.x
+        state[1] = msg.pose.position.y
         quat = np.array((msg.pose.orientation.x,
                            msg.pose.orientation.y,
                            msg.pose.orientation.z,
                            msg.pose.orientation.w))
         # yaw
         (_,_,yaw) = euler_from_quaternion(quat)
+        state[2] = yaw
 
         self.rcs.setState(state)
 
@@ -223,9 +222,9 @@ class RunSimulationViz:
 
         # create the message
         pt_msg = Transform()
-        pt_msg.translation.x = state.x
-        pt_msg.translation.y = state.y
-        quat = quaternion_from_euler(0.0, 0.0, state.theta)
+        pt_msg.translation.x = state[0]
+        pt_msg.translation.y = state[1]
+        quat = quaternion_from_euler(0.0, 0.0, state[2])
         pt_msg.rotation.x = quat[0]
         pt_msg.rotation.y = quat[1]
         pt_msg.rotation.z = quat[2]
@@ -234,8 +233,8 @@ class RunSimulationViz:
         # ground truth
         ps = PoseStamped()
         ps.header.frame_id = self.map_topic
-        ps.pose.position.x = state.x
-        ps.pose.position.y = state.y
+        ps.pose.position.x = state[0]
+        ps.pose.position.y = state[1]
         ps.pose.orientation.x = quat[0]
         ps.pose.orientation.y = quat[1]
         ps.pose.orientation.z = quat[2]
@@ -265,7 +264,7 @@ class RunSimulationViz:
         ts_msg = TransformStamped()
         ts_msg.header.stamp = timestamp
 
-        quat = quaternion_from_euler(0.0, 0.0, state.theta)
+        quat = quaternion_from_euler(0.0, 0.0, state[2])
         ts_msg.transform.rotation.x = quat[0]
         ts_msg.transform.rotation.y = quat[1]
         ts_msg.transform.rotation.z = quat[2]
@@ -305,16 +304,16 @@ class RunSimulationViz:
         od_msg.header.stamp = timestamp
         od_msg.header.frame_id = self.map_frame
         od_msg.child_frame_id = self.base_frame
-        quat = quaternion_from_euler(0.0, 0.0, state.theta)
+        quat = quaternion_from_euler(0.0, 0.0, state[2])
         od_msg.pose.pose.orientation.x = quat[0]
         od_msg.pose.pose.orientation.y = quat[1]
         od_msg.pose.pose.orientation.z = quat[2]
         od_msg.pose.pose.orientation.w = quat[3]
 
-        od_msg.pose.pose.position.x = state.x
-        od_msg.pose.pose.position.y = state.y
-        od_msg.twist.twist.linear.x = state.velocity
-        od_msg.twist.twist.linear.z = state.angular_velocity
+        od_msg.pose.pose.position.x = state[0]
+        od_msg.pose.pose.position.y = state[1]
+        od_msg.twist.twist.linear.x = state[3]
+        od_msg.twist.twist.linear.z = state[4]
         self.odom_pub.publish(od_msg)
 
 
