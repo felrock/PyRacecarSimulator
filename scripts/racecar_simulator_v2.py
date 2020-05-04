@@ -108,6 +108,7 @@ class RacecarSimulator():
         self.car.control(self.desired_speed, self.desired_steer_ang)
         self.car.updatePosition(dt)
 
+
     def checkCollision(self):
         """
             This takes some computation to perform.

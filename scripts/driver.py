@@ -3,6 +3,7 @@ import sys
 import rospy
 import numpy as np
 import range_libc
+import time
 
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from tf2_ros import TransformBroadcaster
@@ -122,7 +123,9 @@ class RunSimulationViz:
         timestamp = rospy.get_rostime()
 
         # update simulation
+        t1 = time.time()
         self.rcs.updatePose()
+        print " time to update pose: %f " %(time.time()-t1)
 
         # pub pose as transform
         self.poseTransformPub(timestamp)
@@ -137,7 +140,9 @@ class RunSimulationViz:
         # todo
 
         # sim lidar
+        t1 = time.time()
         self.rcs.runScan()
+        print " time to update scan: %f " %(time.time()-t1)
 
         # publish lidar
         self.lidarPub(timestamp)
