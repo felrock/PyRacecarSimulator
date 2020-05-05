@@ -8,7 +8,7 @@ import numpy as np
     MCTS running simulatios with a NN policy
 """
 
-class node:
+class Node:
 
     def __init__(self, parent, state):
         self.parent = parent
