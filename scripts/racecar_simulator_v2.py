@@ -100,7 +100,7 @@ class RacecarSimulator():
         self.desired_steer_ang = desired_steer_ang
         #self.car.control(desired_speed, desired_steer_ang)
 
-    def updatePose(self, dt=0.001):
+    def updatePose(self, dt=0.01):
         """
             Make one step in the simulation
         """
