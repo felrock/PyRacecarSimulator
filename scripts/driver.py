@@ -109,7 +109,6 @@ class RunSimulationViz:
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
         self.pose_sub = rospy.Subscriber(self.pose_topic, PoseStamped, self.poseCallback)
         self.pose_rviz_sub = rospy.Subscriber(self.pose_rviz_topic, PoseWithCovarianceStamped,  self.poseRvizCallback)
-        #self.obs_sub = rospy.Subscriber("/clicked_point", self.obsCallback)
 
         if self.verbose:
             print "Driver constructed"
@@ -143,6 +142,9 @@ class RunSimulationViz:
         t1 = time.time()
         self.rcs.runScan()
         print " time to update scan: %f " %(time.time()-t1)
+
+        if self.rcs.isCrashed(self.scan, self.num_rays):
+            self.rcs.stop()
 
         # publish lidar
         self.lidarPub(timestamp)
