@@ -4,7 +4,7 @@ import racecar
 
 class RacecarSimulator():
 
-    def __init__(self, config, verbose=False):
+    def __init__(self, config, batch_size=100, verbose=False):
 
         self.verbose = verbose
 
@@ -45,7 +45,8 @@ class RacecarSimulator():
         self.scan_simulator = ScanSimulator2D(
                                     self.scan_beams,
                                     self.scan_fov,
-                                    self.scan_std)
+                                    self.scan_std,
+                                    batch_size)
 
         #precompute cosines of scan angles
         self.scan = None
@@ -108,7 +109,6 @@ class RacecarSimulator():
         self.car.control(self.desired_speed, self.desired_steer_ang)
         self.car.updatePosition(dt)
 
-
     def checkCollision(self):
         """
             This takes some computation to perform.
@@ -119,6 +119,20 @@ class RacecarSimulator():
         """
 
         return self.car.isCrashed(self.scan, self.num_rays)
+
+    def checkCollisionMany(self, poses):
+
+        # run all scans on gpu
+        output_scans = self.scan_simulator.scanMany(poses)
+
+        # check collisions in order
+        for i in xrange(self.batch_size):
+            span = (i*self.num_rays, (i+1)*self.num_ray)
+            if self.car.isCrashed(output_scans[span], self.num_rays):
+                return i-1
+
+        # no crash was found
+        return self.batch_size-1
 
     def stop(self):
 

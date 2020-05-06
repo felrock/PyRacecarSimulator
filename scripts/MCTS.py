@@ -13,33 +13,49 @@ import math
 
 class Node:
 
-    """def __init__(self, parent, state):
+    def __init__(self, state, action, terminal=False, parent=None):
+        """
+            state : Numpy array[8]
+        """
+        self.state = state
         self.parent = parent
-        self.state = state
+        self.terminal = terminal
+        self.action = action
+        self.visits = 0
+        self.reward = 0.0
+        self.bound = (0, 0)
         self.children = []
-        self.terminal = False"""
 
-    def setState(self, state):
-        self.state = state
+    def getState(self):
+        return self.state
 
-    def reward(self): #define reward, speed - abs(steer), crash= -max_speed?
-        return 
-    
+    def setReward(self, reward):
+        self.rewards = rewards
+
+    def getReward(self):
+        #define reward, speed - abs(steer), crash= -max_speed?
+        if self.terminal:
+            return -inf
+        else:
+            return self.state[3]
+
     def isTerminal(self):
         return self.terminal
 
-    def findChildren(self):#?
-        return 
-    
-    def findRandomChild(self):#?
-        return
+    def setBound(self, center, dev):
+        self.bound = (center-dev, center+dev)
 
-    def __hash__(self): #needs to be hashable
-        return 
-    
-    def __eq__(node_1, node_2):#compare
-        return
+    def getBound(self):
+        return self.bound
 
+    def hasChildren(self):
+        return len(self.children) > 0
+
+    def addChild(self, child):
+        self.children.append(child)
+
+    def size(self):
+        return len(self.children)
 
 class MCTS:
     """
@@ -54,82 +70,76 @@ class MCTS:
         self.rewards = defaultdict(int)
         self.visit_counts = defaultdict(int)
         self.children = dict()
-        self.exploration_weight = 1
+        self.budget = 1.0
+        self.C = 0.1 # exp constant
 
 
-    def rollout(self, node):
-        path = self.select(node)
-        leaf = path[-1]
-        self.expand(leaf)
-        reward = self.simulate(leaf)
-        self.backPropagate(path, reward)
+    def mcts(self):
 
-    def choose(self, node):
+        t_start = time.time()
+        while t_start + budget > time.time():
+
+            mctsIteration(self.root)
+
+        action = None
+        visits = -1
+        for child in self.root.children:
+            if child.visits > visits:
+                action = child.action
+                visits = child.visits
+
+        # return the best steering angle
+        return action
+
+    def mctsIteration(self, node, expanded=False):
+        """
+
+        """
 
         if node.isTerminal():
-            raise RuntimeError(f"choose called on terminal node {node}")
-        if node not in self.children:
-            return node.findRandomChild()
+            # fixa util saken
+            return utility, false
 
-        def score(n):
-            if self.visit_counts[n] == 0:
-                return float("-inf")
-            return self.rewards[n] / self.visit_counts[n]
+        sum_of_visits = sum(node.children, key=lambda x:x.visits)
+        action = max(self.children,
+                 key=lambda x:(x.reward/x.visits +
+                            self.C*math.log(sum_of_visits/x.visits)))
 
-        return max(self.children[node], key=score)
+        if math.sqrt(sum_of_visits) < node.size():
+            node = action
+            rv, expanded = mctsIteration(node, expanded=False)
 
-    def uctSelect(self, node):
-        "Select a child of node, balancing exploration & exploitation"
+        if not expanded:
+            new_action = self.generateAction(node)
+            new_state, terminal  = self.tryAction(node, new_action)
+            new_child = Node(new_state, new_action, terminal, node)
+            node.addChild(new_child)
+            rv, steps = self.rollout(new_child)
+            node = new_node
 
-        assert all (n in self.children for n in self.children[node])
+        node.update(rv)
+        return rv, True
 
-        log_n = math.log(self.visit_counts[node])
+    def rollout(self, node):
+        """
+            Do a 100 iteration rollout, then pass all states to
+            perform scanning on gpu. Determine wheere the collision is
+            with an index
+        """
 
-        def uct(n):
-            return self.rewards[n] / self.visit_counts[n] + self.exploration_weight * math.sqrt(
-                log_n / self.visit_counts[n]
-            )
+        self.simulator.setState(node.state)
+        self.all_sim_states = np.ndarray(dim=(100,3), dtype=np.float32)
+        rewards = np.zeros(100)
 
-        return max(self.children[node], key=uct)
+        for i in xrange(100):
+            # random action?
+            self.simulator.updatePose()
+            new_state = self.simulator.getState()
+            self.all_sim_states[i] = new_state[:3]
+            rewards[i] = sim_state[3] #velocity
 
-    def select(self, node):
-        path = []
-
-        while True:
-            path.append(node)
-
-            if node not in self.children or not self.children[node]:
-                # node is either unexplored or terminal
-                return path
-            unexplored = self.children[node] - self.children.keys()
-            if unexplored:
-                n = unexplored.pop()
-                path.append(n)
-                return path
-            node = self.uctSelect(node)
-
-
-
-    def expand(self, node):
-        if node in self.children:
-            return #already expanded
-        self.children[node] = node.findChildren()
-
-    def simulate(self, node):
-        invert_reward = True
-        while True:
-            if node.isTerminal():
-                reward = node.reward()
-                return 1 - reward if invert_reward else reward
-            node = node.findRandomChild()
-            invert_reward = not invert_reward
-
-    def backPropagate(self, path, reward):
-        for node in reversed(path):
-            self.visit_counts[node] += 1
-            self.rewards[node] += reward
-            reward = 1 - reward 
-
+        index = self.simulator.checkCollisionMany(self.all_sim_states)
+        return sum(reward[:index])
 
 if __name__ == '__name__':
     pass

@@ -9,7 +9,7 @@ import sys
 
 class ScanSimulator2D:
 
-    def __init__(self, num_rays, fov, scan_std, theta_disc=2000):
+    def __init__(self, num_rays, fov, scan_std, batch_size=100):
         """
             num_rays    - Number of beams for the simulated LiDAR.
             fov         - Field of view
@@ -21,7 +21,6 @@ class ScanSimulator2D:
         self.num_rays = num_rays
         self.fov = fov
         self.scan_std = scan_std
-        self.theta_disc = theta_disc
 
         # often used
         self.twopi = math.pi * 2
@@ -30,6 +29,12 @@ class ScanSimulator2D:
         self.output_vector = np.zeros(self.num_rays, dtype=np.float32)
         self.noise = np.zeros(self.num_rays, dtype=np.float32)
         self.input_vector = np.zeros((self.num_rays, 3), dtype=np.float32)
+
+        # cache vectors to send to gpu
+        self.output_vector_many = np.zeros(batch_size*self.num_rays,
+                                            dtype=np.float32)
+        self.input_vector_many = np.zeros((batch_size*self.num_rays, 3),
+                                            dtype=np.float32)
 
         self.hasMap = False
 
@@ -60,11 +65,7 @@ class ScanSimulator2D:
             print "for set RaytracingMethod use setMap first"
             return
 
-        if method == "CDDT":
-            self.scan_method = range_libc.PyCDDTCast(self.omap, self.mrx, self.theta_disc)
-            self.scan_method.prune()
-
-        elif method == "RM":
+        if method == "RM":
             self.scan_method = range_libc.PyRayMarching(self.omap, self.mrx)
 
         elif method == "RMGPU":
@@ -99,12 +100,36 @@ class ScanSimulator2D:
         self.scan_method.calc_range_many(self.input_vector,
                                          self.output_vector)
 
-        #for i in xrange(self.num_rays):
-        #    self.output_vector[i] = self.scan_method.calc_range(*self.input_vector[i])
-
         # add some noise to the output
         self.noise = np.array(np.random.normal(0, self.scan_std, self.num_rays), dtype=np.float32)
+
         return self.output_vector + self.noise
+
+    def scanMany(self, poses):
+        """
+            Take many poses on the map and simulate them
+            ignore adding noise
+        """
+
+        for i in xrange(batch_size):
+            x = poses[0]
+            y = poses[1]
+            theta = poses[2]
+
+            theta_min = theta - self.fov/2.0
+            theta_max = theta + self.fov/2.0
+
+            # create numpy array
+            span = (i*self.num_rays, (i+1)*self.num_rays)
+            self.input_vector_many[span, 0] = x
+            self.input_vector_many[span, 1] = y
+            self.input_vector_many[span, 2] = np.linspace(theta_min,
+                                             theta_max, self.num_rays)
+
+        self.scan_method.calc_range_many(self.input_vector_many,
+                                        self.output_vector_many)
+
+        return self.output_vector_many
 
     def transformToGrid(self, x, y, theta):
         """
