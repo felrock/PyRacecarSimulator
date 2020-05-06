@@ -57,24 +57,39 @@ class Node:
     def size(self):
         return len(self.children)
 
+    def propagate(self, reward):
+
+        if not self.parent:
+            return
+        else:
+            self.reward += reward
+            self.visits += 1
+
+            # walk up the tree
+            return propagate(self.parent)
+
 class MCTS:
     """
         Driver running a MCTS with RacecarSimulator
     """
 
-    def __init__(self, params):
+    def __init__(self, simulator, budget):
+        """
+
+        """
 
         # create CarParams instance
         # load map
         # create RacecarSim instance
-        self.rewards = defaultdict(int)
-        self.visit_counts = defaultdict(int)
-        self.children = dict()
+        self.simulator = simulator
+        self.budget = budget
         self.budget = 1.0
         self.C = 0.1 # exp constant
 
-
     def mcts(self):
+        """
+
+        """
 
         t_start = time.time()
         while t_start + budget > time.time():
@@ -97,8 +112,8 @@ class MCTS:
         """
 
         if node.isTerminal():
-            # fixa util saken
-            return utility, false
+            # cannot expand from terminated node
+            return 0, false
 
         sum_of_visits = sum(node.children, key=lambda x:x.visits)
         action = max(self.children,
@@ -117,7 +132,7 @@ class MCTS:
             rv, steps = self.rollout(new_child)
             node = new_node
 
-        node.update(rv)
+        node.propagate(rv)
         return rv, True
 
     def rollout(self, node):
@@ -128,7 +143,7 @@ class MCTS:
         """
 
         self.simulator.setState(node.state)
-        self.all_sim_states = np.ndarray(dim=(100,3), dtype=np.float32)
+        self.all_sim_states = np.ndarray(dim=(100, 3), dtype=np.float32)
         rewards = np.zeros(100)
 
         for i in xrange(100):
@@ -143,4 +158,3 @@ class MCTS:
 
 if __name__ == '__name__':
     pass
-
