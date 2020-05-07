@@ -124,4 +124,4 @@ publish_ground_truth_pose: true
 buffer_length: 10
 speed_clip_diff: 0.5
 
-scan_method: "RMGPU" #"CDDT" #RMGPU #RM
+scan_method: "RM" #"CDDT" #RMGPU #RM

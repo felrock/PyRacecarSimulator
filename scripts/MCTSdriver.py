@@ -30,6 +30,13 @@ class MCTSdriver:
         self.scan_frame = rospy.get_param("~scan_frame")
         self.update_pose_rate = rospy.get_param("~update_pose_rate")
 
+
+        self.drive_topic = rospy.get_param("~drive_topic")
+        self.map_topic = rospy.get_param("~map_topic")
+        self.scan_topic = rospy.get_param("~scan_topic")
+        self.odom_topic = rospy.get_param("~odom_topic")
+
+
         # parameters for car/s
         self.car_config = {
             "scan_beams": rospy.get_param("~scan_beams"),
@@ -81,6 +88,7 @@ class MCTSdriver:
         # subscribers
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback, queue_size=1)
         self.odom_sub = rospy.Subscriber(self.odom_topic, Odometry, self.odomCallback, queue_size=10)
+        self.action_update = rospy.Timer(rospy.Duration(self.update_pose_rate), self.createActionCallback)
 
         # publisher
         self.drive_pub = rospy.Publisher(self.drive_topic, AckermannDriveStamped, queue_size=1)
@@ -88,47 +96,36 @@ class MCTSdriver:
         if self.verbose:
             print "Driver constructed"
 
-    def updateSimulationCallback(self, event):
+    def createActionCallback(self, event):
         """
             Updates simulatio one step
         """
-
+        speed = 1.0
         # create timestamp
-        timestamp = rospy.get_rostime()
 
         # update simulation
-        t1 = time.time()
         mcts_run = MCTS(self.rcs, 1.0)
-        action = mcts_run.mcts()
-        #self.rcs.updatePose()
-        print " time to update pose: %f " %(time.time()-t1)
+        action, action_state = mcts_run.mcts()
 
-        # pub pose as transform
-        self.poseTransformPub(timestamp)
+        # update rcs
+        self.rcs.drive(speed, action)
+        self.rcs.updatePose()
 
-        # publish steering ang
-        self.steerAngTransformPub(timestamp)
+        # ackerman cmd stuf
+        timestamp = rospy.get_rostime()
+        action = np.clip(action, -0.4189, 0.4189)
 
-        # publish odom
-        self.odomPub(timestamp)
+        drive_msg = AckermannDriveStamped()
+        drive_msg.header.stamp = rospy.Time.now()
+        drive_msg.header.frame_id = "laser"
+        drive_msg.drive.steering_angle = action
+        drive_msg.drive.speed = 1.0
 
-        # publish imu
-        # todo
-
-        # sim lidar
-        t1 = time.time()
-        self.rcs.runScan()
-        print " time to update scan: %f " %(time.time()-t1)
-
-        if self.rcs.isCrashed(self.scan, self.num_rays):
-            self.rcs.stop()
-
-        # publish lidar
-        self.lidarPub(timestamp)
+        self.drive_pub.publish(drive_msg)
 
 
-        # publish the transform
-        self.laserLinkTransformPub(timestamp)
+        #if self.rcs.isCrashed(self.scan, self.num_rays):
+            #self.rcs.stop()
 
 
     def mapCallback(self, map_msg):
@@ -154,6 +151,15 @@ class MCTSdriver:
         # pass map info to racecar instance
         self.rcs.setMap(ros_omap, map_msg.info.resolution, origin)
 
+    def odomCallback(self, odom_msg):
+
+        state = self.rcs.getState()
+        state[0] = odom_msg.position.x
+        state[1] = odom_msg.position.y
+        state[2] = odom_msg.orientation.theta
+
+        # update current simulation
+        self.rcs.setState(state)
 
 def run():
     """

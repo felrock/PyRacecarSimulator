@@ -122,36 +122,30 @@ class RunSimulationViz:
         timestamp = rospy.get_rostime()
 
         # update simulation
-        t1 = time.time()
         self.rcs.updatePose()
-        print " time to update pose: %f " %(time.time()-t1)
+        if self.visualize:
+            # pub pose as transform
+            self.poseTransformPub(timestamp)
 
-        # pub pose as transform
-        self.poseTransformPub(timestamp)
+            # publish steering ang
+            self.steerAngTransformPub(timestamp)
 
-        # publish steering ang
-        self.steerAngTransformPub(timestamp)
-
-        # publish odom
-        self.odomPub(timestamp)
-
-        # publish imu
-        # todo
+            # publish odom
+            self.odomPub(timestamp)
 
         # sim lidar
-        t1 = time.time()
         self.rcs.runScan()
-        print " time to update scan: %f " %(time.time()-t1)
 
-        if self.rcs.isCrashed(self.scan, self.num_rays):
+        if self.rcs.checkCollision():
+            # do other things here too
             self.rcs.stop()
 
-        # publish lidar
-        self.lidarPub(timestamp)
+        if self.visualize:
+            # publish lidar
+            self.lidarPub(timestamp)
 
-
-        # publish the transform
-        self.laserLinkTransformPub(timestamp)
+            # publish the transform
+            self.laserLinkTransformPub(timestamp)
 
     def driveCallback(self, msg):
         """
@@ -348,7 +342,7 @@ def run():
     """
 
     rospy.init_node('RunSimulationViz', anonymous=True)
-    RunSimulationViz(verbose=False, visualize=False)
+    RunSimulationViz(True, False)
     rospy.sleep(0.1)
     rospy.spin()
 

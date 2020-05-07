@@ -24,7 +24,7 @@ class RacecarSimulator():
         self.width = config["width"]
         self.length = config["length"]
 
-        self.scan_beams = config["scan_beams"]
+        self.num_rays = config["scan_beams"]
         self.scan_fov =  config["scan_fov"] #4.71 #6.2831853 # radians
         self.scan_std = config["scan_std"]
         self.scan_max_range = config["scan_max_range"]
@@ -42,8 +42,15 @@ class RacecarSimulator():
                                config['max_speed'], config['max_accel'],
                                config['max_decel'])
 
+        # set where lidar cuts in the car
+        self.car.setCarEdgeDistances(self.num_rays,
+                                    -self.scan_fov/2.0,
+                                    self.scan_fov/self.num_rays,
+                                    self.scan_dist_to_base)
+
+        # create lidar simulator
         self.scan_simulator = ScanSimulator2D(
-                                    self.scan_beams,
+                                    self.num_rays,
                                     self.scan_fov,
                                     self.scan_std,
                                     batch_size)
@@ -99,7 +106,6 @@ class RacecarSimulator():
 
         self.desired_speed = desired_speed
         self.desired_steer_ang = desired_steer_ang
-        #self.car.control(desired_speed, desired_steer_ang)
 
     def updatePose(self, dt=0.01):
         """
@@ -118,9 +124,14 @@ class RacecarSimulator():
             If any on the scans indicate a crash then run stop_car()
         """
 
-        return self.car.isCrashed(self.scan, self.num_rays)
+        scan_ = np.array(self.scan, dtype=np.float32)
+        return self.car.isCrashed(scan_, self.num_rays)
 
     def checkCollisionMany(self, poses):
+        """
+            Scan and check collision for several poses.
+            This is a speed up for the rollout process.
+        """
 
         # run all scans on gpu
         output_scans = self.scan_simulator.scanMany(poses)
@@ -135,6 +146,9 @@ class RacecarSimulator():
         return self.batch_size-1
 
     def stop(self):
+        """
+            Halt the car
+        """
 
         self.car.stop()
 
@@ -147,7 +161,7 @@ class RacecarSimulator():
         max_range_px = int(self.scan_max_range/resolution)
         self.scan_simulator.setMap(ros_map, max_range_px, resolution, origin)
 
-    def setRaytracingMethod(self, method="CDDT"):
+    def setRaytracingMethod(self, method="RMGPU"):
         """
             Pass ray-tracing method to Scan simulator
         """
