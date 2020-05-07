@@ -156,5 +156,19 @@ class MCTS:
         index = self.simulator.checkCollisionMany(self.all_sim_states)
         return sum(reward[:index])
 
+    def sample(prediction, length, step): #uneven length
+        samples = np.arange(prediction-(step*length/2),
+                    prediction + (step*length/2 + step),
+                    step, dtype=float).round(decimals=2)
+
+        interval = np.random.random_sample()
+
+        if interval >= 0.4:
+            return np.random.choice(samples[int(length/3):int(2*length/3)])
+        elif interval < 0.4 and interval >= 0.2:
+            return np.random.choice(samples[0:int(length/3)])
+        elif interval < 0.2:
+            return np.random.choice(samples[int(2*length/3):length])
+
 if __name__ == '__name__':
     pass
