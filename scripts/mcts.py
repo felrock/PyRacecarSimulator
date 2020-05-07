@@ -13,11 +13,12 @@ import math
 
 class Node:
 
-    def __init__(self, state, action, terminal=False, parent=None):
+    def __init__(self, state, scan, action, terminal=False, parent=None):
         """
             state : Numpy array[8]
         """
         self.state = state
+        self.scan = scan
         self.parent = parent
         self.terminal = terminal
         self.action = action
@@ -25,6 +26,9 @@ class Node:
         self.reward = 0.0
         self.bound = (0, 0)
         self.children = []
+
+    def getScan(self):
+        return self.scan
 
     def getState(self):
         return self.state
@@ -66,35 +70,41 @@ class Node:
             self.visits += 1
 
             # walk up the tree
-            return propagate(self.parent)
+            self = self.parent
+            return self.propagate(reward)
 
 class MCTS:
     """
         Driver running a MCTS with RacecarSimulator
     """
 
-    def __init__(self, simulator, budget):
+    def __init__(self, simulator, policy_session,  budget=1.0):
         """
 
         """
 
-        # create CarParams instance
-        # load map
-        # create RacecarSim instance
         self.simulator = simulator
+        self.policy_session = policy_session
         self.budget = budget
-        self.budget = 1.0
+        self.action = 0.0
+        self.root = None
         self.C = 0.1 # exp constant
+        self.crash_pen = -10
+
+        self.speed = 1.0
 
     def mcts(self):
         """
 
         """
+        root_state = self.simulator.getState()
+        root_scan = self.simulator.getScan()
+        self.root = Node(root_state, root_scan, self.action)
 
         t_start = time.time()
-        while t_start + budget > time.time():
+        while t_start + self.budget > time.time():
 
-            mctsIteration(self.root)
+            self.mctsIteration(self.root)
 
         action = None
         visits = -1
@@ -104,7 +114,8 @@ class MCTS:
                 visits = child.visits
 
         # return the best steering angle
-        return action
+        self.action = action
+        return action, root_state
 
     def mctsIteration(self, node, expanded=False):
         """
@@ -113,27 +124,42 @@ class MCTS:
 
         if node.isTerminal():
             # cannot expand from terminated node
-            return 0, false
+            return 0, False
 
-        sum_of_visits = sum(node.children, key=lambda x:x.visits)
-        action = max(self.children,
-                 key=lambda x:(x.reward/x.visits +
-                            self.C*math.log(sum_of_visits/x.visits)))
+        sum_of_visits = sum([x.visits for x in node.children])
+        if node.hasChildren():
+            action = max(node.children, key=lambda x:(x.reward/x.visits +\
+                                self.C*math.log(sum_of_visits/x.visits)))
 
         if math.sqrt(sum_of_visits) < node.size():
             node = action
-            rv, expanded = mctsIteration(node, expanded=False)
+            rv, expanded = self.mctsIteration(node, expanded=False)
 
         if not expanded:
             new_action = self.generateAction(node)
-            new_state, terminal  = self.tryAction(node, new_action)
-            new_child = Node(new_state, new_action, terminal, node)
+            new_state, new_scan, terminal = self.act(node, new_action)
+            new_child = Node(new_state, new_scan, new_action, terminal, node)
             node.addChild(new_child)
-            rv, steps = self.rollout(new_child)
-            node = new_node
+            if not terminal:
+                rv, steps = self.rollout(new_child)
+            else:
+                rv, steps = self.crash_pen, 0
+            node = new_child
 
         node.propagate(rv)
         return rv, True
+
+    def act(self, node, action):
+
+        self.simulator.setState(node.state)
+        self.simulator.drive(self.speed, action)
+        self.simulator.updatePose()
+        self.simulator.runScan()
+        scan = self.simulator.getScan()
+        terminal = self.simulator.checkCollision()
+        new_state = self.simulator.getState()
+
+        return new_state, scan, terminal
 
     def rollout(self, node):
         """
@@ -143,20 +169,33 @@ class MCTS:
         """
 
         self.simulator.setState(node.state)
-        self.all_sim_states = np.ndarray(dim=(100, 3), dtype=np.float32)
+        self.all_sim_states = np.ndarray((100, 3), dtype=np.float32)
         rewards = np.zeros(100)
 
         for i in xrange(100):
             # random action?
             self.simulator.updatePose()
             new_state = self.simulator.getState()
-            self.all_sim_states[i] = new_state[:3]
-            rewards[i] = sim_state[3] #velocity
+            self.all_sim_states[i][0] = new_state[0]
+            self.all_sim_states[i][1] = new_state[1]
+            self.all_sim_states[i][2] = new_state[2]
+            rewards[i] = new_state[3] #velocity
 
         index = self.simulator.checkCollisionMany(self.all_sim_states)
-        return sum(reward[:index])
 
-    def sample(prediction, length, step): #uneven length
+        return np.sum(rewards[:index]), index
+
+    def generateAction(self, node):
+
+        if node.hasChildren():
+            # make faster
+            return self.sample(node.action, 11, 0.13*2/11)
+        else:
+            # make faster
+            return self.policy_session.predict_action(node.getScan())
+
+
+    def sample(self, prediction, length, step): #uneven length
         samples = np.arange(prediction-(step*length/2),
                     prediction + (step*length/2 + step),
                     step, dtype=float).round(decimals=2)

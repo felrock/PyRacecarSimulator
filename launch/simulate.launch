@@ -9,7 +9,7 @@
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map)"/>
 
   <!-- Begin the simulator with the parameters from params.yaml -->
-  <node pkg="PyRacecarSimulator" name="PyRacecarSimulator" type="ros_interface.py" output="screen">
+  <node pkg="PyRacecarSimulator" name="ros_interface" type="ros_interface.py" output="screen">
     <rosparam command="load" file="$(find PyRacecarSimulator)/params.yaml"/>
   </node>
 

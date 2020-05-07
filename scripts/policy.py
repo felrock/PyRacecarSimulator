@@ -4,9 +4,7 @@ from tensorflow.python.platform import gfile
 import numpy as np
 import time
 
-MAX_DISTANCE = 15.0
 TRT_MODEL_PATH = '../model/TensorRT_model.pb'
-GPU_MEMORY_FRACTION = 0.75
 
 class Policy():
 
@@ -16,26 +14,26 @@ class Policy():
             graph_def.ParseFromString(f.read())
         return graph_def
 
-    def __init__(self):
+    def __init__(self, graph_path=''):
         self.graph = tf.Graph().as_default()
         self.sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(
                         gpu_options=tf.compat.v1.GPUOptions(
-                        per_process_gpu_memory_fraction=GPU_MEMORY_FRACTION)))
-        self.trt_graph = self.read_pb_graph(TRT_MODEL_PATH)
+                        per_process_gpu_memory_fraction=0.75)))
+        self.trt_graph = self.read_pb_graph(graph_path)
 
         tf.import_graph_def(self.trt_graph, name='')
         self.input_ = self.sess.graph.get_tensor_by_name('input_layer:0')
         self.output_ = self.sess.graph.get_tensor_by_name('output_layer/BiasAdd:0')
 
-        self.lidar_proc = lambda x : x if x <= MAX_DISTANCE else MAX_DISTANCE
+        self.lidar_proc = lambda x : x if x <= 15.0 else 15.0
 
 
     def predict_action(self, lidar):
         new_lid = []
         for j in range(180,900):
 			if(j % 2 == 0):
-				new_lid.append(np.clip(lidar[i][j], 0, 15.0))
-        new_lid = np.array([[ self.lidar_proc(i) / MAX_DISTANCE for i in new_lid ]])
+				new_lid.append(np.clip(lidar[j], 0, 15.0))
+        new_lid = np.array([[ self.lidar_proc(i) / 15.0 for i in new_lid ]])
         return self.sess.run(self.output_, feed_dict={ self.input_ : new_lid })[0][0]
 
 

@@ -17,6 +17,8 @@ class ScanSimulator2D:
             theta_disc  - Theta Discretization
         """
 
+        self.batch_size = batch_size
+
         # these were used in the old scan 2d
         self.num_rays = num_rays
         self.fov = fov
@@ -111,19 +113,20 @@ class ScanSimulator2D:
             ignore adding noise
         """
 
-        for i in xrange(batch_size):
-            x = poses[0]
-            y = poses[1]
-            theta = poses[2]
+        for i in xrange(self.batch_size):
+            x = poses[i][0]
+            y = poses[i][1]
+            theta = poses[i][2]
 
             theta_min = theta - self.fov/2.0
             theta_max = theta + self.fov/2.0
 
             # create numpy array
-            span = (i*self.num_rays, (i+1)*self.num_rays)
-            self.input_vector_many[span, 0] = x
-            self.input_vector_many[span, 1] = y
-            self.input_vector_many[span, 2] = np.linspace(theta_min,
+            a = i*self.num_rays
+            b = (i+1)*self.num_rays
+            self.input_vector_many[a:b, 0] = x
+            self.input_vector_many[a:b, 1] = y
+            self.input_vector_many[a:b, 2] = np.linspace(theta_min,
                                              theta_max, self.num_rays)
 
         self.scan_method.calc_range_many(self.input_vector_many,

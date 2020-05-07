@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+
+  <!-- Launch a map from the maps folder-->
+  <arg name="map" default="$(find PyRacecarSimulator)/maps/map.yaml"/>
+  <node pkg="map_server" name="map_server_mcts" type="map_server" args="$(arg map)"/>
+
+  <!-- Begin the simulator with the parameters from params.yaml -->
+  <node pkg="PyRacecarSimulator" name="mcts_driver" type="mcts_driver.py" output="screen">
+    <rosparam command="load" file="$(find PyRacecarSimulator)/params.yaml"/>
+  </node>
+</launch>

@@ -1,5 +1,6 @@
 #! /usr/bin/python
 import sys
+import rospkg
 import rospy
 import numpy as np
 import range_libc
@@ -17,25 +18,22 @@ from nav_msgs.srv import GetMap
 from ackermann_msgs.msg import AckermannDriveStamped
 
 from racecar_simulator_v2 import RacecarSimulator
-from MCTS import Node, MCTS
+from mcts import Node, MCTS
+from policy import Policy
 
 class MCTSdriver:
 
     def __init__(self, verbose=True):
 
-        # parameters for simulation
-        self.buffer_length = rospy.get_param("~buffer_length")
-        self.map_frame = rospy.get_param("~map_frame")
-        self.base_frame = rospy.get_param("~base_frame")
-        self.scan_frame = rospy.get_param("~scan_frame")
-        self.update_pose_rate = rospy.get_param("~update_pose_rate")
+        self.verbose = verbose
 
+        # parameters for simulation
+        self.update_pose_rate = rospy.get_param("~update_pose_rate")
 
         self.drive_topic = rospy.get_param("~drive_topic")
         self.map_topic = rospy.get_param("~map_topic")
         self.scan_topic = rospy.get_param("~scan_topic")
         self.odom_topic = rospy.get_param("~odom_topic")
-
 
         # parameters for car/s
         self.car_config = {
@@ -63,8 +61,16 @@ class MCTSdriver:
             "cs_f": rospy.get_param("~C_S_front"),
             "cs_r": rospy.get_param("~C_S_rear"),
             "I_z": rospy.get_param("~moment_inertia"),
-            "mass": rospy.get_param("~mass")
+            "mass": rospy.get_param("~mass"),
+            "batch_size": rospy.get_param("~batch_size")
         }
+
+        # create policy session
+
+        pack = rospkg.RosPack()
+        self.graph_path = (pack.get_path('PyRacecarSimulator') +
+                rospy.get_param("~graph_path"))
+        self.ps = Policy(self.graph_path)
 
         # racecar object
         self.rcs = RacecarSimulator(self.car_config)
@@ -85,6 +91,9 @@ class MCTSdriver:
         # set ray tracing method
         self.rcs.setRaytracingMethod(rospy.get_param("~scan_method"))
 
+        # run first scan
+        self.rcs.runScan()
+
         # subscribers
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback, queue_size=1)
         self.odom_sub = rospy.Subscriber(self.odom_topic, Odometry, self.odomCallback, queue_size=10)
@@ -103,8 +112,8 @@ class MCTSdriver:
         speed = 1.0
         # create timestamp
 
-        # update simulation
-        mcts_run = MCTS(self.rcs, 1.0)
+        # create new MCTS instance
+        mcts_run = MCTS(self.rcs, self.ps, budget=3.0)
         action, action_state = mcts_run.mcts()
 
         # update rcs
@@ -154,9 +163,15 @@ class MCTSdriver:
     def odomCallback(self, odom_msg):
 
         state = self.rcs.getState()
-        state[0] = odom_msg.position.x
-        state[1] = odom_msg.position.y
-        state[2] = odom_msg.orientation.theta
+        quat = euler_from_quaternion((odom_msg.pose.pose.orientation.x,
+                                     odom_msg.pose.pose.orientation.y,
+                                     odom_msg.pose.pose.orientation.z,
+                                     odom_msg.pose.pose.orientation.w))
+        state[0] = odom_msg.pose.pose.position.x
+        state[1] = odom_msg.pose.pose.position.y
+        state[2] = quat[2]
+        state[3] = odom_msg.twist.twist.linear.x
+        state[4] = odom_msg.twist.twist.linear.z
 
         # update current simulation
         self.rcs.setState(state)
@@ -166,8 +181,8 @@ def run():
         Main func
     """
 
-    rospy.init_node('MCTSdriver', anonymous=True)
-    RunSimulationViz(verbose=False, visualize=False)
+    rospy.init_node('mcts_driver', anonymous=True)
+    MCTSdriver(verbose=False)
     rospy.sleep(0.1)
     rospy.spin()
 

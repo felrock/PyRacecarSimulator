@@ -20,7 +20,7 @@ from racecar_simulator_v2 import RacecarSimulator
 
 class RunSimulationViz:
 
-    def __init__(self, visualize=False, verbose=True):
+    def __init__(self, visualize=True, verbose=True):
 
         self.visualize = visualize
         self.verbose = verbose
@@ -67,7 +67,8 @@ class RunSimulationViz:
             "cs_f": rospy.get_param("~C_S_front"),
             "cs_r": rospy.get_param("~C_S_rear"),
             "I_z": rospy.get_param("~moment_inertia"),
-            "mass": rospy.get_param("~mass")
+            "mass": rospy.get_param("~mass"),
+            "batch_size": rospy.get_param("~batch_size")
         }
 
         # racecar object
