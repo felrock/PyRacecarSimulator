@@ -31,8 +31,12 @@ class Policy():
 
 
     def predict_action(self, lidar):
-        lidar = np.array([[ self.lidar_proc(i) / MAX_DISTANCE for i in lidar ]])
-        return self.sess.run(self.output_, feed_dict={ self.input_ : lidar })[0][0]
+        new_lid = []
+        for j in range(180,900):
+			if(j % 2 == 0):
+				new_lid.append(np.clip(lidar[i][j], 0, 15.0))
+        new_lid = np.array([[ self.lidar_proc(i) / MAX_DISTANCE for i in new_lid ]])
+        return self.sess.run(self.output_, feed_dict={ self.input_ : new_lid })[0][0]
 
 
 #Example use
@@ -46,14 +50,12 @@ if __name__ == '__main__':
 	y= act.iloc[:,0].values
 
 	tot_time = 0
-	
+
 	for i in range(len(X)):
 		start = time.time()
-		
+
 		lidar = []
-		for j in range(180,900):
-			if(j % 2 == 0):
-				lidar.append(np.clip(X[i][j], 0, 15.0))
+
 
 		pred = self.sess.run(self.output_, feed_dict={input_:lidar})
 
@@ -63,10 +65,3 @@ if __name__ == '__main__':
 		print("Time: ", pred_time)
 
 	print("Average time: ", tot_time/len(X))
-
-
-
-
-
-
-
