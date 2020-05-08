@@ -25,11 +25,19 @@ cdef extern from "include/racecar.hpp":
                                 double scan_ang_inc, double scan_dist_to_base)
         void updateSingle(double dt)
         void updateNormal(double dt)
+
         void setState(float* state)
         void getState(float* state)
         void getScanPose(double scan_dist_to_base, float* pose)
+        double getMeanVelocity()
+        double getTravelDistance()
+        void getCarPixels(double num_rays, float* pixels)
 
         # for driving
+        double total_velo
+        double travel_dist
+        double update_count
+
         double input_speed
         double input_steer
 
@@ -96,3 +104,10 @@ cdef class PyCar:
     cpdef void getScanPose(self, double scan_dist_to_base,
                           np.ndarray[float, ndim=1, mode="c"] pose):
         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
+    cpdef double getMeanVelocity(self):
+        return self.thisptr.getMeanVelocity()
+    cpdef double getTravelDistance(self):
+        return self.thisptr.getTravelDistance()
+    cpdef void getCarPixels(self, double num_rays,
+                                np.ndarray[float, ndim=1, mode="c"] pixels):
+        self.thisptr.getCarPixels(num_rays, &pixels[0])

@@ -101,17 +101,28 @@ class MCTS:
         root_state = self.simulator.getState()
         root_scan = self.simulator.getScan()
         self.root = Node(root_state, root_scan, self.action)
+        print("location at the start of mcts")
+        print root_state[0], root_state[1]
 
         t_start = time.time()
         while t_start + self.budget > time.time():
-            print("reward: ",self.mctsIteration(self.root))
+            print("reward: ", self.mctsIteration(self.root))
 
         action = None
         visits = -1
+        print "mcts iteration complete"
+        print "root child size: %i" % self.root.size()
         for child in self.root.children:
+            print "root child visit: %i" % child.visits
             if child.visits > visits:
                 action = child.action
                 visits = child.visits
+
+        rt = self.simulator.getState()
+        print("location at the end of mcts")
+        print rt[0], rt[1]
+
+
 
         # return the best steering angle
         self.action = action
@@ -127,7 +138,7 @@ class MCTS:
             return 0, False
 
         sum_of_visits = sum([x.visits for x in node.children])
-        
+
         if node.hasChildren():
             action = max(node.children, key=lambda x:(x.reward/x.visits +\
                                 self.C*math.log(sum_of_visits/x.visits)))
@@ -175,7 +186,18 @@ class MCTS:
 
         for i in xrange(self.max_iterations):
             # random action?
+            if i%10 == 0:
+                rand_steer = np.random.uniform(
+                                -self.simulator.config['max_steer_ang'],
+                                self.simulator.config['max_steer_ang'])
+                rand_speed = np.random.uniform(0,
+                                self.simulator.config['max_speed'])
+                self.simulator.drive(rand_steer, rand_speed)
+
+            # step
             self.simulator.updatePose()
+
+            # save reward from step
             new_state = self.simulator.getState()
             self.all_sim_states[i][0] = new_state[0]
             self.all_sim_states[i][1] = new_state[1]
@@ -190,11 +212,13 @@ class MCTS:
 
         if node.hasChildren():
             # make faster
-            return self.sample(node.action, 11, 0.02)
+            return self.uniSample(node.action, 0.05)
         else:
             # make faster
             return self.policy_session.predict_action(node.getScan())
 
+    def uniSample(self, prediction, dev):
+        return np.random.uniform(prediction-dev, prediction+dev)
 
     def sample(self, prediction, length, step): #uneven length
         samples = np.arange(prediction-(step*length/2),

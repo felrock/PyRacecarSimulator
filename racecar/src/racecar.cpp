@@ -38,6 +38,7 @@ Car::Car(double WB, double FC, double H_CG, double L_F, double L_R, double CS_F,
     this->I_Z = I_Z;
     this->CRASH_THRESH = CRASH_THRESH;
     this->WIDTH = WIDTH;
+    this->LENGTH = LENGTH;
     this->MAX_STEER_VEL = MAX_STEER_VEL;
     this->MAX_STEER_ANG = MAX_STEER_ANG;
     this->MAX_SPEED = MAX_SPEED;
@@ -46,6 +47,10 @@ Car::Car(double WB, double FC, double H_CG, double L_F, double L_R, double CS_F,
 
     // speed regulate
     KP = 2.0 * MAX_ACCEL / MAX_SPEED;
+
+    total_velo = 0.0;
+    travel_dist = 0.0;
+    update_count = 0;
 }
 
 void Car::updatePosition(double dt)
@@ -57,6 +62,10 @@ void Car::updatePosition(double dt)
     */
 
     computeFromInput();
+
+    // save previous x and y
+    double p_x = cs.x;
+    double p_y = cs.y;
 
     // change threshold to avoid flip flop
     double thresh;
@@ -78,10 +87,35 @@ void Car::updatePosition(double dt)
         updateSingle(dt);
     }
 
+    // get difference for travel distance
+    double d_x = p_x - cs.x;
+    double d_y = p_y - cs.y;
+    travel_dist += std::sqrt(d_x*d_x + d_y*d_y);
+    total_velo += cs.velocity;
+    update_count++;
+
     // limit values steering and speed
     cs.velocity = std::min(std::max(cs.velocity, -MAX_SPEED), MAX_SPEED);
     cs.steer_angle = std::min(std::max(cs.steer_angle, -MAX_STEER_ANG),\
                                                         MAX_STEER_ANG);
+}
+
+double Car::getMeanVelocity()
+{
+    /*
+     * The mean value over all the velo's seen in updatePose
+     */
+
+    return total_velo / static_cast<double>(update_count);
+}
+
+double Car::getTravelDistance()
+{
+    /*
+     * The total distance travel from car init
+     */
+
+    return travel_dist;
 }
 
 void Car::computeFromInput()
@@ -349,6 +383,69 @@ void Car::getScanPose(double scan_dist_to_base, float* pose)
     pose[0] = cs.x + scan_dist_to_base * std::cos(cs.theta);
     pose[1] = cs.y + scan_dist_to_base * std::sin(cs.theta);
     pose[2] = cs.theta;
+}
+
+void Car::getCarPixels(int num_rays, float* pixels)
+{
+    /*
+     * Similar to setCarEdge but the edge ecloses the car with pixels
+     * with the density specified with num_rays
+     */
+
+    // get the pixels that enclose the car
+    double dx, dy, t_dist;
+    double dist_to_side = WIDTH / 2.0;
+    double dist_to_front = LENGTH / 2.0;
+    double dist_to_back = LENGTH / 2.0;
+    double cur_ang = -cs.theta;
+    double ang_inc = 2.0*PI/num_rays; // 360 degrees over rays
+
+    for(int i=0; i < num_rays; ++i)
+    {
+        cur_ang += ang_inc;
+
+        if(cur_ang > 0.0)
+        {
+            if(cur_ang < PI /2.0)
+            {
+                t_dist = std::min(dist_to_side / std::sin(cur_ang),\
+                                 dist_to_front / std::cos(cur_ang));
+                pixels[i] = static_cast<float>(dx);
+                pixels[i+1] = static_cast<float>(dy);
+
+            }
+            else
+            {
+                t_dist = std::min(dist_to_side / std::sin(cur_ang-PI/2.0),\
+                                 dist_to_back / std::cos(cur_ang-PI/2.0));
+                pixels[i] = static_cast<float>(dx);
+                pixels[i+1] = static_cast<float>(dy);
+            }
+        }
+        else
+        {
+            if(cur_ang == 0.0)
+                cur_ang += 0.0001; // avoid zero division
+
+            if(cur_ang > -PI /2.0)
+            {
+                t_dist = std::min(dist_to_side / std::sin(-cur_ang),\
+                                dist_to_front / std::cos(-cur_ang));
+                pixels[i] = static_cast<float>(dx);
+                pixels[i+1] = static_cast<float>(dy);
+            }
+            else
+            {
+                t_dist = std::min(dist_to_side / std::sin(-cur_ang-PI/2.0),\
+                                dist_to_back / std::cos(-cur_ang-PI/2.0));
+                dx = t_dist * std::cos(cur_ang);
+                dy = t_dist * std::sin(cur_ang);
+                pixels[i] = static_cast<float>(dx);
+                pixels[i+1] = static_cast<float>(dy);
+            }
+        }
+    }
+
 }
 
 /* ************************************************************************** */

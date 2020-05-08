@@ -109,11 +109,11 @@ class MCTSdriver:
         """
             Updates simulatio one step
         """
-        speed = 1.0
+        speed = 3.0
         # create timestamp
 
         # create new MCTS instance
-        mcts_run = MCTS(self.rcs, self.ps,self.car_config['batch_size'], budget=1.0)
+        mcts_run = MCTS(self.rcs, self.ps,self.car_config['batch_size'], budget=0.1)
         action, action_state = mcts_run.mcts()
 
         # update rcs

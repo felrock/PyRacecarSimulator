@@ -150,7 +150,18 @@ class RacecarSimulator():
             Halt the car
         """
 
-        self.car.stop()
+        state = self.getState()
+        state[0] = 0.0
+        state[1] = 0.0
+        state[2] = 0.0
+        state[3] = 0.0
+        state[4] = 0.0
+        state[5] = 0.0
+        state[6] = 0.0
+        state[7] = 0.0
+        self.setState(state)
+        self.desired_speed = 0.0
+        self.desired_steer_ang = 0.0
 
     def setMap(self, ros_map, resolution, origin):
         """

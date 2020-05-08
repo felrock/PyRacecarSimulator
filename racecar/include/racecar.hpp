@@ -55,8 +55,18 @@ class Car
         void getState(float* state);
         void setState(float* state);
         void getScanPose(double scan_dist_to_base, float* pose);
+        double getMeanVelocity();
+        double getTravelDistance();
+
+        // for drawing
+        void getCarPixels(int num_rays, float* pixels);
 
     private:
+
+        // added for rewards
+        double total_velo; // used to get avg speed over updates
+        double travel_dist; // total distance traveled
+        int update_count;
 
         // driver inputs
         double input_speed;
@@ -72,7 +82,7 @@ class Car
 
         // for map occupation
         double WIDTH;
-        double HEIGHT;
+        double LENGTH;
 
         // limits
         double MAX_ACCEL, MAX_DECEL, MAX_SPEED;
