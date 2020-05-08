@@ -177,6 +177,7 @@ class RunSimulationViz:
         state[2] = yaw
 
         self.rcs.setState(state)
+        self.rcs.runScan()
 
 
     def poseRvizCallback(self, msg):
@@ -186,7 +187,7 @@ class RunSimulationViz:
         ps_msg = PoseWithCovarianceStamped()
         ps_msg.header = msg.header
         ps_msg.pose = msg.pose.pose
-        poseCallback(ps_msg)
+        self.poseCallback(ps_msg)
 
 
     def mapCallback(self, map_msg):
