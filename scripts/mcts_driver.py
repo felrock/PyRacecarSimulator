@@ -113,7 +113,7 @@ class MCTSdriver:
         # create timestamp
 
         # create new MCTS instance
-        mcts_run = MCTS(self.rcs, self.ps, budget=3.0)
+        mcts_run = MCTS(self.rcs, self.ps,self.car_config['batch_size'], budget=1.0)
         action, action_state = mcts_run.mcts()
 
         # update rcs
@@ -123,12 +123,14 @@ class MCTSdriver:
         # ackerman cmd stuf
         timestamp = rospy.get_rostime()
         action = np.clip(action, -0.4189, 0.4189)
+        print("Action: ", action)
+        print("============================NEW ITERATION=============================")
 
         drive_msg = AckermannDriveStamped()
         drive_msg.header.stamp = rospy.Time.now()
         drive_msg.header.frame_id = "laser"
         drive_msg.drive.steering_angle = action
-        drive_msg.drive.speed = 1.0
+        drive_msg.drive.speed = speed
 
         self.drive_pub.publish(drive_msg)
 

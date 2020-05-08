@@ -78,7 +78,7 @@ class MCTS:
         Driver running a MCTS with RacecarSimulator
     """
 
-    def __init__(self, simulator, policy_session,  budget=1.0):
+    def __init__(self, simulator, policy_session, max_iter,  budget=1.0):
         """
 
         """
@@ -86,10 +86,11 @@ class MCTS:
         self.simulator = simulator
         self.policy_session = policy_session
         self.budget = budget
+        self.max_iterations = max_iter
         self.action = 0.0
         self.root = None
         self.C = 0.1 # exp constant
-        self.crash_pen = -10
+        self.crash_pen = -60
 
         self.speed = 1.0
 
@@ -103,8 +104,7 @@ class MCTS:
 
         t_start = time.time()
         while t_start + self.budget > time.time():
-
-            self.mctsIteration(self.root)
+            print("reward: ",self.mctsIteration(self.root))
 
         action = None
         visits = -1
@@ -127,6 +127,7 @@ class MCTS:
             return 0, False
 
         sum_of_visits = sum([x.visits for x in node.children])
+        
         if node.hasChildren():
             action = max(node.children, key=lambda x:(x.reward/x.visits +\
                                 self.C*math.log(sum_of_visits/x.visits)))
@@ -163,16 +164,16 @@ class MCTS:
 
     def rollout(self, node):
         """
-            Do a 100 iteration rollout, then pass all states to
+            Do a batch_size iteration rollout, then pass all states to
             perform scanning on gpu. Determine wheere the collision is
             with an index
         """
 
         self.simulator.setState(node.state)
-        self.all_sim_states = np.ndarray((100, 3), dtype=np.float32)
-        rewards = np.zeros(100)
+        self.all_sim_states = np.ndarray((self.max_iterations, 3), dtype=np.float32)
+        rewards = np.zeros(self.max_iterations)
 
-        for i in xrange(100):
+        for i in xrange(self.max_iterations):
             # random action?
             self.simulator.updatePose()
             new_state = self.simulator.getState()
@@ -189,7 +190,7 @@ class MCTS:
 
         if node.hasChildren():
             # make faster
-            return self.sample(node.action, 11, 0.13*2/11)
+            return self.sample(node.action, 11, 0.02)
         else:
             # make faster
             return self.policy_session.predict_action(node.getScan())
