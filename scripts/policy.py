@@ -29,11 +29,7 @@ class Policy():
 
 
     def predict_action(self, lidar):
-        new_lid = []
-        for j in range(180,900):
-			if(j % 2 == 0):
-				new_lid.append(np.clip(lidar[j], 0, 15.0))
-        new_lid = np.array([[ self.lidar_proc(i) / 15.0 for i in new_lid ]])
+        new_lid = np.array([[ self.lidar_proc(i) / 15.0 for i in lidar[180:900]]])
         return self.sess.run(self.output_, feed_dict={ self.input_ : new_lid })[0][0]
 
 
@@ -52,10 +48,7 @@ if __name__ == '__main__':
 	for i in range(len(X)):
 		start = time.time()
 
-		lidar = []
-
-
-		pred = self.sess.run(self.output_, feed_dict={input_:lidar})
+		pred = self.predict_action(X[i])
 
 		end = time.time()
 		pred_time = end-start
