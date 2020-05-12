@@ -134,12 +134,11 @@ class RacecarSimulator():
 
         # run all scans on gpu
         output_scans = self.scan_simulator.scanMany(poses)
-
         # check collisions in order
         for i in xrange(self.batch_size):
             # TODO:fix with poses
-            if self.car.isCrashed(output_scans[i*self.num_rays:(i+1)*
-                                self.num_rays], self.num_rays):
+            scan = output_scans[i*self.num_rays:(i+1)*self.num_rays]
+            if self.car.isCrashed(scan, self.num_rays):
                 return i-1
 
         # no crash was found

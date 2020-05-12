@@ -124,7 +124,12 @@ class RunSimulationViz:
 
         # update simulation
         self.rcs.updatePose()
+
+        cur_state = self.rcs.getState()
+        print "position: "
         if self.visualize:
+
+            print cur_state[0], cur_state[1]
             # pub pose as transform
             self.poseTransformPub(timestamp)
 

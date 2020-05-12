@@ -1,5 +1,6 @@
 #! /usr/bin/python
 import sys
+import os
 import rospkg
 import rospy
 import numpy as np
@@ -24,11 +25,13 @@ from policy import Policy
 class MCTSdriver:
 
     def __init__(self, verbose=True):
+        self.beta = 0
 
         self.verbose = verbose
 
         # parameters for simulation
         self.update_pose_rate = rospy.get_param("~update_pose_rate")
+        self.update_action_rate = rospy.get_param("~update_action_rate")
 
         self.drive_topic = rospy.get_param("~drive_topic")
         self.map_topic = rospy.get_param("~map_topic")
@@ -66,7 +69,6 @@ class MCTSdriver:
         }
 
         # create policy session
-
         pack = rospkg.RosPack()
         self.graph_path = (pack.get_path('PyRacecarSimulator') +
                 rospy.get_param("~graph_path"))
@@ -95,15 +97,41 @@ class MCTSdriver:
         self.rcs.runScan()
 
         # subscribers
-        self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback, queue_size=1)
-        self.odom_sub = rospy.Subscriber(self.odom_topic, Odometry, self.odomCallback, queue_size=10)
-        self.action_update = rospy.Timer(rospy.Duration(self.update_pose_rate), self.createActionCallback)
+        self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
+        self.odom_sub = rospy.Subscriber(self.odom_topic, Odometry, self.odomCallback)
+        self.lidar_sub = rospy.Subscriber(self.scan_topic, LaserScan, self.lidarCallback)
+        self.action_update = rospy.Timer(rospy.Duration(self.update_action_rate), self.createActionCallback)
 
         # publisher
         self.drive_pub = rospy.Publisher(self.drive_topic, AckermannDriveStamped, queue_size=1)
 
+        # to keep track of position
+        self.odom_state = self.rcs.getState()
+        self.scan = None
+        self.action = 0.0
+
         if self.verbose:
             print "Driver constructed"
+
+    def writeTreePoints(self, file, tree_node):
+
+        if not tree_node.hasChildren():
+            file.write("0, %f, %f\n" % (tree_node.state[0],
+                                  tree_node.state[1]))
+
+            for ro in tree_node.rollout_points:
+                file.write("1, %f, %f\n" % (ro[0],
+                                      ro[1]))
+
+        else:
+            for child in tree_node.children:
+                self.writeTreePoints(file, child)
+            file.write("0, %f, %f\n" % (tree_node.state[0],
+                                  tree_node.state[1]))
+
+            for ro in tree_node.rollout_points:
+                file.write("0, %f, %f\n" % (ro[0],
+                                      ro[1]))
 
     def createActionCallback(self, event):
         """
@@ -112,24 +140,34 @@ class MCTSdriver:
         speed = 3.0
         # create timestamp
 
-        # create new MCTS instance
-        mcts_run = MCTS(self.rcs, self.ps,self.car_config['batch_size'], budget=0.1)
-        action, action_state = mcts_run.mcts()
 
+        # create new MCTS instance
+        self.rcs.setState(self.odom_state)
+        mcts_run = MCTS(self.rcs, self.ps, self.action,
+                                    self.car_config['batch_size'], budget=10.0)
+        self.action = mcts_run.mcts()
+
+        # logg the tree
+        if self.beta ==  5:
+            print os.path.abspath(os.getcwd())
+
+            with open('logg_mcts_100_RND_RO.txt', 'w') as f:
+                self.writeTreePoints(f, mcts_run.root)
+        self.beta += 1
         # update rcs
-        self.rcs.drive(speed, action)
+        self.rcs.drive(speed, self.action)
         self.rcs.updatePose()
 
         # ackerman cmd stuf
         timestamp = rospy.get_rostime()
-        action = np.clip(action, -0.4189, 0.4189)
-        print("Action: ", action)
+        self.action = np.clip(self.action, -0.4189, 0.4189)
+        print("Action: ", self.action)
         print("============================NEW ITERATION=============================")
 
         drive_msg = AckermannDriveStamped()
         drive_msg.header.stamp = rospy.Time.now()
         drive_msg.header.frame_id = "laser"
-        drive_msg.drive.steering_angle = action
+        drive_msg.drive.steering_angle = self.action
         drive_msg.drive.speed = speed
 
         self.drive_pub.publish(drive_msg)
@@ -163,20 +201,20 @@ class MCTSdriver:
         self.rcs.setMap(ros_omap, map_msg.info.resolution, origin)
 
     def odomCallback(self, odom_msg):
-
-        state = self.rcs.getState()
+        #self.odom_state = self.rcs.getState()
         quat = euler_from_quaternion((odom_msg.pose.pose.orientation.x,
                                      odom_msg.pose.pose.orientation.y,
                                      odom_msg.pose.pose.orientation.z,
                                      odom_msg.pose.pose.orientation.w))
-        state[0] = odom_msg.pose.pose.position.x
-        state[1] = odom_msg.pose.pose.position.y
-        state[2] = quat[2]
-        state[3] = odom_msg.twist.twist.linear.x
-        state[4] = odom_msg.twist.twist.linear.z
+        self.odom_state[0] = odom_msg.pose.pose.position.x
+        self.odom_state[1] = odom_msg.pose.pose.position.y
+        self.odom_state[2] = quat[2]
+        self.odom_state[3] = odom_msg.twist.twist.linear.x
+        self.odom_state[4] = odom_msg.twist.twist.linear.z
 
-        # update current simulation
-        self.rcs.setState(state)
+    def lidarCallback(self, lidar_msg):
+
+        self.scan = lidar_msg.ranges
 
 def run():
     """
