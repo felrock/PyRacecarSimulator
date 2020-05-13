@@ -38,7 +38,7 @@ class Car
         void computeFromInput();
 
         // from simulator.cpp
-        bool isCrashed(float* rays, int num_rays);
+        int isCrashed(float* rays, int num_rays, int poses);
 
         // from precompute
         void setCarEdgeDistances(int num_rays,

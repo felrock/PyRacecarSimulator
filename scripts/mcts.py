@@ -1,6 +1,7 @@
 from racecar_simulator_v2 import RacecarSimulator
 from policy import *
 from follow_the_gap import *
+import followgap
 
 import math
 from collections import defaultdict
@@ -27,9 +28,6 @@ class Node:
         self.reward = 0.0
         self.bound = (0, 0)
         self.children = []
-
-        # for logging
-        self.rollout_points = []
 
     def getScan(self):
         return self.scan
@@ -94,7 +92,10 @@ class MCTS:
 
         # action generators
         self.policy_session = policy_session
-        self.fg = FollowTheGap()
+        #self.fg = FollowTheGap()
+        self.fg = followgap.PyFollowGap(10, 15.0,
+                                self.simulator.config['max_steer_ang'],
+                                0.004)
         self.budget = budget
         self.max_iterations = roll_out_itr
         self.action = recent_action
@@ -156,7 +157,7 @@ class MCTS:
             rv, expanded = self.mctsIteration(node, expanded=False)
 
         if not expanded:
-            new_action = self.generateActionFromRandom(node)
+            new_action = self.generateActionFromFG(node)
             new_state, new_scan, terminal = self.act(node, new_action)
             new_child = Node(new_state, new_scan, new_action, terminal,
                             parent=node)
@@ -179,7 +180,7 @@ class MCTS:
         self.simulator.updatePose()
         self.simulator.runScan()
         scan = self.simulator.getScan()
-        terminal = self.simulator.checkCollision()
+        terminal = self.simulator.checkCollision() > 0
         new_state = self.simulator.getState()
 
         self.simulator.setState(prev_state)
@@ -219,9 +220,13 @@ class MCTS:
             rewards[i] = new_state[3]
 
         index = self.simulator.checkCollisionMany(self.all_sim_states)
-        node.rollout_points = self.all_sim_states[:index]
         self.simulator.setState(prev_state)
-        return np.sum(rewards[:index]), index
+        if index < 0:
+
+            return np.sum(rewards), index
+        else:
+
+            return np.sum(rewards[:index]), index
 
     def generateActionFromNN(self, node):
 
@@ -244,8 +249,7 @@ class MCTS:
 
         else:
 
-            return self.fg.getAction(lidar)
-
+            return self.fg.eval(lidar, len(lidar))
 
     def uniSample(self, prediction, dev):
         return np.random.uniform(prediction-dev, prediction+dev)

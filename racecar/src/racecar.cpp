@@ -305,31 +305,29 @@ void Car::control(double speed, double steer_vel)
     input_steer = steer_vel;
 }
 
-bool Car::isCrashed(float* rays, int num_rays)
+int Car::isCrashed(float* rays, int num_rays, int poses)
 {
     /*
      * rays is the same length as edge_distances.
      * if a ray is small enough to be within the
      * edge distances set, the car has crashed
      *
+     * Poses is how many scans ray cotains, makes checking
+     * more than one scene for crashes faster
      */
-
-
-    // we can speed this up by only checking the rays
-    // that are within our steering range, and also if
-    // an object is close we don't really have to check
-    // every ray, every other would be fine.
-    //
-    // TODO
-
-    for(size_t i=0; i < num_rays; ++i)
+    int i;
+    for(i=0; i < poses; ++i)
     {
-        if(rays[i] - edge_distances[i] < CRASH_THRESH)
+        for(size_t j=0; j < num_rays; ++j)
         {
-            return true;
+            if(rays[i*num_rays + j] - edge_distances[j] < CRASH_THRESH)
+            {
+                return i;
+            }
         }
     }
-    return false;
+
+    return -i;
 }
 
 void Car::setState(float *state)

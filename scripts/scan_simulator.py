@@ -58,7 +58,7 @@ class ScanSimulator2D:
         self.res = resolution
         self.hasMap = True
 
-    def setRaytracingMethod(self, method="CDDT"):
+    def setRaytracingMethod(self, method="RM"):
         """
             Set which Ray tracing method to use
         """
@@ -68,10 +68,14 @@ class ScanSimulator2D:
             return
 
         if method == "RM":
-            self.scan_method = range_libc.PyRayMarching(self.omap, self.mrx)
-
+            self.scan_method = range_libc.PyRayMarching(self.omap,
+                                                        self.mrx)
         elif method == "RMGPU":
-            self.scan_method = range_libc.PyRayMarchingGPU(self.omap, self.mrx)
+            self.scan_method = range_libc.PyRayMarchingGPU(self.omap,
+                                                           self.mrx)
+        else:
+            print "Only ray marching is supported"
+            sys.exit()
 
     def updateMap(self, ros_map):
         """
@@ -90,22 +94,20 @@ class ScanSimulator2D:
         if not self.hasMap:
             print "Doing a scan without a defined map"
 
-        theta_min = theta - self.fov/2.0
-        theta_max = theta +self.fov/2.0
-
-        # create numpy array
-        self.input_vector[:, 0] = x
-        self.input_vector[:, 1] = y
-        self.input_vector[:, 2] = np.linspace(theta_min, theta_max, self.num_rays)
+        self.input_vector[0, 0] = x
+        self.input_vector[0, 1] = y
+        self.input_vector[0, 2] = theta
 
         # run ray marching
         self.scan_method.calc_range_many(self.input_vector,
-                                         self.output_vector)
+                                         self.output_vector,
+                                         self.fov,
+                                         self.num_rays)
 
         # add some noise to the output
-        self.noise = np.array(np.random.normal(0, self.scan_std, self.num_rays), dtype=np.float32)
+        #self.noise = np.array(np.random.normal(0, self.scan_std, self.num_rays), dtype=np.float32)
 
-        return self.output_vector + self.noise
+        return self.output_vector #+ self.noise
 
     def scanMany(self, poses):
         """
@@ -114,23 +116,20 @@ class ScanSimulator2D:
         """
 
         for i in xrange(self.batch_size):
+
             x = poses[i][0]
             y = poses[i][1]
             theta = poses[i][2]
 
-            theta_min = theta - self.fov/2.0
-            theta_max = theta + self.fov/2.0
+            self.input_vector_many[i*self.num_rays, 0] = x
+            self.input_vector_many[i*self.num_rays, 1] = y
+            self.input_vector_many[i*self.num_rays, 2] = theta
 
-            # create numpy array
-            a = i*self.num_rays
-            b = (i+1)*self.num_rays
-            self.input_vector_many[a:b, 0] = x
-            self.input_vector_many[a:b, 1] = y
-            self.input_vector_many[a:b, 2] = np.linspace(theta_min,
-                                             theta_max, self.num_rays)
-
+        # scanning all
         self.scan_method.calc_range_many(self.input_vector_many,
-                                        self.output_vector_many)
+                                        self.output_vector_many,
+                                        self.fov,
+                                        self.num_rays)
 
         return self.output_vector_many
 

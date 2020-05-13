@@ -144,16 +144,19 @@ class MCTSdriver:
         # create new MCTS instance
         self.rcs.setState(self.odom_state)
         mcts_run = MCTS(self.rcs, self.ps, self.action,
-                                    self.car_config['batch_size'], budget=10.0)
+                                    self.car_config['batch_size'], budget=1.0)
         self.action = mcts_run.mcts()
 
         # logg the tree
+        """
         if self.beta ==  5:
             print os.path.abspath(os.getcwd())
 
             with open('logg_mcts_100_RND_RO.txt', 'w') as f:
                 self.writeTreePoints(f, mcts_run.root)
         self.beta += 1
+
+        """
         # update rcs
         self.rcs.drive(speed, self.action)
         self.rcs.updatePose()

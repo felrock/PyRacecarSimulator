@@ -126,10 +126,9 @@ class RunSimulationViz:
         self.rcs.updatePose()
 
         cur_state = self.rcs.getState()
-        print "position: "
+        print "position: %f, %f" % (cur_state[0], cur_state[1])
         if self.visualize:
 
-            print cur_state[0], cur_state[1]
             # pub pose as transform
             self.poseTransformPub(timestamp)
 
@@ -142,7 +141,7 @@ class RunSimulationViz:
         # sim lidar
         self.rcs.runScan()
 
-        if self.rcs.checkCollision():
+        if self.rcs.checkCollision() > 0:
             # do other things here too
             self.rcs.stop()
 
@@ -157,8 +156,6 @@ class RunSimulationViz:
         """
             Pass actions for driving
         """
-        if self.verbose:
-            print "driveCallback, speed %f, steering %f" %(msg.drive.speed, msg.drive.steering_angle)
 
         self.rcs.drive(msg.drive.speed, msg.drive.steering_angle)
 

@@ -491,20 +491,19 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__racecar
-#define __PYX_HAVE_API__racecar
-#include <string.h>
-#include <string>
+#define __PYX_HAVE__followgap
+#define __PYX_HAVE_API__followgap
+#include <vector>
 #include "ios"
 #include "new"
 #include "stdexcept"
 #include "typeinfo"
-#include <vector>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "numpy/arrayobject.h"
 #include "numpy/ufuncobject.h"
-#include "include/racecar.hpp"
+#include "followgap.hpp"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -728,7 +727,7 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "stringsource",
-  "pywrapper/racecar.pyx",
+  "followgap.pyx",
   "__init__.pxd",
   "type.pxd",
 };
@@ -983,7 +982,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 
 
 /*--- Type declarations ---*/
-struct __pyx_obj_7racecar_PyCar;
+struct __pyx_obj_9followgap_PyFollowGap;
 
 /* "../../../../usr/lib/python2.7/dist-packages/Cython/Includes/numpy/__init__.pxd":764
  * ctypedef npy_longdouble longdouble_t
@@ -1021,35 +1020,25 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "racecar.pyx":75
- *         double G
+/* "followgap.pyx":21
  * 
- * cdef class PyCar:             # <<<<<<<<<<<<<<
- *     cdef Car *thisptr
- *     def __cinit__(self, double WB, double FC, double H_CG, double L_F, double L_R,
+ * 
+ * cdef class PyFollowGap:             # <<<<<<<<<<<<<<
+ *     cdef FollowGap *thisptr
+ *     def __cinit__(self, int ws, float md, float ma, float angle_inc):
  */
-struct __pyx_obj_7racecar_PyCar {
+struct __pyx_obj_9followgap_PyFollowGap {
   PyObject_HEAD
-  struct __pyx_vtabstruct_7racecar_PyCar *__pyx_vtab;
-  Car *thisptr;
+  struct __pyx_vtabstruct_9followgap_PyFollowGap *__pyx_vtab;
+  FollowGap *thisptr;
 };
 
 
 
-struct __pyx_vtabstruct_7racecar_PyCar {
-  void (*updatePosition)(struct __pyx_obj_7racecar_PyCar *, double, int __pyx_skip_dispatch);
-  void (*control)(struct __pyx_obj_7racecar_PyCar *, double, double, int __pyx_skip_dispatch);
-  void (*computeFromInput)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch);
-  int (*isCrashed)(struct __pyx_obj_7racecar_PyCar *, PyArrayObject *, int, int, int __pyx_skip_dispatch);
-  void (*setCarEdgeDistances)(struct __pyx_obj_7racecar_PyCar *, int, double, double, double, int __pyx_skip_dispatch);
-  void (*getState)(struct __pyx_obj_7racecar_PyCar *, PyArrayObject *, int __pyx_skip_dispatch);
-  void (*setState)(struct __pyx_obj_7racecar_PyCar *, PyArrayObject *, int __pyx_skip_dispatch);
-  void (*getScanPose)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch);
-  double (*getMeanVelocity)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch);
-  double (*getTravelDistance)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch);
-  void (*getCarPixels)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch);
+struct __pyx_vtabstruct_9followgap_PyFollowGap {
+  float (*eval)(struct __pyx_obj_9followgap_PyFollowGap *, PyArrayObject *, int, int __pyx_skip_dispatch);
 };
-static struct __pyx_vtabstruct_7racecar_PyCar *__pyx_vtabptr_7racecar_PyCar;
+static struct __pyx_vtabstruct_9followgap_PyFollowGap *__pyx_vtabptr_9followgap_PyFollowGap;
 
 /* --- Runtime support code (head) --- */
 /* Refnanny.proto */
@@ -1146,12 +1135,17 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
     const char* function_name);
 
-/* PyCFunctionFastCall.proto */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
-#else
-#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
-#endif
+/* IsLittleEndian.proto */
+static CYTHON_INLINE int __Pyx_Is_Little_Endian(void);
+
+/* BufferFormatCheck.proto */
+static CYTHON_INLINE int  __Pyx_GetBufferAndValidate(Py_buffer* buf, PyObject* obj,
+    __Pyx_TypeInfo* dtype, int flags, int nd, int cast, __Pyx_BufFmt_StackElem* stack);
+static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info);
+static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts);
+static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
+                              __Pyx_BufFmt_StackElem* stack,
+                              __Pyx_TypeInfo* type);
 
 /* PyFunctionFastCall.proto */
 #if CYTHON_FAST_PYCALL
@@ -1164,6 +1158,13 @@ static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, 
 #endif
 #endif
 
+/* PyCFunctionFastCall.proto */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
+#else
+#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
+#endif
+
 /* PyObjectCall.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
@@ -1171,14 +1172,10 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg
 #define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
 #endif
 
-/* PyObjectCallMethO.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
-#endif
+/* BufferIndexError.proto */
+static void __Pyx_RaiseBufferIndexError(int axis);
 
-/* PyObjectCallOneArg.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
-
+#define __Pyx_BufPtrCContig1d(type, buf, i0, s0) ((type)buf + i0)
 /* PyThreadStateGet.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
@@ -1208,29 +1205,6 @@ static void __Pyx_WriteUnraisable(const char *name, int clineno,
                                   int lineno, const char *filename,
                                   int full_traceback, int nogil);
 
-/* PyObjectCallNoArg.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
-#else
-#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
-#endif
-
-/* IsLittleEndian.proto */
-static CYTHON_INLINE int __Pyx_Is_Little_Endian(void);
-
-/* BufferFormatCheck.proto */
-static CYTHON_INLINE int  __Pyx_GetBufferAndValidate(Py_buffer* buf, PyObject* obj,
-    __Pyx_TypeInfo* dtype, int flags, int nd, int cast, __Pyx_BufFmt_StackElem* stack);
-static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info);
-static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts);
-static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
-                              __Pyx_BufFmt_StackElem* stack,
-                              __Pyx_TypeInfo* type);
-
-/* BufferIndexError.proto */
-static void __Pyx_RaiseBufferIndexError(int axis);
-
-#define __Pyx_BufPtrCContig1d(type, buf, i0, s0) ((type)buf + i0)
 /* ArgTypeTest.proto */
 static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, int none_allowed,
     const char *name, int exact);
@@ -1490,27 +1464,15 @@ static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static void __pyx_f_7racecar_5PyCar_updatePosition(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_dt, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_control(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_speed, double __pyx_v_steer, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_computeFromInput(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
-static int __pyx_f_7racecar_5PyCar_isCrashed(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_rays, int __pyx_v_num_rays, int __pyx_v_poses, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_setCarEdgeDistances(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, double __pyx_v_ang_min, double __pyx_v_scan_ang_inc, double __pyx_v_scan_dist_to_base, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_getState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_setState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_scan_dist_to_base, PyArrayObject *__pyx_v_pose, int __pyx_skip_dispatch); /* proto*/
-static double __pyx_f_7racecar_5PyCar_getMeanVelocity(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
-static double __pyx_f_7racecar_5PyCar_getTravelDistance(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels, int __pyx_skip_dispatch); /* proto*/
+static float __pyx_f_9followgap_11PyFollowGap_eval(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, PyArrayObject *__pyx_v_lidar, int __pyx_v_size, int __pyx_skip_dispatch); /* proto*/
 
 /* Module declarations from 'libcpp' */
-
-/* Module declarations from 'libc.string' */
-
-/* Module declarations from 'libcpp.string' */
 
 /* Module declarations from 'libcpp.vector' */
 
 /* Module declarations from 'cpython.buffer' */
+
+/* Module declarations from 'libc.string' */
 
 /* Module declarations from 'libc.stdio' */
 
@@ -1537,75 +1499,44 @@ static PyTypeObject *__pyx_ptype_5numpy_ndarray = 0;
 static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, char *, char *, int *); /*proto*/
 
-/* Module declarations from 'racecar' */
-static PyTypeObject *__pyx_ptype_7racecar_PyCar = 0;
+/* Module declarations from 'followgap' */
+static PyTypeObject *__pyx_ptype_9followgap_PyFollowGap = 0;
 static __Pyx_TypeInfo __Pyx_TypeInfo_float = { "float", NULL, sizeof(float), { 0 }, 0, 'R', 0, 0 };
-#define __Pyx_MODULE_NAME "racecar"
-int __pyx_module_is_main_racecar = 0;
+#define __Pyx_MODULE_NAME "followgap"
+int __pyx_module_is_main_followgap = 0;
 
-/* Implementation of 'racecar' */
+/* Implementation of 'followgap' */
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_RuntimeError;
 static PyObject *__pyx_builtin_ImportError;
-static const char __pyx_k_FC[] = "FC";
-static const char __pyx_k_WB[] = "WB";
+static const char __pyx_k_ma[] = "ma";
+static const char __pyx_k_md[] = "md";
 static const char __pyx_k_np[] = "np";
-static const char __pyx_k_I_Z[] = "I_Z";
-static const char __pyx_k_L_F[] = "L_F";
-static const char __pyx_k_L_R[] = "L_R";
-static const char __pyx_k_CS_F[] = "CS_F";
-static const char __pyx_k_CS_R[] = "CS_R";
-static const char __pyx_k_H_CG[] = "H_CG";
-static const char __pyx_k_MASS[] = "MASS";
+static const char __pyx_k_ws[] = "ws";
+static const char __pyx_k_eval[] = "eval";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
-static const char __pyx_k_pose[] = "pose";
-static const char __pyx_k_rays[] = "rays";
+static const char __pyx_k_size[] = "size";
 static const char __pyx_k_test[] = "__test__";
-static const char __pyx_k_WIDTH[] = "WIDTH";
+static const char __pyx_k_lidar[] = "lidar";
 static const char __pyx_k_numpy[] = "numpy";
-static const char __pyx_k_poses[] = "poses";
 static const char __pyx_k_range[] = "range";
-static const char __pyx_k_speed[] = "speed";
-static const char __pyx_k_steer[] = "steer";
-static const char __pyx_k_LENGTH[] = "LENGTH";
 static const char __pyx_k_import[] = "__import__";
-static const char __pyx_k_pixels[] = "pixels";
 static const char __pyx_k_reduce[] = "__reduce__";
-static const char __pyx_k_ang_min[] = "ang_min";
-static const char __pyx_k_control[] = "control";
-static const char __pyx_k_getState[] = "getState";
 static const char __pyx_k_getstate[] = "__getstate__";
-static const char __pyx_k_num_rays[] = "num_rays";
-static const char __pyx_k_setState[] = "setState";
 static const char __pyx_k_setstate[] = "__setstate__";
-static const char __pyx_k_MAX_ACCEL[] = "MAX_ACCEL";
-static const char __pyx_k_MAX_DECEL[] = "MAX_DECEL";
-static const char __pyx_k_MAX_SPEED[] = "MAX_SPEED";
 static const char __pyx_k_TypeError[] = "TypeError";
-static const char __pyx_k_isCrashed[] = "isCrashed";
+static const char __pyx_k_angle_inc[] = "angle_inc";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
-static const char __pyx_k_getScanPose[] = "getScanPose";
-static const char __pyx_k_CRASH_THRESH[] = "CRASH_THRESH";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
-static const char __pyx_k_getCarPixels[] = "getCarPixels";
-static const char __pyx_k_scan_ang_inc[] = "scan_ang_inc";
-static const char __pyx_k_MAX_STEER_ANG[] = "MAX_STEER_ANG";
-static const char __pyx_k_MAX_STEER_VEL[] = "MAX_STEER_VEL";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
-static const char __pyx_k_updatePosition[] = "updatePosition";
-static const char __pyx_k_getMeanVelocity[] = "getMeanVelocity";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
-static const char __pyx_k_computeFromInput[] = "computeFromInput";
-static const char __pyx_k_getTravelDistance[] = "getTravelDistance";
-static const char __pyx_k_scan_dist_to_base[] = "scan_dist_to_base";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
-static const char __pyx_k_setCarEdgeDistances[] = "setCarEdgeDistances";
 static const char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
@@ -1615,90 +1546,49 @@ static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not F
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
 static const char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
-static PyObject *__pyx_n_s_CRASH_THRESH;
-static PyObject *__pyx_n_s_CS_F;
-static PyObject *__pyx_n_s_CS_R;
-static PyObject *__pyx_n_s_FC;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
-static PyObject *__pyx_n_s_H_CG;
-static PyObject *__pyx_n_s_I_Z;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_n_s_LENGTH;
-static PyObject *__pyx_n_s_L_F;
-static PyObject *__pyx_n_s_L_R;
-static PyObject *__pyx_n_s_MASS;
-static PyObject *__pyx_n_s_MAX_ACCEL;
-static PyObject *__pyx_n_s_MAX_DECEL;
-static PyObject *__pyx_n_s_MAX_SPEED;
-static PyObject *__pyx_n_s_MAX_STEER_ANG;
-static PyObject *__pyx_n_s_MAX_STEER_VEL;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_ValueError;
-static PyObject *__pyx_n_s_WB;
-static PyObject *__pyx_n_s_WIDTH;
-static PyObject *__pyx_n_s_ang_min;
+static PyObject *__pyx_n_s_angle_inc;
 static PyObject *__pyx_n_s_cline_in_traceback;
-static PyObject *__pyx_n_s_computeFromInput;
-static PyObject *__pyx_n_s_control;
-static PyObject *__pyx_n_s_getCarPixels;
-static PyObject *__pyx_n_s_getMeanVelocity;
-static PyObject *__pyx_n_s_getScanPose;
-static PyObject *__pyx_n_s_getState;
-static PyObject *__pyx_n_s_getTravelDistance;
+static PyObject *__pyx_n_s_eval;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_isCrashed;
+static PyObject *__pyx_n_s_lidar;
+static PyObject *__pyx_n_s_ma;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_md;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_np;
-static PyObject *__pyx_n_s_num_rays;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
-static PyObject *__pyx_n_s_pixels;
-static PyObject *__pyx_n_s_pose;
-static PyObject *__pyx_n_s_poses;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
-static PyObject *__pyx_n_s_rays;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
-static PyObject *__pyx_n_s_scan_ang_inc;
-static PyObject *__pyx_n_s_scan_dist_to_base;
-static PyObject *__pyx_n_s_setCarEdgeDistances;
-static PyObject *__pyx_n_s_setState;
 static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
-static PyObject *__pyx_n_s_speed;
-static PyObject *__pyx_n_s_steer;
+static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
-static PyObject *__pyx_n_s_updatePosition;
-static int __pyx_pf_7racecar_5PyCar___cinit__(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_WB, double __pyx_v_FC, double __pyx_v_H_CG, double __pyx_v_L_F, double __pyx_v_L_R, double __pyx_v_CS_F, double __pyx_v_CS_R, double __pyx_v_MASS, double __pyx_v_I_Z, double __pyx_v_CRASH_THRESH, double __pyx_v_WIDTH, double __pyx_v_LENGTH, double __pyx_v_MAX_STEER_VEL, double __pyx_v_MAX_STEER_ANG, double __pyx_v_MAX_SPEED, double __pyx_v_MAX_ACCEL, double __pyx_v_MAX_DECEL); /* proto */
-static void __pyx_pf_7racecar_5PyCar_2__dealloc__(struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_4updatePosition(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_dt); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_6control(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_speed, double __pyx_v_steer); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_8computeFromInput(struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_10isCrashed(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_rays, int __pyx_v_num_rays, int __pyx_v_poses); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_12setCarEdgeDistances(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, double __pyx_v_ang_min, double __pyx_v_scan_ang_inc, double __pyx_v_scan_dist_to_base); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_14getState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_16setState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_18getScanPose(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_scan_dist_to_base, PyArrayObject *__pyx_v_pose); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_20getMeanVelocity(struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_22getTravelDistance(struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_24getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_26__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_28__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7racecar_PyCar *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_n_s_ws;
+static int __pyx_pf_9followgap_11PyFollowGap___cinit__(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, int __pyx_v_ws, float __pyx_v_md, float __pyx_v_ma, float __pyx_v_angle_inc); /* proto */
+static void __pyx_pf_9followgap_11PyFollowGap_2__dealloc__(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9followgap_11PyFollowGap_4eval(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, PyArrayObject *__pyx_v_lidar, int __pyx_v_size); /* proto */
+static PyObject *__pyx_pf_9followgap_11PyFollowGap_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9followgap_11PyFollowGap_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
-static PyObject *__pyx_tp_new_7racecar_PyCar(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_9followgap_PyFollowGap(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
@@ -1711,1217 +1601,26 @@ static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
 
-/* "racecar.pyx":77
- * cdef class PyCar:
- *     cdef Car *thisptr
- *     def __cinit__(self, double WB, double FC, double H_CG, double L_F, double L_R,             # <<<<<<<<<<<<<<
- *                   double CS_F, double CS_R, double MASS, double I_Z,
- *                   double CRASH_THRESH, double WIDTH, double LENGTH,
+/* "followgap.pyx":23
+ * cdef class PyFollowGap:
+ *     cdef FollowGap *thisptr
+ *     def __cinit__(self, int ws, float md, float ma, float angle_inc):             # <<<<<<<<<<<<<<
+ *         self.thisptr = new FollowGap(ws, md, ma, angle_inc)
+ * 
  */
 
 /* Python wrapper */
-static int __pyx_pw_7racecar_5PyCar_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_7racecar_5PyCar_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  double __pyx_v_WB;
-  double __pyx_v_FC;
-  double __pyx_v_H_CG;
-  double __pyx_v_L_F;
-  double __pyx_v_L_R;
-  double __pyx_v_CS_F;
-  double __pyx_v_CS_R;
-  double __pyx_v_MASS;
-  double __pyx_v_I_Z;
-  double __pyx_v_CRASH_THRESH;
-  double __pyx_v_WIDTH;
-  double __pyx_v_LENGTH;
-  double __pyx_v_MAX_STEER_VEL;
-  double __pyx_v_MAX_STEER_ANG;
-  double __pyx_v_MAX_SPEED;
-  double __pyx_v_MAX_ACCEL;
-  double __pyx_v_MAX_DECEL;
+static int __pyx_pw_9followgap_11PyFollowGap_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_9followgap_11PyFollowGap_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  int __pyx_v_ws;
+  float __pyx_v_md;
+  float __pyx_v_ma;
+  float __pyx_v_angle_inc;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_WB,&__pyx_n_s_FC,&__pyx_n_s_H_CG,&__pyx_n_s_L_F,&__pyx_n_s_L_R,&__pyx_n_s_CS_F,&__pyx_n_s_CS_R,&__pyx_n_s_MASS,&__pyx_n_s_I_Z,&__pyx_n_s_CRASH_THRESH,&__pyx_n_s_WIDTH,&__pyx_n_s_LENGTH,&__pyx_n_s_MAX_STEER_VEL,&__pyx_n_s_MAX_STEER_ANG,&__pyx_n_s_MAX_SPEED,&__pyx_n_s_MAX_ACCEL,&__pyx_n_s_MAX_DECEL,0};
-    PyObject* values[17] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case 17: values[16] = PyTuple_GET_ITEM(__pyx_args, 16);
-        CYTHON_FALLTHROUGH;
-        case 16: values[15] = PyTuple_GET_ITEM(__pyx_args, 15);
-        CYTHON_FALLTHROUGH;
-        case 15: values[14] = PyTuple_GET_ITEM(__pyx_args, 14);
-        CYTHON_FALLTHROUGH;
-        case 14: values[13] = PyTuple_GET_ITEM(__pyx_args, 13);
-        CYTHON_FALLTHROUGH;
-        case 13: values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
-        CYTHON_FALLTHROUGH;
-        case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
-        CYTHON_FALLTHROUGH;
-        case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
-        CYTHON_FALLTHROUGH;
-        case 10: values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
-        CYTHON_FALLTHROUGH;
-        case  9: values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
-        CYTHON_FALLTHROUGH;
-        case  8: values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
-        CYTHON_FALLTHROUGH;
-        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
-        CYTHON_FALLTHROUGH;
-        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
-        CYTHON_FALLTHROUGH;
-        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-        CYTHON_FALLTHROUGH;
-        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-        CYTHON_FALLTHROUGH;
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_WB)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_FC)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 1); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_H_CG)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 2); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  3:
-        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_L_F)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 3); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  4:
-        if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_L_R)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 4); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  5:
-        if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_CS_F)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 5); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  6:
-        if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_CS_R)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 6); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  7:
-        if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_MASS)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 7); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  8:
-        if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_I_Z)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 8); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  9:
-        if (likely((values[9] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_CRASH_THRESH)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 9); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 10:
-        if (likely((values[10] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_WIDTH)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 10); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 11:
-        if (likely((values[11] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_LENGTH)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 11); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 12:
-        if (likely((values[12] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_MAX_STEER_VEL)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 12); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 13:
-        if (likely((values[13] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_MAX_STEER_ANG)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 13); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 14:
-        if (likely((values[14] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_MAX_SPEED)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 14); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 15:
-        if (likely((values[15] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_MAX_ACCEL)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 15); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 16:
-        if (likely((values[16] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_MAX_DECEL)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, 16); __PYX_ERR(1, 77, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(1, 77, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 17) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
-      values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
-      values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
-      values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
-      values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
-      values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
-      values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
-      values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
-      values[13] = PyTuple_GET_ITEM(__pyx_args, 13);
-      values[14] = PyTuple_GET_ITEM(__pyx_args, 14);
-      values[15] = PyTuple_GET_ITEM(__pyx_args, 15);
-      values[16] = PyTuple_GET_ITEM(__pyx_args, 16);
-    }
-    __pyx_v_WB = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_WB == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 77, __pyx_L3_error)
-    __pyx_v_FC = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_FC == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 77, __pyx_L3_error)
-    __pyx_v_H_CG = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_H_CG == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 77, __pyx_L3_error)
-    __pyx_v_L_F = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_L_F == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 77, __pyx_L3_error)
-    __pyx_v_L_R = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_L_R == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 77, __pyx_L3_error)
-    __pyx_v_CS_F = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_CS_F == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 78, __pyx_L3_error)
-    __pyx_v_CS_R = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_CS_R == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 78, __pyx_L3_error)
-    __pyx_v_MASS = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_MASS == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 78, __pyx_L3_error)
-    __pyx_v_I_Z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_I_Z == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 78, __pyx_L3_error)
-    __pyx_v_CRASH_THRESH = __pyx_PyFloat_AsDouble(values[9]); if (unlikely((__pyx_v_CRASH_THRESH == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 79, __pyx_L3_error)
-    __pyx_v_WIDTH = __pyx_PyFloat_AsDouble(values[10]); if (unlikely((__pyx_v_WIDTH == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 79, __pyx_L3_error)
-    __pyx_v_LENGTH = __pyx_PyFloat_AsDouble(values[11]); if (unlikely((__pyx_v_LENGTH == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 79, __pyx_L3_error)
-    __pyx_v_MAX_STEER_VEL = __pyx_PyFloat_AsDouble(values[12]); if (unlikely((__pyx_v_MAX_STEER_VEL == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_MAX_STEER_ANG = __pyx_PyFloat_AsDouble(values[13]); if (unlikely((__pyx_v_MAX_STEER_ANG == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_MAX_SPEED = __pyx_PyFloat_AsDouble(values[14]); if (unlikely((__pyx_v_MAX_SPEED == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_MAX_ACCEL = __pyx_PyFloat_AsDouble(values[15]); if (unlikely((__pyx_v_MAX_ACCEL == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 81, __pyx_L3_error)
-    __pyx_v_MAX_DECEL = __pyx_PyFloat_AsDouble(values[16]); if (unlikely((__pyx_v_MAX_DECEL == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 81, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 17, 17, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 77, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return -1;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7racecar_5PyCar___cinit__(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_WB, __pyx_v_FC, __pyx_v_H_CG, __pyx_v_L_F, __pyx_v_L_R, __pyx_v_CS_F, __pyx_v_CS_R, __pyx_v_MASS, __pyx_v_I_Z, __pyx_v_CRASH_THRESH, __pyx_v_WIDTH, __pyx_v_LENGTH, __pyx_v_MAX_STEER_VEL, __pyx_v_MAX_STEER_ANG, __pyx_v_MAX_SPEED, __pyx_v_MAX_ACCEL, __pyx_v_MAX_DECEL);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_7racecar_5PyCar___cinit__(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_WB, double __pyx_v_FC, double __pyx_v_H_CG, double __pyx_v_L_F, double __pyx_v_L_R, double __pyx_v_CS_F, double __pyx_v_CS_R, double __pyx_v_MASS, double __pyx_v_I_Z, double __pyx_v_CRASH_THRESH, double __pyx_v_WIDTH, double __pyx_v_LENGTH, double __pyx_v_MAX_STEER_VEL, double __pyx_v_MAX_STEER_ANG, double __pyx_v_MAX_SPEED, double __pyx_v_MAX_ACCEL, double __pyx_v_MAX_DECEL) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__cinit__", 0);
-
-  /* "racecar.pyx":82
- *                   double MAX_STEER_VEL, double MAX_STEER_ANG, double MAX_SPEED,
- *                   double MAX_ACCEL, double MAX_DECEL):
- *         self.thisptr = new Car(WB, FC, H_CG, L_F, L_R, CS_F, CS_R, MASS, I_Z,             # <<<<<<<<<<<<<<
- *                               CRASH_THRESH, WIDTH, LENGTH, MAX_STEER_VEL,
- *                               MAX_STEER_ANG, MAX_SPEED, MAX_ACCEL, MAX_DECEL)
- */
-  __pyx_v_self->thisptr = new Car(__pyx_v_WB, __pyx_v_FC, __pyx_v_H_CG, __pyx_v_L_F, __pyx_v_L_R, __pyx_v_CS_F, __pyx_v_CS_R, __pyx_v_MASS, __pyx_v_I_Z, __pyx_v_CRASH_THRESH, __pyx_v_WIDTH, __pyx_v_LENGTH, __pyx_v_MAX_STEER_VEL, __pyx_v_MAX_STEER_ANG, __pyx_v_MAX_SPEED, __pyx_v_MAX_ACCEL, __pyx_v_MAX_DECEL);
-
-  /* "racecar.pyx":77
- * cdef class PyCar:
- *     cdef Car *thisptr
- *     def __cinit__(self, double WB, double FC, double H_CG, double L_F, double L_R,             # <<<<<<<<<<<<<<
- *                   double CS_F, double CS_R, double MASS, double I_Z,
- *                   double CRASH_THRESH, double WIDTH, double LENGTH,
- */
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":85
- *                               CRASH_THRESH, WIDTH, LENGTH, MAX_STEER_VEL,
- *                               MAX_STEER_ANG, MAX_SPEED, MAX_ACCEL, MAX_DECEL)
- *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         del self.thisptr
- *     cpdef void updatePosition(self, double dt):
- */
-
-/* Python wrapper */
-static void __pyx_pw_7racecar_5PyCar_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_7racecar_5PyCar_3__dealloc__(PyObject *__pyx_v_self) {
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
-  __pyx_pf_7racecar_5PyCar_2__dealloc__(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-}
-
-static void __pyx_pf_7racecar_5PyCar_2__dealloc__(struct __pyx_obj_7racecar_PyCar *__pyx_v_self) {
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__dealloc__", 0);
-
-  /* "racecar.pyx":86
- *                               MAX_STEER_ANG, MAX_SPEED, MAX_ACCEL, MAX_DECEL)
- *     def __dealloc__(self):
- *         del self.thisptr             # <<<<<<<<<<<<<<
- *     cpdef void updatePosition(self, double dt):
- *         self.thisptr.updatePosition(dt)
- */
-  delete __pyx_v_self->thisptr;
-
-  /* "racecar.pyx":85
- *                               CRASH_THRESH, WIDTH, LENGTH, MAX_STEER_VEL,
- *                               MAX_STEER_ANG, MAX_SPEED, MAX_ACCEL, MAX_DECEL)
- *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         del self.thisptr
- *     cpdef void updatePosition(self, double dt):
- */
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "racecar.pyx":87
- *     def __dealloc__(self):
- *         del self.thisptr
- *     cpdef void updatePosition(self, double dt):             # <<<<<<<<<<<<<<
- *         self.thisptr.updatePosition(dt)
- *     cpdef void control(self, double speed, double steer):
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_5updatePosition(PyObject *__pyx_v_self, PyObject *__pyx_arg_dt); /*proto*/
-static void __pyx_f_7racecar_5PyCar_updatePosition(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_dt, int __pyx_skip_dispatch) {
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("updatePosition", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_updatePosition); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 87, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_5updatePosition)) {
-      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_dt); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 87, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
-        if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-          __Pyx_INCREF(__pyx_t_5);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_4, function);
-        }
-      }
-      if (!__pyx_t_5) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 87, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-      } else {
-        #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_4)) {
-          PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 87, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        } else
-        #endif
-        #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-          PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 87, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        } else
-        #endif
-        {
-          __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 87, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_6);
-          __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
-          __Pyx_GIVEREF(__pyx_t_3);
-          PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
-          __pyx_t_3 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 87, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        }
-      }
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":88
- *         del self.thisptr
- *     cpdef void updatePosition(self, double dt):
- *         self.thisptr.updatePosition(dt)             # <<<<<<<<<<<<<<
- *     cpdef void control(self, double speed, double steer):
- *         self.thisptr.control(speed, steer)
- */
-  __pyx_v_self->thisptr->updatePosition(__pyx_v_dt);
-
-  /* "racecar.pyx":87
- *     def __dealloc__(self):
- *         del self.thisptr
- *     cpdef void updatePosition(self, double dt):             # <<<<<<<<<<<<<<
- *         self.thisptr.updatePosition(dt)
- *     cpdef void control(self, double speed, double steer):
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_WriteUnraisable("racecar.PyCar.updatePosition", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_5updatePosition(PyObject *__pyx_v_self, PyObject *__pyx_arg_dt); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_5updatePosition(PyObject *__pyx_v_self, PyObject *__pyx_arg_dt) {
-  double __pyx_v_dt;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("updatePosition (wrapper)", 0);
-  assert(__pyx_arg_dt); {
-    __pyx_v_dt = __pyx_PyFloat_AsDouble(__pyx_arg_dt); if (unlikely((__pyx_v_dt == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 87, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.updatePosition", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7racecar_5PyCar_4updatePosition(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), ((double)__pyx_v_dt));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_4updatePosition(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_dt) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("updatePosition", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_updatePosition(__pyx_v_self, __pyx_v_dt, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.updatePosition", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":89
- *     cpdef void updatePosition(self, double dt):
- *         self.thisptr.updatePosition(dt)
- *     cpdef void control(self, double speed, double steer):             # <<<<<<<<<<<<<<
- *         self.thisptr.control(speed, steer)
- *     cpdef void computeFromInput(self):
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_7control(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static void __pyx_f_7racecar_5PyCar_control(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_speed, double __pyx_v_steer, int __pyx_skip_dispatch) {
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  __Pyx_RefNannySetupContext("control", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_control); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 89, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_7control)) {
-      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_speed); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 89, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_steer); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 89, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_5 = __pyx_t_1; __pyx_t_6 = NULL;
-      __pyx_t_7 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-        __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-        if (likely(__pyx_t_6)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-          __Pyx_INCREF(__pyx_t_6);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_5, function);
-          __pyx_t_7 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_3, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 89, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_3, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 89, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 89, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        if (__pyx_t_6) {
-          __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
-        }
-        __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, __pyx_t_3);
-        __Pyx_GIVEREF(__pyx_t_4);
-        PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_t_4);
-        __pyx_t_3 = 0;
-        __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 89, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":90
- *         self.thisptr.updatePosition(dt)
- *     cpdef void control(self, double speed, double steer):
- *         self.thisptr.control(speed, steer)             # <<<<<<<<<<<<<<
- *     cpdef void computeFromInput(self):
- *         self.thisptr.computeFromInput()
- */
-  __pyx_v_self->thisptr->control(__pyx_v_speed, __pyx_v_steer);
-
-  /* "racecar.pyx":89
- *     cpdef void updatePosition(self, double dt):
- *         self.thisptr.updatePosition(dt)
- *     cpdef void control(self, double speed, double steer):             # <<<<<<<<<<<<<<
- *         self.thisptr.control(speed, steer)
- *     cpdef void computeFromInput(self):
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("racecar.PyCar.control", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_7control(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_7control(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  double __pyx_v_speed;
-  double __pyx_v_steer;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("control (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_speed,&__pyx_n_s_steer,0};
-    PyObject* values[2] = {0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_speed)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_steer)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("control", 1, 2, 2, 1); __PYX_ERR(1, 89, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "control") < 0)) __PYX_ERR(1, 89, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-    }
-    __pyx_v_speed = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_speed == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 89, __pyx_L3_error)
-    __pyx_v_steer = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_steer == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 89, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("control", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 89, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.control", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7racecar_5PyCar_6control(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_speed, __pyx_v_steer);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_6control(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_speed, double __pyx_v_steer) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("control", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_control(__pyx_v_self, __pyx_v_speed, __pyx_v_steer, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 89, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.control", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":91
- *     cpdef void control(self, double speed, double steer):
- *         self.thisptr.control(speed, steer)
- *     cpdef void computeFromInput(self):             # <<<<<<<<<<<<<<
- *         self.thisptr.computeFromInput()
- *     cpdef int isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_9computeFromInput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static void __pyx_f_7racecar_5PyCar_computeFromInput(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch) {
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("computeFromInput", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_computeFromInput); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 91, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_9computeFromInput)) {
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 91, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 91, __pyx_L1_error)
-      }
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":92
- *         self.thisptr.control(speed, steer)
- *     cpdef void computeFromInput(self):
- *         self.thisptr.computeFromInput()             # <<<<<<<<<<<<<<
- *     cpdef int isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,
- *                         int num_rays,
- */
-  __pyx_v_self->thisptr->computeFromInput();
-
-  /* "racecar.pyx":91
- *     cpdef void control(self, double speed, double steer):
- *         self.thisptr.control(speed, steer)
- *     cpdef void computeFromInput(self):             # <<<<<<<<<<<<<<
- *         self.thisptr.computeFromInput()
- *     cpdef int isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_WriteUnraisable("racecar.PyCar.computeFromInput", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_9computeFromInput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_9computeFromInput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("computeFromInput (wrapper)", 0);
-  __pyx_r = __pyx_pf_7racecar_5PyCar_8computeFromInput(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_8computeFromInput(struct __pyx_obj_7racecar_PyCar *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("computeFromInput", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_computeFromInput(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 91, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.computeFromInput", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":93
- *     cpdef void computeFromInput(self):
- *         self.thisptr.computeFromInput()
- *     cpdef int isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,             # <<<<<<<<<<<<<<
- *                         int num_rays,
- *                         int poses):
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_11isCrashed(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_f_7racecar_5PyCar_isCrashed(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_rays, int __pyx_v_num_rays, int __pyx_v_poses, int __pyx_skip_dispatch) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_rays;
-  __Pyx_Buffer __pyx_pybuffer_rays;
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  Py_ssize_t __pyx_t_9;
-  __Pyx_RefNannySetupContext("isCrashed", 0);
-  __pyx_pybuffer_rays.pybuffer.buf = NULL;
-  __pyx_pybuffer_rays.refcount = 0;
-  __pyx_pybuffernd_rays.data = NULL;
-  __pyx_pybuffernd_rays.rcbuffer = &__pyx_pybuffer_rays;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_rays.rcbuffer->pybuffer, (PyObject*)__pyx_v_rays, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 93, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_rays.diminfo[0].strides = __pyx_pybuffernd_rays.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_rays.diminfo[0].shape = __pyx_pybuffernd_rays.rcbuffer->pybuffer.shape[0];
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_isCrashed); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 93, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_11isCrashed)) {
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_num_rays); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 93, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_poses); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 93, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_5 = __pyx_t_1; __pyx_t_6 = NULL;
-      __pyx_t_7 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-        __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-        if (likely(__pyx_t_6)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-          __Pyx_INCREF(__pyx_t_6);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_5, function);
-          __pyx_t_7 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[4] = {__pyx_t_6, ((PyObject *)__pyx_v_rays), __pyx_t_3, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 93, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[4] = {__pyx_t_6, ((PyObject *)__pyx_v_rays), __pyx_t_3, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 93, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_8 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 93, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        if (__pyx_t_6) {
-          __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
-        }
-        __Pyx_INCREF(((PyObject *)__pyx_v_rays));
-        __Pyx_GIVEREF(((PyObject *)__pyx_v_rays));
-        PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, ((PyObject *)__pyx_v_rays));
-        __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_t_3);
-        __Pyx_GIVEREF(__pyx_t_4);
-        PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_7, __pyx_t_4);
-        __pyx_t_3 = 0;
-        __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 93, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 93, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_r = __pyx_t_7;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":96
- *                         int num_rays,
- *                         int poses):
- *         return self.thisptr.isCrashed(&rays[0], num_rays, poses)             # <<<<<<<<<<<<<<
- *     cpdef void setCarEdgeDistances(self, int num_rays, double ang_min,
- *                                   double scan_ang_inc, double scan_dist_to_base):
- */
-  __pyx_t_9 = 0;
-  __pyx_t_7 = -1;
-  if (__pyx_t_9 < 0) {
-    __pyx_t_9 += __pyx_pybuffernd_rays.diminfo[0].shape;
-    if (unlikely(__pyx_t_9 < 0)) __pyx_t_7 = 0;
-  } else if (unlikely(__pyx_t_9 >= __pyx_pybuffernd_rays.diminfo[0].shape)) __pyx_t_7 = 0;
-  if (unlikely(__pyx_t_7 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_7);
-    __PYX_ERR(1, 96, __pyx_L1_error)
-  }
-  __pyx_r = __pyx_v_self->thisptr->isCrashed((&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_rays.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_rays.diminfo[0].strides))), __pyx_v_num_rays, __pyx_v_poses);
-  goto __pyx_L0;
-
-  /* "racecar.pyx":93
- *     cpdef void computeFromInput(self):
- *         self.thisptr.computeFromInput()
- *     cpdef int isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,             # <<<<<<<<<<<<<<
- *                         int num_rays,
- *                         int poses):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_rays.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("racecar.PyCar.isCrashed", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_rays.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_11isCrashed(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_11isCrashed(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyArrayObject *__pyx_v_rays = 0;
-  int __pyx_v_num_rays;
-  int __pyx_v_poses;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("isCrashed (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_rays,&__pyx_n_s_num_rays,&__pyx_n_s_poses,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_rays)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_rays)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("isCrashed", 1, 3, 3, 1); __PYX_ERR(1, 93, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_poses)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("isCrashed", 1, 3, 3, 2); __PYX_ERR(1, 93, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "isCrashed") < 0)) __PYX_ERR(1, 93, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_rays = ((PyArrayObject *)values[0]);
-    __pyx_v_num_rays = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_num_rays == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 94, __pyx_L3_error)
-    __pyx_v_poses = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_poses == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 95, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("isCrashed", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 93, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.isCrashed", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_rays), __pyx_ptype_5numpy_ndarray, 1, "rays", 0))) __PYX_ERR(1, 93, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7racecar_5PyCar_10isCrashed(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_rays, __pyx_v_num_rays, __pyx_v_poses);
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_10isCrashed(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_rays, int __pyx_v_num_rays, int __pyx_v_poses) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_rays;
-  __Pyx_Buffer __pyx_pybuffer_rays;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("isCrashed", 0);
-  __pyx_pybuffer_rays.pybuffer.buf = NULL;
-  __pyx_pybuffer_rays.refcount = 0;
-  __pyx_pybuffernd_rays.data = NULL;
-  __pyx_pybuffernd_rays.rcbuffer = &__pyx_pybuffer_rays;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_rays.rcbuffer->pybuffer, (PyObject*)__pyx_v_rays, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 93, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_rays.diminfo[0].strides = __pyx_pybuffernd_rays.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_rays.diminfo[0].shape = __pyx_pybuffernd_rays.rcbuffer->pybuffer.shape[0];
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_7racecar_5PyCar_isCrashed(__pyx_v_self, __pyx_v_rays, __pyx_v_num_rays, __pyx_v_poses, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 93, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_rays.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("racecar.PyCar.isCrashed", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_rays.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":97
- *                         int poses):
- *         return self.thisptr.isCrashed(&rays[0], num_rays, poses)
- *     cpdef void setCarEdgeDistances(self, int num_rays, double ang_min,             # <<<<<<<<<<<<<<
- *                                   double scan_ang_inc, double scan_dist_to_base):
- *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static void __pyx_f_7racecar_5PyCar_setCarEdgeDistances(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, double __pyx_v_ang_min, double __pyx_v_scan_ang_inc, double __pyx_v_scan_dist_to_base, int __pyx_skip_dispatch) {
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  int __pyx_t_9;
-  PyObject *__pyx_t_10 = NULL;
-  __Pyx_RefNannySetupContext("setCarEdgeDistances", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_setCarEdgeDistances); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 97, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances)) {
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_num_rays); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 97, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_ang_min); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 97, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_scan_ang_inc); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 97, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_6 = PyFloat_FromDouble(__pyx_v_scan_dist_to_base); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 97, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_7 = __pyx_t_1; __pyx_t_8 = NULL;
-      __pyx_t_9 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_9 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 97, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 97, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_10 = PyTuple_New(4+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 97, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_10);
-        if (__pyx_t_8) {
-          __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
-        }
-        __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_3);
-        __Pyx_GIVEREF(__pyx_t_4);
-        PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_t_4);
-        __Pyx_GIVEREF(__pyx_t_5);
-        PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_t_5);
-        __Pyx_GIVEREF(__pyx_t_6);
-        PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_t_6);
-        __pyx_t_3 = 0;
-        __pyx_t_4 = 0;
-        __pyx_t_5 = 0;
-        __pyx_t_6 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 97, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":99
- *     cpdef void setCarEdgeDistances(self, int num_rays, double ang_min,
- *                                   double scan_ang_inc, double scan_dist_to_base):
- *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,             # <<<<<<<<<<<<<<
- *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
- */
-  __pyx_v_self->thisptr->setCarEdgeDistances(__pyx_v_num_rays, __pyx_v_ang_min, __pyx_v_scan_ang_inc, __pyx_v_scan_dist_to_base);
-
-  /* "racecar.pyx":97
- *                         int poses):
- *         return self.thisptr.isCrashed(&rays[0], num_rays, poses)
- *     cpdef void setCarEdgeDistances(self, int num_rays, double ang_min,             # <<<<<<<<<<<<<<
- *                                   double scan_ang_inc, double scan_dist_to_base):
- *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_WriteUnraisable("racecar.PyCar.setCarEdgeDistances", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  int __pyx_v_num_rays;
-  double __pyx_v_ang_min;
-  double __pyx_v_scan_ang_inc;
-  double __pyx_v_scan_dist_to_base;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("setCarEdgeDistances (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_num_rays,&__pyx_n_s_ang_min,&__pyx_n_s_scan_ang_inc,&__pyx_n_s_scan_dist_to_base,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_ws,&__pyx_n_s_md,&__pyx_n_s_ma,&__pyx_n_s_angle_inc,0};
     PyObject* values[4] = {0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2941,29 +1640,29 @@ static PyObject *__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances(PyObject *__pyx_
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_rays)) != 0)) kw_args--;
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_ws)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_ang_min)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_md)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("setCarEdgeDistances", 1, 4, 4, 1); __PYX_ERR(1, 97, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(1, 23, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_scan_ang_inc)) != 0)) kw_args--;
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_ma)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("setCarEdgeDistances", 1, 4, 4, 2); __PYX_ERR(1, 97, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(1, 23, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
-        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_scan_dist_to_base)) != 0)) kw_args--;
+        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_angle_inc)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("setCarEdgeDistances", 1, 4, 4, 3); __PYX_ERR(1, 97, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(1, 23, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "setCarEdgeDistances") < 0)) __PYX_ERR(1, 97, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(1, 23, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -2973,457 +1672,111 @@ static PyObject *__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances(PyObject *__pyx_
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
     }
-    __pyx_v_num_rays = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_num_rays == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 97, __pyx_L3_error)
-    __pyx_v_ang_min = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_ang_min == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 97, __pyx_L3_error)
-    __pyx_v_scan_ang_inc = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_scan_ang_inc == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 98, __pyx_L3_error)
-    __pyx_v_scan_dist_to_base = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_scan_dist_to_base == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 98, __pyx_L3_error)
+    __pyx_v_ws = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_ws == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 23, __pyx_L3_error)
+    __pyx_v_md = __pyx_PyFloat_AsFloat(values[1]); if (unlikely((__pyx_v_md == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 23, __pyx_L3_error)
+    __pyx_v_ma = __pyx_PyFloat_AsFloat(values[2]); if (unlikely((__pyx_v_ma == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 23, __pyx_L3_error)
+    __pyx_v_angle_inc = __pyx_PyFloat_AsFloat(values[3]); if (unlikely((__pyx_v_angle_inc == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 23, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setCarEdgeDistances", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 97, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 23, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.setCarEdgeDistances", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("followgap.PyFollowGap.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
-  return NULL;
+  return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7racecar_5PyCar_12setCarEdgeDistances(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_num_rays, __pyx_v_ang_min, __pyx_v_scan_ang_inc, __pyx_v_scan_dist_to_base);
+  __pyx_r = __pyx_pf_9followgap_11PyFollowGap___cinit__(((struct __pyx_obj_9followgap_PyFollowGap *)__pyx_v_self), __pyx_v_ws, __pyx_v_md, __pyx_v_ma, __pyx_v_angle_inc);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7racecar_5PyCar_12setCarEdgeDistances(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, double __pyx_v_ang_min, double __pyx_v_scan_ang_inc, double __pyx_v_scan_dist_to_base) {
-  PyObject *__pyx_r = NULL;
+static int __pyx_pf_9followgap_11PyFollowGap___cinit__(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, int __pyx_v_ws, float __pyx_v_md, float __pyx_v_ma, float __pyx_v_angle_inc) {
+  int __pyx_r;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("setCarEdgeDistances", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_setCarEdgeDistances(__pyx_v_self, __pyx_v_num_rays, __pyx_v_ang_min, __pyx_v_scan_ang_inc, __pyx_v_scan_dist_to_base, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 97, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
+  __Pyx_RefNannySetupContext("__cinit__", 0);
+
+  /* "followgap.pyx":24
+ *     cdef FollowGap *thisptr
+ *     def __cinit__(self, int ws, float md, float ma, float angle_inc):
+ *         self.thisptr = new FollowGap(ws, md, ma, angle_inc)             # <<<<<<<<<<<<<<
+ * 
+ *     def __dealloc__(self):
+ */
+  __pyx_v_self->thisptr = new FollowGap(__pyx_v_ws, __pyx_v_md, __pyx_v_ma, __pyx_v_angle_inc);
+
+  /* "followgap.pyx":23
+ * cdef class PyFollowGap:
+ *     cdef FollowGap *thisptr
+ *     def __cinit__(self, int ws, float md, float ma, float angle_inc):             # <<<<<<<<<<<<<<
+ *         self.thisptr = new FollowGap(ws, md, ma, angle_inc)
+ * 
+ */
 
   /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.setCarEdgeDistances", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
+  __pyx_r = 0;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "racecar.pyx":101
- *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
- *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
- *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+/* "followgap.pyx":26
+ *         self.thisptr = new FollowGap(ws, md, ma, angle_inc)
+ * 
+ *     def __dealloc__(self):             # <<<<<<<<<<<<<<
+ *         del self.thisptr
+ * 
  */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_15getState(PyObject *__pyx_v_self, PyObject *__pyx_v_state); /*proto*/
-static void __pyx_f_7racecar_5PyCar_getState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state, int __pyx_skip_dispatch) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_state;
-  __Pyx_Buffer __pyx_pybuffer_state;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  Py_ssize_t __pyx_t_6;
-  int __pyx_t_7;
-  __Pyx_RefNannySetupContext("getState", 0);
-  __pyx_pybuffer_state.pybuffer.buf = NULL;
-  __pyx_pybuffer_state.refcount = 0;
-  __pyx_pybuffernd_state.data = NULL;
-  __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 101, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getState); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 101, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_15getState)) {
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_state)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 101, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-      } else {
-        #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_3)) {
-          PyObject *__pyx_temp[2] = {__pyx_t_4, ((PyObject *)__pyx_v_state)};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 101, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __Pyx_GOTREF(__pyx_t_2);
-        } else
-        #endif
-        #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-          PyObject *__pyx_temp[2] = {__pyx_t_4, ((PyObject *)__pyx_v_state)};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 101, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __Pyx_GOTREF(__pyx_t_2);
-        } else
-        #endif
-        {
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 101, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
-          __Pyx_INCREF(((PyObject *)__pyx_v_state));
-          __Pyx_GIVEREF(((PyObject *)__pyx_v_state));
-          PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_state));
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 101, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        }
-      }
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":102
- *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.getState(&state[0])             # <<<<<<<<<<<<<<
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.setState(&state[0])
- */
-  __pyx_t_6 = 0;
-  __pyx_t_7 = -1;
-  if (__pyx_t_6 < 0) {
-    __pyx_t_6 += __pyx_pybuffernd_state.diminfo[0].shape;
-    if (unlikely(__pyx_t_6 < 0)) __pyx_t_7 = 0;
-  } else if (unlikely(__pyx_t_6 >= __pyx_pybuffernd_state.diminfo[0].shape)) __pyx_t_7 = 0;
-  if (unlikely(__pyx_t_7 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_7);
-    __PYX_ERR(1, 102, __pyx_L1_error)
-  }
-  __pyx_v_self->thisptr->getState((&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_state.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_state.diminfo[0].strides))));
-
-  /* "racecar.pyx":101
- *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
- *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
- *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("racecar.PyCar.getState", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_RefNannyFinishContext();
-}
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_15getState(PyObject *__pyx_v_self, PyObject *__pyx_v_state); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_15getState(PyObject *__pyx_v_self, PyObject *__pyx_v_state) {
-  PyObject *__pyx_r = 0;
+static void __pyx_pw_9followgap_11PyFollowGap_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_9followgap_11PyFollowGap_3__dealloc__(PyObject *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getState (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_state), __pyx_ptype_5numpy_ndarray, 1, "state", 0))) __PYX_ERR(1, 101, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7racecar_5PyCar_14getState(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), ((PyArrayObject *)__pyx_v_state));
+  __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
+  __pyx_pf_9followgap_11PyFollowGap_2__dealloc__(((struct __pyx_obj_9followgap_PyFollowGap *)__pyx_v_self));
 
   /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
   __Pyx_RefNannyFinishContext();
-  return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7racecar_5PyCar_14getState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_state;
-  __Pyx_Buffer __pyx_pybuffer_state;
-  PyObject *__pyx_r = NULL;
+static void __pyx_pf_9followgap_11PyFollowGap_2__dealloc__(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("getState", 0);
-  __pyx_pybuffer_state.pybuffer.buf = NULL;
-  __pyx_pybuffer_state.refcount = 0;
-  __pyx_pybuffernd_state.data = NULL;
-  __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 101, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_getState(__pyx_v_self, __pyx_v_state, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 101, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
+  __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("racecar.PyCar.getState", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":103
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
- *         self.thisptr.setState(&state[0])
- *     cpdef void getScanPose(self, double scan_dist_to_base,
+  /* "followgap.pyx":27
+ * 
+ *     def __dealloc__(self):
+ *         del self.thisptr             # <<<<<<<<<<<<<<
+ * 
+ *     cpdef float eval(self, np.ndarray[float, ndim=1, mode="c"] lidar, int size):
  */
+  delete __pyx_v_self->thisptr;
 
-static PyObject *__pyx_pw_7racecar_5PyCar_17setState(PyObject *__pyx_v_self, PyObject *__pyx_v_state); /*proto*/
-static void __pyx_f_7racecar_5PyCar_setState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state, int __pyx_skip_dispatch) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_state;
-  __Pyx_Buffer __pyx_pybuffer_state;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  Py_ssize_t __pyx_t_6;
-  int __pyx_t_7;
-  __Pyx_RefNannySetupContext("setState", 0);
-  __pyx_pybuffer_state.pybuffer.buf = NULL;
-  __pyx_pybuffer_state.refcount = 0;
-  __pyx_pybuffernd_state.data = NULL;
-  __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 103, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_setState); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 103, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_17setState)) {
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_state)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 103, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-      } else {
-        #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_3)) {
-          PyObject *__pyx_temp[2] = {__pyx_t_4, ((PyObject *)__pyx_v_state)};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 103, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __Pyx_GOTREF(__pyx_t_2);
-        } else
-        #endif
-        #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-          PyObject *__pyx_temp[2] = {__pyx_t_4, ((PyObject *)__pyx_v_state)};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 103, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __Pyx_GOTREF(__pyx_t_2);
-        } else
-        #endif
-        {
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 103, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
-          __Pyx_INCREF(((PyObject *)__pyx_v_state));
-          __Pyx_GIVEREF(((PyObject *)__pyx_v_state));
-          PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_state));
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 103, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        }
-      }
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":104
- *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.setState(&state[0])             # <<<<<<<<<<<<<<
- *     cpdef void getScanPose(self, double scan_dist_to_base,
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
- */
-  __pyx_t_6 = 0;
-  __pyx_t_7 = -1;
-  if (__pyx_t_6 < 0) {
-    __pyx_t_6 += __pyx_pybuffernd_state.diminfo[0].shape;
-    if (unlikely(__pyx_t_6 < 0)) __pyx_t_7 = 0;
-  } else if (unlikely(__pyx_t_6 >= __pyx_pybuffernd_state.diminfo[0].shape)) __pyx_t_7 = 0;
-  if (unlikely(__pyx_t_7 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_7);
-    __PYX_ERR(1, 104, __pyx_L1_error)
-  }
-  __pyx_v_self->thisptr->setState((&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_state.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_state.diminfo[0].strides))));
-
-  /* "racecar.pyx":103
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
- *         self.thisptr.setState(&state[0])
- *     cpdef void getScanPose(self, double scan_dist_to_base,
+  /* "followgap.pyx":26
+ *         self.thisptr = new FollowGap(ws, md, ma, angle_inc)
+ * 
+ *     def __dealloc__(self):             # <<<<<<<<<<<<<<
+ *         del self.thisptr
+ * 
  */
 
   /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("racecar.PyCar.setState", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __pyx_L2:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_17setState(PyObject *__pyx_v_self, PyObject *__pyx_v_state); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_17setState(PyObject *__pyx_v_self, PyObject *__pyx_v_state) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("setState (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_state), __pyx_ptype_5numpy_ndarray, 1, "state", 0))) __PYX_ERR(1, 103, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7racecar_5PyCar_16setState(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), ((PyArrayObject *)__pyx_v_state));
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_16setState(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, PyArrayObject *__pyx_v_state) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_state;
-  __Pyx_Buffer __pyx_pybuffer_state;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("setState", 0);
-  __pyx_pybuffer_state.pybuffer.buf = NULL;
-  __pyx_pybuffer_state.refcount = 0;
-  __pyx_pybuffernd_state.data = NULL;
-  __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 103, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_setState(__pyx_v_self, __pyx_v_state, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 103, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("racecar.PyCar.setState", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_state.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":105
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.setState(&state[0])
- *     cpdef void getScanPose(self, double scan_dist_to_base,             # <<<<<<<<<<<<<<
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
- *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
+/* "followgap.pyx":29
+ *         del self.thisptr
+ * 
+ *     cpdef float eval(self, np.ndarray[float, ndim=1, mode="c"] lidar, int size):             # <<<<<<<<<<<<<<
+ *         return self.thisptr.eval(&lidar[0], size)
+ * 
  */
 
-static PyObject *__pyx_pw_7racecar_5PyCar_19getScanPose(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_scan_dist_to_base, PyArrayObject *__pyx_v_pose, int __pyx_skip_dispatch) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_pose;
-  __Pyx_Buffer __pyx_pybuffer_pose;
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_5eval(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static float __pyx_f_9followgap_11PyFollowGap_eval(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, PyArrayObject *__pyx_v_lidar, int __pyx_v_size, int __pyx_skip_dispatch) {
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_lidar;
+  __Pyx_Buffer __pyx_pybuffer_lidar;
+  float __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -3432,25 +1785,26 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
   PyObject *__pyx_t_5 = NULL;
   int __pyx_t_6;
   PyObject *__pyx_t_7 = NULL;
-  Py_ssize_t __pyx_t_8;
-  __Pyx_RefNannySetupContext("getScanPose", 0);
-  __pyx_pybuffer_pose.pybuffer.buf = NULL;
-  __pyx_pybuffer_pose.refcount = 0;
-  __pyx_pybuffernd_pose.data = NULL;
-  __pyx_pybuffernd_pose.rcbuffer = &__pyx_pybuffer_pose;
+  float __pyx_t_8;
+  Py_ssize_t __pyx_t_9;
+  __Pyx_RefNannySetupContext("eval", 0);
+  __pyx_pybuffer_lidar.pybuffer.buf = NULL;
+  __pyx_pybuffer_lidar.refcount = 0;
+  __pyx_pybuffernd_lidar.data = NULL;
+  __pyx_pybuffernd_lidar.rcbuffer = &__pyx_pybuffer_lidar;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pose.rcbuffer->pybuffer, (PyObject*)__pyx_v_pose, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 105, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_lidar.rcbuffer->pybuffer, (PyObject*)__pyx_v_lidar, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 29, __pyx_L1_error)
   }
-  __pyx_pybuffernd_pose.diminfo[0].strides = __pyx_pybuffernd_pose.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pose.diminfo[0].shape = __pyx_pybuffernd_pose.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_lidar.diminfo[0].strides = __pyx_pybuffernd_lidar.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_lidar.diminfo[0].shape = __pyx_pybuffernd_lidar.rcbuffer->pybuffer.shape[0];
   /* Check if called by wrapper */
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getScanPose); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 105, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_eval); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_19getScanPose)) {
-      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_scan_dist_to_base); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 105, __pyx_L1_error)
+    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_9followgap_11PyFollowGap_5eval)) {
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 29, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_t_1);
       __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -3467,8 +1821,8 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_pose)};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 105, __pyx_L1_error)
+        PyObject *__pyx_temp[3] = {__pyx_t_5, ((PyObject *)__pyx_v_lidar), __pyx_t_3};
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 29, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3476,66 +1830,67 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_pose)};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 105, __pyx_L1_error)
+        PyObject *__pyx_temp[3] = {__pyx_t_5, ((PyObject *)__pyx_v_lidar), __pyx_t_3};
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 29, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 105, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 29, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         if (__pyx_t_5) {
           __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
         }
+        __Pyx_INCREF(((PyObject *)__pyx_v_lidar));
+        __Pyx_GIVEREF(((PyObject *)__pyx_v_lidar));
+        PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_6, ((PyObject *)__pyx_v_lidar));
         __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_6, __pyx_t_3);
-        __Pyx_INCREF(((PyObject *)__pyx_v_pose));
-        __Pyx_GIVEREF(((PyObject *)__pyx_v_pose));
-        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, ((PyObject *)__pyx_v_pose));
+        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 105, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 29, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_8 = __pyx_PyFloat_AsFloat(__pyx_t_2); if (unlikely((__pyx_t_8 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 29, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_r = __pyx_t_8;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       goto __pyx_L0;
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "racecar.pyx":107
- *     cpdef void getScanPose(self, double scan_dist_to_base,
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
- *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])             # <<<<<<<<<<<<<<
- *     cpdef double getMeanVelocity(self):
- *         return self.thisptr.getMeanVelocity()
+  /* "followgap.pyx":30
+ * 
+ *     cpdef float eval(self, np.ndarray[float, ndim=1, mode="c"] lidar, int size):
+ *         return self.thisptr.eval(&lidar[0], size)             # <<<<<<<<<<<<<<
+ * 
  */
-  __pyx_t_8 = 0;
+  __pyx_t_9 = 0;
   __pyx_t_6 = -1;
-  if (__pyx_t_8 < 0) {
-    __pyx_t_8 += __pyx_pybuffernd_pose.diminfo[0].shape;
-    if (unlikely(__pyx_t_8 < 0)) __pyx_t_6 = 0;
-  } else if (unlikely(__pyx_t_8 >= __pyx_pybuffernd_pose.diminfo[0].shape)) __pyx_t_6 = 0;
+  if (__pyx_t_9 < 0) {
+    __pyx_t_9 += __pyx_pybuffernd_lidar.diminfo[0].shape;
+    if (unlikely(__pyx_t_9 < 0)) __pyx_t_6 = 0;
+  } else if (unlikely(__pyx_t_9 >= __pyx_pybuffernd_lidar.diminfo[0].shape)) __pyx_t_6 = 0;
   if (unlikely(__pyx_t_6 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_6);
-    __PYX_ERR(1, 107, __pyx_L1_error)
+    __PYX_ERR(1, 30, __pyx_L1_error)
   }
-  __pyx_v_self->thisptr->getScanPose(__pyx_v_scan_dist_to_base, (&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_pose.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_pose.diminfo[0].strides))));
+  __pyx_r = __pyx_v_self->thisptr->eval((&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_lidar.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_lidar.diminfo[0].strides))), __pyx_v_size);
+  goto __pyx_L0;
 
-  /* "racecar.pyx":105
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
- *         self.thisptr.setState(&state[0])
- *     cpdef void getScanPose(self, double scan_dist_to_base,             # <<<<<<<<<<<<<<
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
- *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
+  /* "followgap.pyx":29
+ *         del self.thisptr
+ * 
+ *     cpdef float eval(self, np.ndarray[float, ndim=1, mode="c"] lidar, int size):             # <<<<<<<<<<<<<<
+ *         return self.thisptr.eval(&lidar[0], size)
+ * 
  */
 
   /* function exit code */
-  goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
@@ -3547,26 +1902,28 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pose.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lidar.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("racecar.PyCar.getScanPose", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("followgap.PyFollowGap.eval", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pose.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lidar.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_RefNannyFinishContext();
+  return __pyx_r;
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_19getScanPose(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_19getScanPose(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  double __pyx_v_scan_dist_to_base;
-  PyArrayObject *__pyx_v_pose = 0;
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_5eval(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_5eval(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyArrayObject *__pyx_v_lidar = 0;
+  int __pyx_v_size;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getScanPose (wrapper)", 0);
+  __Pyx_RefNannySetupContext("eval (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_scan_dist_to_base,&__pyx_n_s_pose,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_lidar,&__pyx_n_s_size,0};
     PyObject* values[2] = {0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -3582,17 +1939,17 @@ static PyObject *__pyx_pw_7racecar_5PyCar_19getScanPose(PyObject *__pyx_v_self, 
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_scan_dist_to_base)) != 0)) kw_args--;
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lidar)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_pose)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_size)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getScanPose", 1, 2, 2, 1); __PYX_ERR(1, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("eval", 1, 2, 2, 1); __PYX_ERR(1, 29, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getScanPose") < 0)) __PYX_ERR(1, 105, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "eval") < 0)) __PYX_ERR(1, 29, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3600,19 +1957,19 @@ static PyObject *__pyx_pw_7racecar_5PyCar_19getScanPose(PyObject *__pyx_v_self, 
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_scan_dist_to_base = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_scan_dist_to_base == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 105, __pyx_L3_error)
-    __pyx_v_pose = ((PyArrayObject *)values[1]);
+    __pyx_v_lidar = ((PyArrayObject *)values[0]);
+    __pyx_v_size = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_size == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 29, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getScanPose", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 105, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("eval", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 29, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.getScanPose", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("followgap.PyFollowGap.eval", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pose), __pyx_ptype_5numpy_ndarray, 1, "pose", 0))) __PYX_ERR(1, 106, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7racecar_5PyCar_18getScanPose(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_scan_dist_to_base, __pyx_v_pose);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lidar), __pyx_ptype_5numpy_ndarray, 1, "lidar", 0))) __PYX_ERR(1, 29, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9followgap_11PyFollowGap_4eval(((struct __pyx_obj_9followgap_PyFollowGap *)__pyx_v_self), __pyx_v_lidar, __pyx_v_size);
 
   /* function exit code */
   goto __pyx_L0;
@@ -3623,24 +1980,24 @@ static PyObject *__pyx_pw_7racecar_5PyCar_19getScanPose(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7racecar_5PyCar_18getScanPose(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_scan_dist_to_base, PyArrayObject *__pyx_v_pose) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_pose;
-  __Pyx_Buffer __pyx_pybuffer_pose;
+static PyObject *__pyx_pf_9followgap_11PyFollowGap_4eval(struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, PyArrayObject *__pyx_v_lidar, int __pyx_v_size) {
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_lidar;
+  __Pyx_Buffer __pyx_pybuffer_lidar;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("getScanPose", 0);
-  __pyx_pybuffer_pose.pybuffer.buf = NULL;
-  __pyx_pybuffer_pose.refcount = 0;
-  __pyx_pybuffernd_pose.data = NULL;
-  __pyx_pybuffernd_pose.rcbuffer = &__pyx_pybuffer_pose;
+  __Pyx_RefNannySetupContext("eval", 0);
+  __pyx_pybuffer_lidar.pybuffer.buf = NULL;
+  __pyx_pybuffer_lidar.refcount = 0;
+  __pyx_pybuffernd_lidar.data = NULL;
+  __pyx_pybuffernd_lidar.rcbuffer = &__pyx_pybuffer_lidar;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pose.rcbuffer->pybuffer, (PyObject*)__pyx_v_pose, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 105, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_lidar.rcbuffer->pybuffer, (PyObject*)__pyx_v_lidar, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 29, __pyx_L1_error)
   }
-  __pyx_pybuffernd_pose.diminfo[0].strides = __pyx_pybuffernd_pose.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pose.diminfo[0].shape = __pyx_pybuffernd_pose.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_lidar.diminfo[0].strides = __pyx_pybuffernd_lidar.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_lidar.diminfo[0].shape = __pyx_pybuffernd_lidar.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_getScanPose(__pyx_v_self, __pyx_v_scan_dist_to_base, __pyx_v_pose, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 105, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_9followgap_11PyFollowGap_eval(__pyx_v_self, __pyx_v_lidar, __pyx_v_size, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3653,505 +2010,13 @@ static PyObject *__pyx_pf_7racecar_5PyCar_18getScanPose(struct __pyx_obj_7raceca
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pose.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lidar.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("racecar.PyCar.getScanPose", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("followgap.PyFollowGap.eval", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pose.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":108
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
- *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
- *     cpdef double getMeanVelocity(self):             # <<<<<<<<<<<<<<
- *         return self.thisptr.getMeanVelocity()
- *     cpdef double getTravelDistance(self):
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_21getMeanVelocity(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static double __pyx_f_7racecar_5PyCar_getMeanVelocity(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch) {
-  double __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  double __pyx_t_5;
-  __Pyx_RefNannySetupContext("getMeanVelocity", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getMeanVelocity); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 108, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_21getMeanVelocity)) {
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 108, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 108, __pyx_L1_error)
-      }
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 108, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_r = __pyx_t_5;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":109
- *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
- *     cpdef double getMeanVelocity(self):
- *         return self.thisptr.getMeanVelocity()             # <<<<<<<<<<<<<<
- *     cpdef double getTravelDistance(self):
- *         return self.thisptr.getTravelDistance()
- */
-  __pyx_r = __pyx_v_self->thisptr->getMeanVelocity();
-  goto __pyx_L0;
-
-  /* "racecar.pyx":108
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
- *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
- *     cpdef double getMeanVelocity(self):             # <<<<<<<<<<<<<<
- *         return self.thisptr.getMeanVelocity()
- *     cpdef double getTravelDistance(self):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_WriteUnraisable("racecar.PyCar.getMeanVelocity", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_21getMeanVelocity(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_21getMeanVelocity(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getMeanVelocity (wrapper)", 0);
-  __pyx_r = __pyx_pf_7racecar_5PyCar_20getMeanVelocity(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_20getMeanVelocity(struct __pyx_obj_7racecar_PyCar *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("getMeanVelocity", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_7racecar_5PyCar_getMeanVelocity(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.getMeanVelocity", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":110
- *     cpdef double getMeanVelocity(self):
- *         return self.thisptr.getMeanVelocity()
- *     cpdef double getTravelDistance(self):             # <<<<<<<<<<<<<<
- *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_23getTravelDistance(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static double __pyx_f_7racecar_5PyCar_getTravelDistance(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch) {
-  double __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  double __pyx_t_5;
-  __Pyx_RefNannySetupContext("getTravelDistance", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getTravelDistance); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 110, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_23getTravelDistance)) {
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 110, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 110, __pyx_L1_error)
-      }
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 110, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_r = __pyx_t_5;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":111
- *         return self.thisptr.getMeanVelocity()
- *     cpdef double getTravelDistance(self):
- *         return self.thisptr.getTravelDistance()             # <<<<<<<<<<<<<<
- *     cpdef void getCarPixels(self, double num_rays,
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- */
-  __pyx_r = __pyx_v_self->thisptr->getTravelDistance();
-  goto __pyx_L0;
-
-  /* "racecar.pyx":110
- *     cpdef double getMeanVelocity(self):
- *         return self.thisptr.getMeanVelocity()
- *     cpdef double getTravelDistance(self):             # <<<<<<<<<<<<<<
- *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_WriteUnraisable("racecar.PyCar.getTravelDistance", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_23getTravelDistance(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_23getTravelDistance(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getTravelDistance (wrapper)", 0);
-  __pyx_r = __pyx_pf_7racecar_5PyCar_22getTravelDistance(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_22getTravelDistance(struct __pyx_obj_7racecar_PyCar *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("getTravelDistance", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_7racecar_5PyCar_getTravelDistance(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 110, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.getTravelDistance", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "racecar.pyx":112
- *     cpdef double getTravelDistance(self):
- *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,             # <<<<<<<<<<<<<<
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- *         self.thisptr.getCarPixels(num_rays, &pixels[0])
- */
-
-static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels, int __pyx_skip_dispatch) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_pixels;
-  __Pyx_Buffer __pyx_pybuffer_pixels;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  Py_ssize_t __pyx_t_8;
-  __Pyx_RefNannySetupContext("getCarPixels", 0);
-  __pyx_pybuffer_pixels.pybuffer.buf = NULL;
-  __pyx_pybuffer_pixels.refcount = 0;
-  __pyx_pybuffernd_pixels.data = NULL;
-  __pyx_pybuffernd_pixels.rcbuffer = &__pyx_pybuffer_pixels;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer, (PyObject*)__pyx_v_pixels, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_pixels.diminfo[0].strides = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pixels.diminfo[0].shape = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.shape[0];
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getCarPixels); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 112, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_25getCarPixels)) {
-      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_num_rays); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 112, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_1);
-      __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
-      __pyx_t_6 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
-        if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-          __Pyx_INCREF(__pyx_t_5);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_4, function);
-          __pyx_t_6 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_pixels)};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 112, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_pixels)};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 112, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 112, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        if (__pyx_t_5) {
-          __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
-        }
-        __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_6, __pyx_t_3);
-        __Pyx_INCREF(((PyObject *)__pyx_v_pixels));
-        __Pyx_GIVEREF(((PyObject *)__pyx_v_pixels));
-        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, ((PyObject *)__pyx_v_pixels));
-        __pyx_t_3 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 112, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      goto __pyx_L0;
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  }
-
-  /* "racecar.pyx":114
- *     cpdef void getCarPixels(self, double num_rays,
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- *         self.thisptr.getCarPixels(num_rays, &pixels[0])             # <<<<<<<<<<<<<<
- */
-  __pyx_t_8 = 0;
-  __pyx_t_6 = -1;
-  if (__pyx_t_8 < 0) {
-    __pyx_t_8 += __pyx_pybuffernd_pixels.diminfo[0].shape;
-    if (unlikely(__pyx_t_8 < 0)) __pyx_t_6 = 0;
-  } else if (unlikely(__pyx_t_8 >= __pyx_pybuffernd_pixels.diminfo[0].shape)) __pyx_t_6 = 0;
-  if (unlikely(__pyx_t_6 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_6);
-    __PYX_ERR(1, 114, __pyx_L1_error)
-  }
-  __pyx_v_self->thisptr->getCarPixels(__pyx_v_num_rays, (&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_pixels.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_pixels.diminfo[0].strides))));
-
-  /* "racecar.pyx":112
- *     cpdef double getTravelDistance(self):
- *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,             # <<<<<<<<<<<<<<
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- *         self.thisptr.getCarPixels(num_rays, &pixels[0])
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_7);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("racecar.PyCar.getCarPixels", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  double __pyx_v_num_rays;
-  PyArrayObject *__pyx_v_pixels = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getCarPixels (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_num_rays,&__pyx_n_s_pixels,0};
-    PyObject* values[2] = {0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_rays)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_pixels)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("getCarPixels", 1, 2, 2, 1); __PYX_ERR(1, 112, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getCarPixels") < 0)) __PYX_ERR(1, 112, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-    }
-    __pyx_v_num_rays = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_num_rays == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 112, __pyx_L3_error)
-    __pyx_v_pixels = ((PyArrayObject *)values[1]);
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getCarPixels", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 112, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.getCarPixels", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pixels), __pyx_ptype_5numpy_ndarray, 1, "pixels", 0))) __PYX_ERR(1, 113, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7racecar_5PyCar_24getCarPixels(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_num_rays, __pyx_v_pixels);
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7racecar_5PyCar_24getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_pixels;
-  __Pyx_Buffer __pyx_pybuffer_pixels;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("getCarPixels", 0);
-  __pyx_pybuffer_pixels.pybuffer.buf = NULL;
-  __pyx_pybuffer_pixels.refcount = 0;
-  __pyx_pybuffernd_pixels.data = NULL;
-  __pyx_pybuffernd_pixels.rcbuffer = &__pyx_pybuffer_pixels;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer, (PyObject*)__pyx_v_pixels, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_pixels.diminfo[0].strides = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pixels.diminfo[0].shape = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.shape[0];
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_getCarPixels(__pyx_v_self, __pyx_v_num_rays, __pyx_v_pixels, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("racecar.PyCar.getCarPixels", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lidar.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -4165,19 +2030,19 @@ static PyObject *__pyx_pf_7racecar_5PyCar_24getCarPixels(struct __pyx_obj_7racec
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_27__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_27__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7racecar_5PyCar_26__reduce_cython__(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9followgap_11PyFollowGap_6__reduce_cython__(((struct __pyx_obj_9followgap_PyFollowGap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7racecar_5PyCar_26__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7racecar_PyCar *__pyx_v_self) {
+static PyObject *__pyx_pf_9followgap_11PyFollowGap_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4204,7 +2069,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_26__reduce_cython__(CYTHON_UNUSED stru
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("followgap.PyFollowGap.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -4219,19 +2084,19 @@ static PyObject *__pyx_pf_7racecar_5PyCar_26__reduce_cython__(CYTHON_UNUSED stru
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_29__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_29__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_9followgap_11PyFollowGap_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7racecar_5PyCar_28__setstate_cython__(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_9followgap_11PyFollowGap_8__setstate_cython__(((struct __pyx_obj_9followgap_PyFollowGap *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7racecar_5PyCar_28__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7racecar_PyCar *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_9followgap_11PyFollowGap_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9followgap_PyFollowGap *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4258,7 +2123,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_28__setstate_cython__(CYTHON_UNUSED st
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("racecar.PyCar.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("followgap.PyFollowGap.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -6778,10 +4643,10 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static struct __pyx_vtabstruct_7racecar_PyCar __pyx_vtable_7racecar_PyCar;
+static struct __pyx_vtabstruct_9followgap_PyFollowGap __pyx_vtable_9followgap_PyFollowGap;
 
-static PyObject *__pyx_tp_new_7racecar_PyCar(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_7racecar_PyCar *p;
+static PyObject *__pyx_tp_new_9followgap_PyFollowGap(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_9followgap_PyFollowGap *p;
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
     o = (*t->tp_alloc)(t, 0);
@@ -6789,16 +4654,16 @@ static PyObject *__pyx_tp_new_7racecar_PyCar(PyTypeObject *t, PyObject *a, PyObj
     o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
   }
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_7racecar_PyCar *)o);
-  p->__pyx_vtab = __pyx_vtabptr_7racecar_PyCar;
-  if (unlikely(__pyx_pw_7racecar_5PyCar_1__cinit__(o, a, k) < 0)) goto bad;
+  p = ((struct __pyx_obj_9followgap_PyFollowGap *)o);
+  p->__pyx_vtab = __pyx_vtabptr_9followgap_PyFollowGap;
+  if (unlikely(__pyx_pw_9followgap_11PyFollowGap_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_7racecar_PyCar(PyObject *o) {
+static void __pyx_tp_dealloc_9followgap_PyFollowGap(PyObject *o) {
   #if PY_VERSION_HEX >= 0x030400a1
   if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -6808,36 +4673,26 @@ static void __pyx_tp_dealloc_7racecar_PyCar(PyObject *o) {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     ++Py_REFCNT(o);
-    __pyx_pw_7racecar_5PyCar_3__dealloc__(o);
+    __pyx_pw_9followgap_11PyFollowGap_3__dealloc__(o);
     --Py_REFCNT(o);
     PyErr_Restore(etype, eval, etb);
   }
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyMethodDef __pyx_methods_7racecar_PyCar[] = {
-  {"updatePosition", (PyCFunction)__pyx_pw_7racecar_5PyCar_5updatePosition, METH_O, 0},
-  {"control", (PyCFunction)__pyx_pw_7racecar_5PyCar_7control, METH_VARARGS|METH_KEYWORDS, 0},
-  {"computeFromInput", (PyCFunction)__pyx_pw_7racecar_5PyCar_9computeFromInput, METH_NOARGS, 0},
-  {"isCrashed", (PyCFunction)__pyx_pw_7racecar_5PyCar_11isCrashed, METH_VARARGS|METH_KEYWORDS, 0},
-  {"setCarEdgeDistances", (PyCFunction)__pyx_pw_7racecar_5PyCar_13setCarEdgeDistances, METH_VARARGS|METH_KEYWORDS, 0},
-  {"getState", (PyCFunction)__pyx_pw_7racecar_5PyCar_15getState, METH_O, 0},
-  {"setState", (PyCFunction)__pyx_pw_7racecar_5PyCar_17setState, METH_O, 0},
-  {"getScanPose", (PyCFunction)__pyx_pw_7racecar_5PyCar_19getScanPose, METH_VARARGS|METH_KEYWORDS, 0},
-  {"getMeanVelocity", (PyCFunction)__pyx_pw_7racecar_5PyCar_21getMeanVelocity, METH_NOARGS, 0},
-  {"getTravelDistance", (PyCFunction)__pyx_pw_7racecar_5PyCar_23getTravelDistance, METH_NOARGS, 0},
-  {"getCarPixels", (PyCFunction)__pyx_pw_7racecar_5PyCar_25getCarPixels, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_7racecar_5PyCar_27__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_7racecar_5PyCar_29__setstate_cython__, METH_O, 0},
+static PyMethodDef __pyx_methods_9followgap_PyFollowGap[] = {
+  {"eval", (PyCFunction)__pyx_pw_9followgap_11PyFollowGap_5eval, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_9followgap_11PyFollowGap_7__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_9followgap_11PyFollowGap_9__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_7racecar_PyCar = {
+static PyTypeObject __pyx_type_9followgap_PyFollowGap = {
   PyVarObject_HEAD_INIT(0, 0)
-  "racecar.PyCar", /*tp_name*/
-  sizeof(struct __pyx_obj_7racecar_PyCar), /*tp_basicsize*/
+  "followgap.PyFollowGap", /*tp_name*/
+  sizeof(struct __pyx_obj_9followgap_PyFollowGap), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_7racecar_PyCar, /*tp_dealloc*/
+  __pyx_tp_dealloc_9followgap_PyFollowGap, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -6865,7 +4720,7 @@ static PyTypeObject __pyx_type_7racecar_PyCar = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_7racecar_PyCar, /*tp_methods*/
+  __pyx_methods_9followgap_PyFollowGap, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -6875,7 +4730,7 @@ static PyTypeObject __pyx_type_7racecar_PyCar = {
   0, /*tp_dictoffset*/
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_7racecar_PyCar, /*tp_new*/
+  __pyx_tp_new_9followgap_PyFollowGap, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -6901,7 +4756,7 @@ static struct PyModuleDef __pyx_moduledef = {
   #else
     PyModuleDef_HEAD_INIT,
   #endif
-    "racecar",
+    "followgap",
     0, /* m_doc */
     -1, /* m_size */
     __pyx_methods /* m_methods */,
@@ -6913,72 +4768,41 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_n_s_CRASH_THRESH, __pyx_k_CRASH_THRESH, sizeof(__pyx_k_CRASH_THRESH), 0, 0, 1, 1},
-  {&__pyx_n_s_CS_F, __pyx_k_CS_F, sizeof(__pyx_k_CS_F), 0, 0, 1, 1},
-  {&__pyx_n_s_CS_R, __pyx_k_CS_R, sizeof(__pyx_k_CS_R), 0, 0, 1, 1},
-  {&__pyx_n_s_FC, __pyx_k_FC, sizeof(__pyx_k_FC), 0, 0, 1, 1},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
-  {&__pyx_n_s_H_CG, __pyx_k_H_CG, sizeof(__pyx_k_H_CG), 0, 0, 1, 1},
-  {&__pyx_n_s_I_Z, __pyx_k_I_Z, sizeof(__pyx_k_I_Z), 0, 0, 1, 1},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_n_s_LENGTH, __pyx_k_LENGTH, sizeof(__pyx_k_LENGTH), 0, 0, 1, 1},
-  {&__pyx_n_s_L_F, __pyx_k_L_F, sizeof(__pyx_k_L_F), 0, 0, 1, 1},
-  {&__pyx_n_s_L_R, __pyx_k_L_R, sizeof(__pyx_k_L_R), 0, 0, 1, 1},
-  {&__pyx_n_s_MASS, __pyx_k_MASS, sizeof(__pyx_k_MASS), 0, 0, 1, 1},
-  {&__pyx_n_s_MAX_ACCEL, __pyx_k_MAX_ACCEL, sizeof(__pyx_k_MAX_ACCEL), 0, 0, 1, 1},
-  {&__pyx_n_s_MAX_DECEL, __pyx_k_MAX_DECEL, sizeof(__pyx_k_MAX_DECEL), 0, 0, 1, 1},
-  {&__pyx_n_s_MAX_SPEED, __pyx_k_MAX_SPEED, sizeof(__pyx_k_MAX_SPEED), 0, 0, 1, 1},
-  {&__pyx_n_s_MAX_STEER_ANG, __pyx_k_MAX_STEER_ANG, sizeof(__pyx_k_MAX_STEER_ANG), 0, 0, 1, 1},
-  {&__pyx_n_s_MAX_STEER_VEL, __pyx_k_MAX_STEER_VEL, sizeof(__pyx_k_MAX_STEER_VEL), 0, 0, 1, 1},
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
-  {&__pyx_n_s_WB, __pyx_k_WB, sizeof(__pyx_k_WB), 0, 0, 1, 1},
-  {&__pyx_n_s_WIDTH, __pyx_k_WIDTH, sizeof(__pyx_k_WIDTH), 0, 0, 1, 1},
-  {&__pyx_n_s_ang_min, __pyx_k_ang_min, sizeof(__pyx_k_ang_min), 0, 0, 1, 1},
+  {&__pyx_n_s_angle_inc, __pyx_k_angle_inc, sizeof(__pyx_k_angle_inc), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-  {&__pyx_n_s_computeFromInput, __pyx_k_computeFromInput, sizeof(__pyx_k_computeFromInput), 0, 0, 1, 1},
-  {&__pyx_n_s_control, __pyx_k_control, sizeof(__pyx_k_control), 0, 0, 1, 1},
-  {&__pyx_n_s_getCarPixels, __pyx_k_getCarPixels, sizeof(__pyx_k_getCarPixels), 0, 0, 1, 1},
-  {&__pyx_n_s_getMeanVelocity, __pyx_k_getMeanVelocity, sizeof(__pyx_k_getMeanVelocity), 0, 0, 1, 1},
-  {&__pyx_n_s_getScanPose, __pyx_k_getScanPose, sizeof(__pyx_k_getScanPose), 0, 0, 1, 1},
-  {&__pyx_n_s_getState, __pyx_k_getState, sizeof(__pyx_k_getState), 0, 0, 1, 1},
-  {&__pyx_n_s_getTravelDistance, __pyx_k_getTravelDistance, sizeof(__pyx_k_getTravelDistance), 0, 0, 1, 1},
+  {&__pyx_n_s_eval, __pyx_k_eval, sizeof(__pyx_k_eval), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_isCrashed, __pyx_k_isCrashed, sizeof(__pyx_k_isCrashed), 0, 0, 1, 1},
+  {&__pyx_n_s_lidar, __pyx_k_lidar, sizeof(__pyx_k_lidar), 0, 0, 1, 1},
+  {&__pyx_n_s_ma, __pyx_k_ma, sizeof(__pyx_k_ma), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_md, __pyx_k_md, sizeof(__pyx_k_md), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_kp_u_ndarray_is_not_C_contiguous, __pyx_k_ndarray_is_not_C_contiguous, sizeof(__pyx_k_ndarray_is_not_C_contiguous), 0, 1, 0, 0},
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
-  {&__pyx_n_s_num_rays, __pyx_k_num_rays, sizeof(__pyx_k_num_rays), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
   {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
-  {&__pyx_n_s_pixels, __pyx_k_pixels, sizeof(__pyx_k_pixels), 0, 0, 1, 1},
-  {&__pyx_n_s_pose, __pyx_k_pose, sizeof(__pyx_k_pose), 0, 0, 1, 1},
-  {&__pyx_n_s_poses, __pyx_k_poses, sizeof(__pyx_k_poses), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
-  {&__pyx_n_s_rays, __pyx_k_rays, sizeof(__pyx_k_rays), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
-  {&__pyx_n_s_scan_ang_inc, __pyx_k_scan_ang_inc, sizeof(__pyx_k_scan_ang_inc), 0, 0, 1, 1},
-  {&__pyx_n_s_scan_dist_to_base, __pyx_k_scan_dist_to_base, sizeof(__pyx_k_scan_dist_to_base), 0, 0, 1, 1},
-  {&__pyx_n_s_setCarEdgeDistances, __pyx_k_setCarEdgeDistances, sizeof(__pyx_k_setCarEdgeDistances), 0, 0, 1, 1},
-  {&__pyx_n_s_setState, __pyx_k_setState, sizeof(__pyx_k_setState), 0, 0, 1, 1},
   {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
-  {&__pyx_n_s_speed, __pyx_k_speed, sizeof(__pyx_k_speed), 0, 0, 1, 1},
-  {&__pyx_n_s_steer, __pyx_k_steer, sizeof(__pyx_k_steer), 0, 0, 1, 1},
+  {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
-  {&__pyx_n_s_updatePosition, __pyx_k_updatePosition, sizeof(__pyx_k_updatePosition), 0, 0, 1, 1},
+  {&__pyx_n_s_ws, __pyx_k_ws, sizeof(__pyx_k_ws), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
@@ -7126,11 +4950,11 @@ static int __Pyx_InitGlobals(void) {
 }
 
 #if PY_MAJOR_VERSION < 3
-PyMODINIT_FUNC initracecar(void); /*proto*/
-PyMODINIT_FUNC initracecar(void)
+PyMODINIT_FUNC initfollowgap(void); /*proto*/
+PyMODINIT_FUNC initfollowgap(void)
 #else
-PyMODINIT_FUNC PyInit_racecar(void); /*proto*/
-PyMODINIT_FUNC PyInit_racecar(void)
+PyMODINIT_FUNC PyInit_followgap(void); /*proto*/
+PyMODINIT_FUNC PyInit_followgap(void)
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
@@ -7144,7 +4968,7 @@ PyMODINIT_FUNC PyInit_racecar(void)
           Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_racecar(void)", 0);
+  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_followgap(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(1, 1, __pyx_L1_error)
   __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(1, 1, __pyx_L1_error)
@@ -7173,7 +4997,7 @@ PyMODINIT_FUNC PyInit_racecar(void)
   #endif
   /*--- Module creation code ---*/
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("racecar", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("followgap", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -7191,14 +5015,14 @@ PyMODINIT_FUNC PyInit_racecar(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_racecar) {
+  if (__pyx_module_is_main_followgap) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(1, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "racecar")) {
-      if (unlikely(PyDict_SetItemString(modules, "racecar", __pyx_m) < 0)) __PYX_ERR(1, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "followgap")) {
+      if (unlikely(PyDict_SetItemString(modules, "followgap", __pyx_m) < 0)) __PYX_ERR(1, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -7210,24 +5034,14 @@ PyMODINIT_FUNC PyInit_racecar(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  __pyx_vtabptr_7racecar_PyCar = &__pyx_vtable_7racecar_PyCar;
-  __pyx_vtable_7racecar_PyCar.updatePosition = (void (*)(struct __pyx_obj_7racecar_PyCar *, double, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_updatePosition;
-  __pyx_vtable_7racecar_PyCar.control = (void (*)(struct __pyx_obj_7racecar_PyCar *, double, double, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_control;
-  __pyx_vtable_7racecar_PyCar.computeFromInput = (void (*)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_computeFromInput;
-  __pyx_vtable_7racecar_PyCar.isCrashed = (int (*)(struct __pyx_obj_7racecar_PyCar *, PyArrayObject *, int, int, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_isCrashed;
-  __pyx_vtable_7racecar_PyCar.setCarEdgeDistances = (void (*)(struct __pyx_obj_7racecar_PyCar *, int, double, double, double, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_setCarEdgeDistances;
-  __pyx_vtable_7racecar_PyCar.getState = (void (*)(struct __pyx_obj_7racecar_PyCar *, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getState;
-  __pyx_vtable_7racecar_PyCar.setState = (void (*)(struct __pyx_obj_7racecar_PyCar *, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_setState;
-  __pyx_vtable_7racecar_PyCar.getScanPose = (void (*)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getScanPose;
-  __pyx_vtable_7racecar_PyCar.getMeanVelocity = (double (*)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getMeanVelocity;
-  __pyx_vtable_7racecar_PyCar.getTravelDistance = (double (*)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getTravelDistance;
-  __pyx_vtable_7racecar_PyCar.getCarPixels = (void (*)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getCarPixels;
-  if (PyType_Ready(&__pyx_type_7racecar_PyCar) < 0) __PYX_ERR(1, 75, __pyx_L1_error)
-  __pyx_type_7racecar_PyCar.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_7racecar_PyCar.tp_dict, __pyx_vtabptr_7racecar_PyCar) < 0) __PYX_ERR(1, 75, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "PyCar", (PyObject *)&__pyx_type_7racecar_PyCar) < 0) __PYX_ERR(1, 75, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_7racecar_PyCar) < 0) __PYX_ERR(1, 75, __pyx_L1_error)
-  __pyx_ptype_7racecar_PyCar = &__pyx_type_7racecar_PyCar;
+  __pyx_vtabptr_9followgap_PyFollowGap = &__pyx_vtable_9followgap_PyFollowGap;
+  __pyx_vtable_9followgap_PyFollowGap.eval = (float (*)(struct __pyx_obj_9followgap_PyFollowGap *, PyArrayObject *, int, int __pyx_skip_dispatch))__pyx_f_9followgap_11PyFollowGap_eval;
+  if (PyType_Ready(&__pyx_type_9followgap_PyFollowGap) < 0) __PYX_ERR(1, 21, __pyx_L1_error)
+  __pyx_type_9followgap_PyFollowGap.tp_print = 0;
+  if (__Pyx_SetVtable(__pyx_type_9followgap_PyFollowGap.tp_dict, __pyx_vtabptr_9followgap_PyFollowGap) < 0) __PYX_ERR(1, 21, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "PyFollowGap", (PyObject *)&__pyx_type_9followgap_PyFollowGap) < 0) __PYX_ERR(1, 21, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_9followgap_PyFollowGap) < 0) __PYX_ERR(1, 21, __pyx_L1_error)
+  __pyx_ptype_9followgap_PyFollowGap = &__pyx_type_9followgap_PyFollowGap;
   /*--- Type import code ---*/
   __pyx_ptype_7cpython_4type_type = __Pyx_ImportType(__Pyx_BUILTIN_MODULE_NAME, "type", 
   #if CYTHON_COMPILING_IN_PYPY
@@ -7248,22 +5062,21 @@ PyMODINIT_FUNC PyInit_racecar(void)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
 
-  /* "racecar.pyx":4
- * from libcpp.string cimport string
- * from libcpp.vector cimport vector
+  /* "followgap.pyx":2
+ * from libcpp cimport vector
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(1, 4, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "racecar.pyx":1
- * from libcpp cimport bool             # <<<<<<<<<<<<<<
- * from libcpp.string cimport string
- * from libcpp.vector cimport vector
+  /* "followgap.pyx":1
+ * from libcpp cimport vector             # <<<<<<<<<<<<<<
+ * import numpy as np
+ * cimport numpy as np
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -7285,11 +5098,11 @@ PyMODINIT_FUNC PyInit_racecar(void)
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init racecar", 0, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init followgap", 0, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init racecar");
+    PyErr_SetString(PyExc_ImportError, "init followgap");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -7474,318 +5287,8 @@ bad:
     return -1;
 }
 
-/* PyCFunctionFastCall */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
-    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
-    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
-    PyObject *self = PyCFunction_GET_SELF(func);
-    int flags = PyCFunction_GET_FLAGS(func);
-    assert(PyCFunction_Check(func));
-    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS)));
-    assert(nargs >= 0);
-    assert(nargs == 0 || args != NULL);
-    /* _PyCFunction_FastCallDict() must not be called with an exception set,
-       because it may clear it (directly or indirectly) and so the
-       caller loses its exception */
-    assert(!PyErr_Occurred());
-    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
-        return (*((__Pyx_PyCFunctionFastWithKeywords)meth)) (self, args, nargs, NULL);
-    } else {
-        return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs);
-    }
-}
-#endif
-
-/* PyFunctionFastCall */
-#if CYTHON_FAST_PYCALL
-#include "frameobject.h"
-static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
-                                               PyObject *globals) {
-    PyFrameObject *f;
-    PyThreadState *tstate = PyThreadState_GET();
-    PyObject **fastlocals;
-    Py_ssize_t i;
-    PyObject *result;
-    assert(globals != NULL);
-    /* XXX Perhaps we should create a specialized
-       PyFrame_New() that doesn't take locals, but does
-       take builtins without sanity checking them.
-       */
-    assert(tstate != NULL);
-    f = PyFrame_New(tstate, co, globals, NULL);
-    if (f == NULL) {
-        return NULL;
-    }
-    fastlocals = f->f_localsplus;
-    for (i = 0; i < na; i++) {
-        Py_INCREF(*args);
-        fastlocals[i] = *args++;
-    }
-    result = PyEval_EvalFrameEx(f,0);
-    ++tstate->recursion_depth;
-    Py_DECREF(f);
-    --tstate->recursion_depth;
-    return result;
-}
-#if 1 || PY_VERSION_HEX < 0x030600B1
-static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs) {
-    PyCodeObject *co = (PyCodeObject *)PyFunction_GET_CODE(func);
-    PyObject *globals = PyFunction_GET_GLOBALS(func);
-    PyObject *argdefs = PyFunction_GET_DEFAULTS(func);
-    PyObject *closure;
-#if PY_MAJOR_VERSION >= 3
-    PyObject *kwdefs;
-#endif
-    PyObject *kwtuple, **k;
-    PyObject **d;
-    Py_ssize_t nd;
-    Py_ssize_t nk;
-    PyObject *result;
-    assert(kwargs == NULL || PyDict_Check(kwargs));
-    nk = kwargs ? PyDict_Size(kwargs) : 0;
-    if (Py_EnterRecursiveCall((char*)" while calling a Python object")) {
-        return NULL;
-    }
-    if (
-#if PY_MAJOR_VERSION >= 3
-            co->co_kwonlyargcount == 0 &&
-#endif
-            likely(kwargs == NULL || nk == 0) &&
-            co->co_flags == (CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE)) {
-        if (argdefs == NULL && co->co_argcount == nargs) {
-            result = __Pyx_PyFunction_FastCallNoKw(co, args, nargs, globals);
-            goto done;
-        }
-        else if (nargs == 0 && argdefs != NULL
-                 && co->co_argcount == Py_SIZE(argdefs)) {
-            /* function called with no arguments, but all parameters have
-               a default value: use default values as arguments .*/
-            args = &PyTuple_GET_ITEM(argdefs, 0);
-            result =__Pyx_PyFunction_FastCallNoKw(co, args, Py_SIZE(argdefs), globals);
-            goto done;
-        }
-    }
-    if (kwargs != NULL) {
-        Py_ssize_t pos, i;
-        kwtuple = PyTuple_New(2 * nk);
-        if (kwtuple == NULL) {
-            result = NULL;
-            goto done;
-        }
-        k = &PyTuple_GET_ITEM(kwtuple, 0);
-        pos = i = 0;
-        while (PyDict_Next(kwargs, &pos, &k[i], &k[i+1])) {
-            Py_INCREF(k[i]);
-            Py_INCREF(k[i+1]);
-            i += 2;
-        }
-        nk = i / 2;
-    }
-    else {
-        kwtuple = NULL;
-        k = NULL;
-    }
-    closure = PyFunction_GET_CLOSURE(func);
-#if PY_MAJOR_VERSION >= 3
-    kwdefs = PyFunction_GET_KW_DEFAULTS(func);
-#endif
-    if (argdefs != NULL) {
-        d = &PyTuple_GET_ITEM(argdefs, 0);
-        nd = Py_SIZE(argdefs);
-    }
-    else {
-        d = NULL;
-        nd = 0;
-    }
-#if PY_MAJOR_VERSION >= 3
-    result = PyEval_EvalCodeEx((PyObject*)co, globals, (PyObject *)NULL,
-                               args, nargs,
-                               k, (int)nk,
-                               d, (int)nd, kwdefs, closure);
-#else
-    result = PyEval_EvalCodeEx(co, globals, (PyObject *)NULL,
-                               args, nargs,
-                               k, (int)nk,
-                               d, (int)nd, closure);
-#endif
-    Py_XDECREF(kwtuple);
-done:
-    Py_LeaveRecursiveCall();
-    return result;
-}
-#endif
-#endif
-
-/* PyObjectCall */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = func->ob_type->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-/* PyObjectCallMethO */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
-    PyObject *self, *result;
-    PyCFunction cfunc;
-    cfunc = PyCFunction_GET_FUNCTION(func);
-    self = PyCFunction_GET_SELF(func);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = cfunc(self, arg);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-/* PyObjectCallOneArg */
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject *result;
-    PyObject *args = PyTuple_New(1);
-    if (unlikely(!args)) return NULL;
-    Py_INCREF(arg);
-    PyTuple_SET_ITEM(args, 0, arg);
-    result = __Pyx_PyObject_Call(func, args, NULL);
-    Py_DECREF(args);
-    return result;
-}
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-#if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(func)) {
-        return __Pyx_PyFunction_FastCall(func, &arg, 1);
-    }
-#endif
-    if (likely(PyCFunction_Check(func))) {
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
-            return __Pyx_PyObject_CallMethO(func, arg);
-#if CYTHON_FAST_PYCCALL
-        } else if (PyCFunction_GET_FLAGS(func) & METH_FASTCALL) {
-            return __Pyx_PyCFunction_FastCall(func, &arg, 1);
-#endif
-        }
-    }
-    return __Pyx__PyObject_CallOneArg(func, arg);
-}
-#else
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject *result;
-    PyObject *args = PyTuple_Pack(1, arg);
-    if (unlikely(!args)) return NULL;
-    result = __Pyx_PyObject_Call(func, args, NULL);
-    Py_DECREF(args);
-    return result;
-}
-#endif
-
-/* PyErrFetchRestore */
-#if CYTHON_FAST_THREAD_STATE
-static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
-    PyObject *tmp_type, *tmp_value, *tmp_tb;
-    tmp_type = tstate->curexc_type;
-    tmp_value = tstate->curexc_value;
-    tmp_tb = tstate->curexc_traceback;
-    tstate->curexc_type = type;
-    tstate->curexc_value = value;
-    tstate->curexc_traceback = tb;
-    Py_XDECREF(tmp_type);
-    Py_XDECREF(tmp_value);
-    Py_XDECREF(tmp_tb);
-}
-static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
-    *type = tstate->curexc_type;
-    *value = tstate->curexc_value;
-    *tb = tstate->curexc_traceback;
-    tstate->curexc_type = 0;
-    tstate->curexc_value = 0;
-    tstate->curexc_traceback = 0;
-}
-#endif
-
-/* WriteUnraisableException */
-static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
-                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
-                                  int full_traceback, CYTHON_UNUSED int nogil) {
-    PyObject *old_exc, *old_val, *old_tb;
-    PyObject *ctx;
-    __Pyx_PyThreadState_declare
-#ifdef WITH_THREAD
-    PyGILState_STATE state;
-    if (nogil)
-        state = PyGILState_Ensure();
-#ifdef _MSC_VER
-    else state = (PyGILState_STATE)-1;
-#endif
-#endif
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
-    if (full_traceback) {
-        Py_XINCREF(old_exc);
-        Py_XINCREF(old_val);
-        Py_XINCREF(old_tb);
-        __Pyx_ErrRestore(old_exc, old_val, old_tb);
-        PyErr_PrintEx(1);
-    }
-    #if PY_MAJOR_VERSION < 3
-    ctx = PyString_FromString(name);
-    #else
-    ctx = PyUnicode_FromString(name);
-    #endif
-    __Pyx_ErrRestore(old_exc, old_val, old_tb);
-    if (!ctx) {
-        PyErr_WriteUnraisable(Py_None);
-    } else {
-        PyErr_WriteUnraisable(ctx);
-        Py_DECREF(ctx);
-    }
-#ifdef WITH_THREAD
-    if (nogil)
-        PyGILState_Release(state);
-#endif
-}
-
-/* PyObjectCallNoArg */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
-#if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(func)) {
-        return __Pyx_PyFunction_FastCall(func, NULL, 0);
-    }
-#endif
-#ifdef __Pyx_CyFunction_USED
-    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
-#else
-    if (likely(PyCFunction_Check(func))) {
-#endif
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
-            return __Pyx_PyObject_CallMethO(func, NULL);
-        }
-    }
-    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
-}
-#endif
-
 /* IsLittleEndian */
-  static CYTHON_INLINE int __Pyx_Is_Little_Endian(void)
+static CYTHON_INLINE int __Pyx_Is_Little_Endian(void)
 {
   union {
     uint32_t u32;
@@ -7796,7 +5299,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 }
 
 /* BufferFormatCheck */
-  static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
+static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
                               __Pyx_BufFmt_StackElem* stack,
                               __Pyx_TypeInfo* type) {
   stack[0].field = &ctx->root;
@@ -8341,14 +5844,243 @@ static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info) {
   __Pyx_ReleaseBuffer(info);
 }
 
+/* PyFunctionFastCall */
+  #if CYTHON_FAST_PYCALL
+#include "frameobject.h"
+static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
+                                               PyObject *globals) {
+    PyFrameObject *f;
+    PyThreadState *tstate = PyThreadState_GET();
+    PyObject **fastlocals;
+    Py_ssize_t i;
+    PyObject *result;
+    assert(globals != NULL);
+    /* XXX Perhaps we should create a specialized
+       PyFrame_New() that doesn't take locals, but does
+       take builtins without sanity checking them.
+       */
+    assert(tstate != NULL);
+    f = PyFrame_New(tstate, co, globals, NULL);
+    if (f == NULL) {
+        return NULL;
+    }
+    fastlocals = f->f_localsplus;
+    for (i = 0; i < na; i++) {
+        Py_INCREF(*args);
+        fastlocals[i] = *args++;
+    }
+    result = PyEval_EvalFrameEx(f,0);
+    ++tstate->recursion_depth;
+    Py_DECREF(f);
+    --tstate->recursion_depth;
+    return result;
+}
+#if 1 || PY_VERSION_HEX < 0x030600B1
+static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs) {
+    PyCodeObject *co = (PyCodeObject *)PyFunction_GET_CODE(func);
+    PyObject *globals = PyFunction_GET_GLOBALS(func);
+    PyObject *argdefs = PyFunction_GET_DEFAULTS(func);
+    PyObject *closure;
+#if PY_MAJOR_VERSION >= 3
+    PyObject *kwdefs;
+#endif
+    PyObject *kwtuple, **k;
+    PyObject **d;
+    Py_ssize_t nd;
+    Py_ssize_t nk;
+    PyObject *result;
+    assert(kwargs == NULL || PyDict_Check(kwargs));
+    nk = kwargs ? PyDict_Size(kwargs) : 0;
+    if (Py_EnterRecursiveCall((char*)" while calling a Python object")) {
+        return NULL;
+    }
+    if (
+#if PY_MAJOR_VERSION >= 3
+            co->co_kwonlyargcount == 0 &&
+#endif
+            likely(kwargs == NULL || nk == 0) &&
+            co->co_flags == (CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE)) {
+        if (argdefs == NULL && co->co_argcount == nargs) {
+            result = __Pyx_PyFunction_FastCallNoKw(co, args, nargs, globals);
+            goto done;
+        }
+        else if (nargs == 0 && argdefs != NULL
+                 && co->co_argcount == Py_SIZE(argdefs)) {
+            /* function called with no arguments, but all parameters have
+               a default value: use default values as arguments .*/
+            args = &PyTuple_GET_ITEM(argdefs, 0);
+            result =__Pyx_PyFunction_FastCallNoKw(co, args, Py_SIZE(argdefs), globals);
+            goto done;
+        }
+    }
+    if (kwargs != NULL) {
+        Py_ssize_t pos, i;
+        kwtuple = PyTuple_New(2 * nk);
+        if (kwtuple == NULL) {
+            result = NULL;
+            goto done;
+        }
+        k = &PyTuple_GET_ITEM(kwtuple, 0);
+        pos = i = 0;
+        while (PyDict_Next(kwargs, &pos, &k[i], &k[i+1])) {
+            Py_INCREF(k[i]);
+            Py_INCREF(k[i+1]);
+            i += 2;
+        }
+        nk = i / 2;
+    }
+    else {
+        kwtuple = NULL;
+        k = NULL;
+    }
+    closure = PyFunction_GET_CLOSURE(func);
+#if PY_MAJOR_VERSION >= 3
+    kwdefs = PyFunction_GET_KW_DEFAULTS(func);
+#endif
+    if (argdefs != NULL) {
+        d = &PyTuple_GET_ITEM(argdefs, 0);
+        nd = Py_SIZE(argdefs);
+    }
+    else {
+        d = NULL;
+        nd = 0;
+    }
+#if PY_MAJOR_VERSION >= 3
+    result = PyEval_EvalCodeEx((PyObject*)co, globals, (PyObject *)NULL,
+                               args, nargs,
+                               k, (int)nk,
+                               d, (int)nd, kwdefs, closure);
+#else
+    result = PyEval_EvalCodeEx(co, globals, (PyObject *)NULL,
+                               args, nargs,
+                               k, (int)nk,
+                               d, (int)nd, closure);
+#endif
+    Py_XDECREF(kwtuple);
+done:
+    Py_LeaveRecursiveCall();
+    return result;
+}
+#endif
+#endif
+
+/* PyCFunctionFastCall */
+  #if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
+    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
+    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
+    PyObject *self = PyCFunction_GET_SELF(func);
+    int flags = PyCFunction_GET_FLAGS(func);
+    assert(PyCFunction_Check(func));
+    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS)));
+    assert(nargs >= 0);
+    assert(nargs == 0 || args != NULL);
+    /* _PyCFunction_FastCallDict() must not be called with an exception set,
+       because it may clear it (directly or indirectly) and so the
+       caller loses its exception */
+    assert(!PyErr_Occurred());
+    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
+        return (*((__Pyx_PyCFunctionFastWithKeywords)meth)) (self, args, nargs, NULL);
+    } else {
+        return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs);
+    }
+}
+#endif
+
+/* PyObjectCall */
+  #if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
+    PyObject *result;
+    ternaryfunc call = func->ob_type->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
 /* BufferIndexError */
-    static void __Pyx_RaiseBufferIndexError(int axis) {
+  static void __Pyx_RaiseBufferIndexError(int axis) {
   PyErr_Format(PyExc_IndexError,
      "Out of bounds on buffer access (axis %d)", axis);
 }
 
+/* PyErrFetchRestore */
+  #if CYTHON_FAST_THREAD_STATE
+static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    tmp_type = tstate->curexc_type;
+    tmp_value = tstate->curexc_value;
+    tmp_tb = tstate->curexc_traceback;
+    tstate->curexc_type = type;
+    tstate->curexc_value = value;
+    tstate->curexc_traceback = tb;
+    Py_XDECREF(tmp_type);
+    Py_XDECREF(tmp_value);
+    Py_XDECREF(tmp_tb);
+}
+static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
+    *type = tstate->curexc_type;
+    *value = tstate->curexc_value;
+    *tb = tstate->curexc_traceback;
+    tstate->curexc_type = 0;
+    tstate->curexc_value = 0;
+    tstate->curexc_traceback = 0;
+}
+#endif
+
+/* WriteUnraisableException */
+  static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
+#endif
+}
+
 /* ArgTypeTest */
-    static void __Pyx_RaiseArgumentTypeInvalid(const char* name, PyObject *obj, PyTypeObject *type) {
+  static void __Pyx_RaiseArgumentTypeInvalid(const char* name, PyObject *obj, PyTypeObject *type) {
     PyErr_Format(PyExc_TypeError,
         "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
         name, type->tp_name, Py_TYPE(obj)->tp_name);
@@ -8375,7 +6107,7 @@ static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, in
 }
 
 /* RaiseException */
-    #if PY_MAJOR_VERSION < 3
+  #if PY_MAJOR_VERSION < 3
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb,
                         CYTHON_UNUSED PyObject *cause) {
     __Pyx_PyThreadState_declare
@@ -8538,25 +6270,25 @@ bad:
 #endif
 
 /* RaiseTooManyValuesToUnpack */
-      static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
+    static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
     PyErr_Format(PyExc_ValueError,
                  "too many values to unpack (expected %" CYTHON_FORMAT_SSIZE_T "d)", expected);
 }
 
 /* RaiseNeedMoreValuesToUnpack */
-      static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
+    static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
     PyErr_Format(PyExc_ValueError,
                  "need more than %" CYTHON_FORMAT_SSIZE_T "d value%.1s to unpack",
                  index, (index == 1) ? "" : "s");
 }
 
 /* RaiseNoneIterError */
-      static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
+    static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
 }
 
 /* ExtTypeTest */
-      static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
+    static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
     if (unlikely(!type)) {
         PyErr_SetString(PyExc_SystemError, "Missing type object");
         return 0;
@@ -8569,7 +6301,7 @@ bad:
 }
 
 /* SaveResetException */
-      #if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx__ExceptionSave(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
     *type = tstate->exc_type;
     *value = tstate->exc_value;
@@ -8593,7 +6325,7 @@ static CYTHON_INLINE void __Pyx__ExceptionReset(PyThreadState *tstate, PyObject 
 #endif
 
 /* PyErrExceptionMatches */
-      #if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tstate, PyObject* err) {
     PyObject *exc_type = tstate->curexc_type;
     if (exc_type == err) return 1;
@@ -8603,7 +6335,7 @@ static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tsta
 #endif
 
 /* GetException */
-      #if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
 #else
 static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb) {
@@ -8664,7 +6396,7 @@ bad:
 }
 
 /* SetVTable */
-        static int __Pyx_SetVtable(PyObject *dict, void *vtable) {
+      static int __Pyx_SetVtable(PyObject *dict, void *vtable) {
 #if PY_VERSION_HEX >= 0x02070000
     PyObject *ob = PyCapsule_New(vtable, 0, 0);
 #else
@@ -8682,7 +6414,7 @@ bad:
 }
 
 /* SetupReduce */
-        static int __Pyx_setup_reduce_is_named(PyObject* meth, PyObject* name) {
+      static int __Pyx_setup_reduce_is_named(PyObject* meth, PyObject* name) {
   int ret;
   PyObject *name_attr;
   name_attr = __Pyx_PyObject_GetAttrStr(meth, __pyx_n_s_name);
@@ -8758,7 +6490,7 @@ GOOD:
 }
 
 /* Import */
-        static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
+      static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
     PyObject *empty_list = 0;
     PyObject *module = 0;
     PyObject *global_dict = 0;
@@ -8832,7 +6564,7 @@ bad:
 }
 
 /* CLineInTraceback */
-        static int __Pyx_CLineForTraceback(int c_line) {
+      static int __Pyx_CLineForTraceback(int c_line) {
 #ifdef CYTHON_CLINE_IN_TRACEBACK
     return ((CYTHON_CLINE_IN_TRACEBACK)) ? c_line : 0;
 #else
@@ -8868,7 +6600,7 @@ bad:
 }
 
 /* CodeObjectCache */
-        static int __pyx_bisect_code_objects(__Pyx_CodeObjectCacheEntry* entries, int count, int code_line) {
+      static int __pyx_bisect_code_objects(__Pyx_CodeObjectCacheEntry* entries, int count, int code_line) {
     int start = 0, mid = 0, end = count - 1;
     if (end >= 0 && code_line > entries[end].code_line) {
         return count;
@@ -8948,7 +6680,7 @@ static void __pyx_insert_code_object(int code_line, PyCodeObject* code_object) {
 }
 
 /* AddTraceback */
-        #include "compile.h"
+      #include "compile.h"
 #include "frameobject.h"
 #include "traceback.h"
 static PyCodeObject* __Pyx_CreateCodeObjectForTraceback(
@@ -9053,8 +6785,8 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 
-        /* CIntFromPyVerify */
-        #define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
+      /* CIntFromPyVerify */
+      #define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
     __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
 #define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
     __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
@@ -9076,7 +6808,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
     }
 
 /* CIntToPy */
-        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+      static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
     const int neg_one = (int) -1, const_zero = (int) 0;
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
@@ -9107,7 +6839,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 }
 
 /* Declarations */
-        #if CYTHON_CCOMPLEX
+      #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     static CYTHON_INLINE __pyx_t_float_complex __pyx_t_float_complex_from_parts(float x, float y) {
       return ::std::complex< float >(x, y);
@@ -9127,7 +6859,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 /* Arithmetic */
-        #if CYTHON_CCOMPLEX
+      #if CYTHON_CCOMPLEX
 #else
     static CYTHON_INLINE int __Pyx_c_eq_float(__pyx_t_float_complex a, __pyx_t_float_complex b) {
        return (a.real == b.real) && (a.imag == b.imag);
@@ -9262,7 +6994,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 /* Declarations */
-        #if CYTHON_CCOMPLEX
+      #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(double x, double y) {
       return ::std::complex< double >(x, y);
@@ -9282,7 +7014,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 /* Arithmetic */
-        #if CYTHON_CCOMPLEX
+      #if CYTHON_CCOMPLEX
 #else
     static CYTHON_INLINE int __Pyx_c_eq_double(__pyx_t_double_complex a, __pyx_t_double_complex b) {
        return (a.real == b.real) && (a.imag == b.imag);
@@ -9417,7 +7149,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 /* CIntToPy */
-        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value) {
+      static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value) {
     const enum NPY_TYPES neg_one = (enum NPY_TYPES) -1, const_zero = (enum NPY_TYPES) 0;
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
@@ -9448,7 +7180,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 }
 
 /* CIntFromPy */
-        static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
+      static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
     const int neg_one = (int) -1, const_zero = (int) 0;
     const int is_unsigned = neg_one > const_zero;
 #if PY_MAJOR_VERSION < 3
@@ -9637,7 +7369,7 @@ raise_neg_overflow:
 }
 
 /* CIntToPy */
-        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
+      static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     const long neg_one = (long) -1, const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
@@ -9668,7 +7400,7 @@ raise_neg_overflow:
 }
 
 /* CIntFromPy */
-        static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
+      static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
     const long neg_one = (long) -1, const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
 #if PY_MAJOR_VERSION < 3
@@ -9857,7 +7589,7 @@ raise_neg_overflow:
 }
 
 /* CheckBinaryVersion */
-        static int __Pyx_check_binary_version(void) {
+      static int __Pyx_check_binary_version(void) {
     char ctversion[4], rtversion[4];
     PyOS_snprintf(ctversion, 4, "%d.%d", PY_MAJOR_VERSION, PY_MINOR_VERSION);
     PyOS_snprintf(rtversion, 4, "%s", Py_GetVersion());
@@ -9873,7 +7605,7 @@ raise_neg_overflow:
 }
 
 /* ModuleImport */
-        #ifndef __PYX_HAVE_RT_ImportModule
+      #ifndef __PYX_HAVE_RT_ImportModule
 #define __PYX_HAVE_RT_ImportModule
 static PyObject *__Pyx_ImportModule(const char *name) {
     PyObject *py_name = 0;
@@ -9891,7 +7623,7 @@ bad:
 #endif
 
 /* TypeImport */
-        #ifndef __PYX_HAVE_RT_ImportType
+      #ifndef __PYX_HAVE_RT_ImportType
 #define __PYX_HAVE_RT_ImportType
 static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class_name,
     size_t size, int strict)
@@ -9956,7 +7688,7 @@ bad:
 #endif
 
 /* InitStrings */
-        static int __Pyx_InitStrings(__Pyx_StringTabEntry *t) {
+      static int __Pyx_InitStrings(__Pyx_StringTabEntry *t) {
     while (t->p) {
         #if PY_MAJOR_VERSION < 3
         if (t->is_unicode) {

@@ -20,7 +20,7 @@ cdef extern from "include/racecar.hpp":
         void updatePosition(double dt)
         void control(double speed, double steer_vel)
         void computeFromInput()
-        bool isCrashed(float* rays, int num_rays)
+        int isCrashed(float* rays, int num_rays, int poses)
         void setCarEdgeDistances(double num_rays, double ang_min,
                                 double scan_ang_inc, double scan_dist_to_base)
         void updateSingle(double dt)
@@ -90,9 +90,10 @@ cdef class PyCar:
         self.thisptr.control(speed, steer)
     cpdef void computeFromInput(self):
         self.thisptr.computeFromInput()
-    cpdef bool isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,
-                        int num_rays):
-        return self.thisptr.isCrashed(&rays[0], num_rays)
+    cpdef int isCrashed(self, np.ndarray[float, ndim=1, mode="c"] rays,
+                        int num_rays,
+                        int poses):
+        return self.thisptr.isCrashed(&rays[0], num_rays, poses)
     cpdef void setCarEdgeDistances(self, int num_rays, double ang_min,
                                   double scan_ang_inc, double scan_dist_to_base):
         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,

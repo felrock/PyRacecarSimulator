@@ -56,6 +56,8 @@ class RacecarSimulator():
                                     self.scan_std,
                                     self.batch_size)
 
+        self.scan = np.zeros(self.num_rays)
+
         # user input
         self.desired_speed = 0.0
         self.desired_steer_ang = 0.0
@@ -124,7 +126,7 @@ class RacecarSimulator():
         """
 
         scan_ = np.array(self.scan, dtype=np.float32)
-        return self.car.isCrashed(scan_, self.num_rays)
+        return self.car.isCrashed(scan_, self.num_rays, 1)
 
     def checkCollisionMany(self, poses):
         """
@@ -134,6 +136,8 @@ class RacecarSimulator():
 
         # run all scans on gpu
         output_scans = self.scan_simulator.scanMany(poses)
+
+        """
         # check collisions in order
         for i in xrange(self.batch_size):
             # TODO:fix with poses
@@ -143,6 +147,9 @@ class RacecarSimulator():
 
         # no crash was found
         return self.batch_size-1
+
+        """
+        return self.car.isCrashed(output_scans, self.num_rays, self.batch_size)
 
     def stop(self):
         """
