@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- group for racecar -->
+  <group ns="racecar">
+
+  <!-- Open the model file -->
+  <arg name="simple_racecar_xacro" default="$(find PyRacecarSimulator)/racecar.xacro"/>
+
+  <!--<param name="tf_prefix" value="racecar"/>-->
+  <param name="simple_robot_description" command="xacro --inorder '$(arg racecar_xacro)'"/>
+
+  <!-- Add the transformations -->
+  <node name="simple_robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  </group>
+
+</launch>

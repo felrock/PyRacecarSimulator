@@ -100,7 +100,6 @@ class MCTSdriver:
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
         self.odom_sub = rospy.Subscriber(self.odom_topic, Odometry, self.odomCallback)
         self.lidar_sub = rospy.Subscriber(self.scan_topic, LaserScan, self.lidarCallback)
-        self.action_update = rospy.Timer(rospy.Duration(self.update_action_rate), self.createActionCallback)
 
         # publisher
         self.drive_pub = rospy.Publisher(self.drive_topic, AckermannDriveStamped, queue_size=1)
@@ -112,6 +111,8 @@ class MCTSdriver:
 
         if self.verbose:
             print "Driver constructed"
+
+        self.action_update = rospy.Timer(rospy.Duration(self.update_action_rate), self.createActionCallback)
 
     def writeTreePoints(self, file, tree_node):
 
@@ -144,7 +145,7 @@ class MCTSdriver:
         # create new MCTS instance
         self.rcs.setState(self.odom_state)
         mcts_run = MCTS(self.rcs, self.ps, self.action,
-                                    self.car_config['batch_size'], budget=1.0)
+                                    self.car_config['batch_size'], budget=0.1)
         self.action = mcts_run.mcts()
 
         # logg the tree

@@ -21,8 +21,8 @@ mass:  3.17 # kg (measured on car 'lidart')
 moment_inertia: .0398378 # kg m^2 (estimated as a rectangle with width and height of car and evenly distributed mass, then shifted to account for center of mass location)
 
 # The rate at which the pose and the lidar publish
-update_pose_rate: 0.5
-update_action_rate: 0.5
+update_pose_rate: 0.01
+update_action_rate: 0.01
 
 # Lidar simulation parameters
 scan_beams: 1080
@@ -126,5 +126,5 @@ buffer_length: 10
 batch_size: 100 # rollout
 speed_clip_diff: 0.5
 
-scan_method: "RMGPU" #"CDDT" #RMGPU #RM
+scan_method: "RM" #"CDDT" #RMGPU #RM
 graph_path: "/model/frozen_model.pb"

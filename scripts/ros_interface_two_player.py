@@ -7,6 +7,7 @@ import time
 
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from tf2_ros import TransformBroadcaster
+
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import PoseStamped, PointStamped, Quaternion, Transform
 from geometry_msgs.msg import PoseWithCovarianceStamped, TransformStamped
@@ -21,8 +22,13 @@ class RunSimulationViz:
 
     def __init__(self, visualize=True, verbose=True):
 
-        self.visualize = visualize
+        self.visualize = visulize
         self.verbose = verbose
+
+        createFirstPlayer()
+        createSecondPlayer()
+
+    def createFirstPlayer(self):
 
         # parameters for simulation
         self.drive_topic = rospy.get_param("~drive_topic")
@@ -111,7 +117,100 @@ class RunSimulationViz:
         self.pose_rviz_sub = rospy.Subscriber(self.pose_rviz_topic, PoseWithCovarianceStamped,  self.poseRvizCallback)
 
         if self.verbose:
-            print "Driver constructed"
+            print "First player constructed"
+
+
+    def createSecondPlayer(self):
+
+        # parameters for simulation
+        self.drive_topic = rospy.get_param("~drive_topic_simple")
+        self.map_topic = rospy.get_param("~map_topic")
+        self.scan_topic = rospy.get_param("~scan_topic")
+        self.pose_topic = rospy.get_param("~pose_topic")
+        self.odom_topic = rospy.get_param("~odom_topic")
+        self.pose_rviz_topic = rospy.get_param("~pose_rviz_topic")
+        self.imu_topic = rospy.get_param("~imu_topic")
+        self.gt_pose_topic = rospy.get_param("~ground_truth_pose_topic")
+
+        self.buffer_length = rospy.get_param("~buffer_length")
+        self.map_frame = rospy.get_param("~map_frame")
+        self.base_frame = rospy.get_param("~base_frame")
+        self.scan_frame = rospy.get_param("~scan_frame")
+        self.update_pose_rate = rospy.get_param("~update_pose_rate")
+
+        # parameters for car/s
+        self.car_config = {
+            "scan_beams": rospy.get_param("~scan_beams"),
+            "scan_fov": rospy.get_param("~scan_fov"),
+            "scan_std": rospy.get_param("~scan_std"),
+            "free_thresh": rospy.get_param("~free_thresh"),
+            "scan_dist_to_base": rospy.get_param("~scan_dist_to_base"),
+            "max_speed": rospy.get_param("~max_speed"),
+            "max_accel": rospy.get_param("~max_accel"),
+            "max_decel": rospy.get_param("~max_decel"),
+            "max_steer_ang": rospy.get_param("~max_steer_ang"),
+            "max_steer_vel": rospy.get_param("~max_steer_vel"),
+            #"col_thresh": rospy.get_param("~coll_threshold"),
+            "ttc_thresh": rospy.get_param("~ttc_thresh"),
+            "width": rospy.get_param("~width"),
+            "length": rospy.get_param("~length"),
+            "scan_max_range": rospy.get_param("~scan_max_range"),
+            "update_pose_rate": self.update_pose_rate,
+            "wb": rospy.get_param("~wheelbase"),
+            "fc": rospy.get_param("~friction_coeff"),
+            "h_cg": rospy.get_param("~height_cg"),
+            "l_r": rospy.get_param("~l_cg2rear"),
+            "l_f": rospy.get_param("~l_cg2front"),
+            "cs_f": rospy.get_param("~C_S_front"),
+            "cs_r": rospy.get_param("~C_S_rear"),
+            "I_z": rospy.get_param("~moment_inertia"),
+            "mass": rospy.get_param("~mass"),
+            "batch_size": rospy.get_param("~batch_size")
+        }
+
+        # racecar object
+        self.rcs = RacecarSimulator(self.car_config)
+
+        # read and create OMap
+        map_service_name = rospy.get_param("~static_map", "static_map")
+        rospy.wait_for_service(map_service_name)
+        map_msg = rospy.ServiceProxy(map_service_name, GetMap)().map
+        new_map = []
+        for i in xrange(len(map_msg.data)):
+            if map_msg.data[i] > 0:
+                new_map.append(255)
+            else:
+                new_map.append(0)
+        map_msg.data = tuple(new_map)
+        self.mapCallback(map_msg)
+
+        # set ray tracing method
+        self.rcs.setRaytracingMethod(rospy.get_param("~scan_method"))
+
+        # other params
+        self.speed_clip_dif = rospy.get_param("~speed_clip_diff")
+        self.broadcast_transform = rospy.get_param("~broadcast_transform")
+        self.pub_gt_pose = rospy.get_param("~publish_ground_truth_pose")
+
+        # transform broadcaster
+        self.br = TransformBroadcaster()
+
+        # publishers
+        self.scan_pub = rospy.Publisher(self.scan_topic, LaserScan, queue_size=1)
+        self.odom_pub = rospy.Publisher(self.odom_topic, Odometry, queue_size=1)
+        self.map_pub = rospy.Publisher(self.map_topic, OccupancyGrid, queue_size=1)
+        self.pose_pub = rospy.Publisher(self.gt_pose_topic, PoseStamped, queue_size=1)
+
+        # subscribers
+        self.update_simulation = rospy.Timer(rospy.Duration(self.update_pose_rate), self.updateSimulationCallback)
+        self.drive_sub = rospy.Subscriber(self.drive_topic, AckermannDriveStamped, self.driveCallback, queue_size=1)
+        self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
+        self.pose_sub = rospy.Subscriber(self.pose_topic, PoseStamped, self.poseCallback)
+        self.pose_rviz_sub = rospy.Subscriber(self.pose_rviz_topic, PoseWithCovarianceStamped,  self.poseRvizCallback)
+
+        if self.verbose:
+            print "Second player constructed"
+
 
     def updateSimulationCallback(self, event):
         """
@@ -124,6 +223,8 @@ class RunSimulationViz:
         # update simulation
         self.rcs.updatePose()
 
+        cur_state = self.rcs.getState()
+        print "position: %f, %f" % (cur_state[0], cur_state[1])
         if self.visualize:
 
             # pub pose as transform
@@ -138,9 +239,7 @@ class RunSimulationViz:
         # sim lidar
         self.rcs.runScan()
 
-        crash =self.rcs.checkCollision()
-        print crash
-        if crash >= 0:
+        if self.rcs.checkCollision() > 0:
             # do other things here too
             self.rcs.stop()
 
