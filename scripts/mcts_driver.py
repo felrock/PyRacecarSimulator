@@ -32,6 +32,7 @@ class MCTSdriver:
         # parameters for simulation
         self.update_pose_rate = rospy.get_param("~update_pose_rate")
         self.update_action_rate = rospy.get_param("~update_action_rate")
+        self.budget = rospy.get_param("~budget")
 
         self.drive_topic = rospy.get_param("~drive_topic")
         self.map_topic = rospy.get_param("~map_topic")
@@ -120,7 +121,7 @@ class MCTSdriver:
             file.write("0, %f, %f\n" % (tree_node.state[0],
                                   tree_node.state[1]))
 
-            for ro in tree_node.rollout_points:
+            for ro in tree_node.ro:
                 file.write("1, %f, %f\n" % (ro[0],
                                       ro[1]))
 
@@ -130,34 +131,46 @@ class MCTSdriver:
             file.write("0, %f, %f\n" % (tree_node.state[0],
                                   tree_node.state[1]))
 
-            for ro in tree_node.rollout_points:
-                file.write("0, %f, %f\n" % (ro[0],
-                                      ro[1]))
+            for ro in tree_node.ro:
+                file.write("1, %f, %f\n" % (ro[0], ro[1]))
+
+    def printDepth(self, node):
+        if not node.hasChildren():
+            return 1
+        else:
+            max = 0
+            for n in node.children:
+                t  = self.printDepth(n) + 1
+                if t > max:
+                    max = t
+            if not node.parent:
+                print(max)
+            return max
 
     def createActionCallback(self, event):
         """
             Updates simulatio one step
         """
-        speed = 3.0
+        speed = 4.0
         # create timestamp
-
 
         # create new MCTS instance
         self.rcs.setState(self.odom_state)
         mcts_run = MCTS(self.rcs, self.ps, self.action,
-                                    self.car_config['batch_size'], budget=0.1)
+                                    self.car_config['batch_size'], self.budget)
         self.action = mcts_run.mcts()
 
         # logg the tree
-        """
         if self.beta ==  5:
             print os.path.abspath(os.getcwd())
 
-            with open('logg_mcts_100_RND_RO.txt', 'w') as f:
+            with open('logg_mcts_01_FG_RO.txt', 'w') as f:
                 self.writeTreePoints(f, mcts_run.root)
+
+        self.printDepth(mcts_run.root)
+
         self.beta += 1
 
-        """
         # update rcs
         self.rcs.drive(speed, self.action)
         self.rcs.updatePose()

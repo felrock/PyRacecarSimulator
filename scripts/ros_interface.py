@@ -138,9 +138,7 @@ class RunSimulationViz:
         # sim lidar
         self.rcs.runScan()
 
-        crash =self.rcs.checkCollision()
-        print crash
-        if crash >= 0:
+        if self.rcs.checkCollision() >= 0:
             # do other things here too
             self.rcs.stop()
 

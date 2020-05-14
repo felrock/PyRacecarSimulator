@@ -19,6 +19,7 @@ class Node:
         """
             state : Numpy array[8]
         """
+        self.state = np.zeros(8)
         self.state = state
         self.scan = scan
         self.parent = parent
@@ -26,8 +27,10 @@ class Node:
         self.action = action
         self.visits = 1
         self.reward = 0.0
-        self.bound = (0, 0)
         self.children = []
+
+        # logg
+        self.ro = []
 
     def getScan(self):
         return self.scan
@@ -121,7 +124,6 @@ class MCTS:
             count += 1
 
         print "MCTS Iterations: %i" % count
-
         action = None
         visits = -1
         for child in self.root.children:
@@ -132,6 +134,21 @@ class MCTS:
 
         # return the best steering angle
         self.action = action
+        action_list = []
+        tnode = self.root
+        while tnode.hasChildren():
+            vs = -1
+            cd = None
+            for cj in tnode.children:
+
+                if cj.visits > vs:
+                    vs = cj.visits
+                    cd = cj
+            action_list.append(cd.action)
+            tnode = cd
+        print len(action_list)
+
+
         return self.action
 
     def mctsIteration(self, node, expanded=False):
@@ -150,7 +167,7 @@ class MCTS:
 
         if node.hasChildren():
             action = max(node.children, key=lambda x:(x.reward/x.visits +\
-                                self.C*math.log(sum_of_visits/x.visits)))
+                    self.C*math.sqrt(math.log(sum_of_visits)/x.visits)))
 
         if math.sqrt(sum_of_visits) < node.size():
             node = action
@@ -163,9 +180,9 @@ class MCTS:
                             parent=node)
             node.addChild(new_child)
             if not terminal:
-                rv, steps = self.rollout(new_child)
+                rv = self.rollout(new_child)
             else:
-                rv, steps = self.crash_pen, 0
+                rv = self.crash_pen
             node = new_child
 
         Node.propagate(node, rv)
@@ -219,14 +236,16 @@ class MCTS:
             self.all_sim_states[i][2] = new_state[2]
             rewards[i] = new_state[3]
 
+
         index = self.simulator.checkCollisionMany(self.all_sim_states)
         self.simulator.setState(prev_state)
+        node.ro = self.all_sim_states
         if index < 0:
 
-            return np.sum(rewards), index
+            return np.sum(rewards)
         else:
 
-            return np.sum(rewards[:index]), index
+            return np.sum(rewards[:index])
 
     def generateActionFromNN(self, node):
 
