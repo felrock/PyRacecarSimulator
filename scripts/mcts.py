@@ -86,13 +86,11 @@ class MCTS:
     """
 
     def __init__(self, simulator, policy_session, recent_action, roll_out_itr,
-                                    budget=1.0):
-        """
+                            track_point=None, with_global=False, budget=1.0):
 
-        """
-
+        self.point_to_follow = track_point
+        self.with_global = with_global
         self.simulator = simulator
-
         # action generators
         self.policy_session = policy_session
         #self.fg = FollowTheGap()
@@ -104,9 +102,9 @@ class MCTS:
         self.action = recent_action
         self.root = None
         self.C = 0.5 # exp constant
-        self.crash_pen = - 7.0
+        self.crash_pen = - 10.0
 
-        self.speed = 3.0
+        self.speed = 2.0
 
     def mcts(self):
         """
@@ -132,9 +130,7 @@ class MCTS:
                 action = child.action
                 visits = child.visits
 
-        # return the best steering angle
-        self.action = action
-        action_list = []
+        """action_list = []
         tnode = self.root
         while tnode.hasChildren():
             vs = -1
@@ -146,9 +142,9 @@ class MCTS:
                     cd = cj
             action_list.append(cd.action)
             tnode = cd
-        print len(action_list)
-
-
+        print len(action_list)"""
+        # return the best steering angle
+        self.action = action
         return self.action
 
     def mctsIteration(self, node, expanded=False):
@@ -191,7 +187,6 @@ class MCTS:
     def act(self, node, action):
 
         prev_state = self.simulator.getState()
-
         self.simulator.setState(node.state)
         self.simulator.drive(self.speed, action)
         self.simulator.updatePose()
@@ -234,47 +229,47 @@ class MCTS:
             self.all_sim_states[i][0] = new_state[0]
             self.all_sim_states[i][1] = new_state[1]
             self.all_sim_states[i][2] = new_state[2]
-            rewards[i] = new_state[3]
 
+            if self.with_global:
+                rewards[i] = new_state[3] / self.calculateDistance((new_state[0],new_state[1]))
+            else:
+                rewards[i] = new_state[3]
 
         index = self.simulator.checkCollisionMany(self.all_sim_states)
         self.simulator.setState(prev_state)
         node.ro = self.all_sim_states
-        if index < 0:
 
+        if index < 0:
             return np.sum(rewards)
         else:
-
             return np.sum(rewards[:index])
 
-    def generateActionFromNN(self, node):
+    def calculateDistance(self, current_pose):
+        return math.sqrt(
+        (self.point_to_follow[0] - current_pose[0])**2 +
+        (self.point_to_follow[1] - current_pose[1])**2)
 
+    def generateActionFromNN(self, node):
         if node.hasChildren():
-            # make faster
-            return self.uniSample(node.action, 0.05)
+            return self.uniSample(node.children[0].action, 0.05)
         else:
-            # make faster
             return self.policy_session.predict_action(node.getScan())
 
 
     def generateActionFromRandom(self, node):
-            return self.uniSample(0, 0.41)
+        return self.uniSample(0, 0.41)
 
     def generateActionFromFG(self, node):
-
         lidar = node.getScan()
         if node.hasChildren():
             return self.uniSample(node.children[0].action, 0.05)
-
         else:
-
             return self.fg.eval(lidar, len(lidar))
 
     def uniSample(self, prediction, dev):
         return np.random.uniform(prediction-dev, prediction+dev)
 
     def sample(self, prediction, length, step): #uneven length
-
         samples = np.arange(prediction-(step*length/2),
                     prediction + (step*length/2 + step),
                     step, dtype=float).round(decimals=2)

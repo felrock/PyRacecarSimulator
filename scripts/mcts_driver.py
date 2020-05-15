@@ -6,28 +6,48 @@ import rospy
 import numpy as np
 import range_libc
 import time
+import math
 
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
-from tf2_ros import TransformBroadcaster
+from tf2_ros import TransformBroadcaster, Buffer, TransformListener
+import tf2_geometry_msgs
 
 from sensor_msgs.msg import LaserScan
-from geometry_msgs.msg import PoseStamped, PointStamped, Quaternion, Transform
+from geometry_msgs.msg import PoseStamped, PointStamped, Quaternion, Transform, Pose
 from geometry_msgs.msg import PoseWithCovarianceStamped, TransformStamped
 from nav_msgs.msg import Odometry, OccupancyGrid
 from std_msgs.msg import String, Header, Float32MultiArray
 from nav_msgs.srv import GetMap
 from ackermann_msgs.msg import AckermannDriveStamped
 
+#viz
+from visualization_msgs.msg import Marker
+
 from racecar_simulator_v2 import RacecarSimulator
 from mcts import Node, MCTS
 from policy import Policy
 
+
 class MCTSdriver:
 
-    def __init__(self, verbose=True):
+    def __init__(self, verbose=True, with_global=False):
         self.beta = 0
-
+        pack = rospkg.RosPack()
         self.verbose = verbose
+        self.with_global = with_global
+
+        #Global Planner
+        if with_global:
+            self.csv_path = (pack.get_path('PyRacecarSimulator') +
+                                rospy.get_param("~csv_path"))
+            self.global_path = self.readGlobalPath()
+            self.lookahead_distance = 0.75
+            self.unique_id = 0
+            #transformations
+            self.tf_buffer = Buffer()
+            self.tf_listener = TransformListener(self.tf_buffer)
+            #Publishers
+            self.wp_viz_pub = rospy.Publisher('/waypoint_vis', Marker, queue_size=100)
 
         # parameters for simulation
         self.update_pose_rate = rospy.get_param("~update_pose_rate")
@@ -70,7 +90,6 @@ class MCTSdriver:
         }
 
         # create policy session
-        pack = rospkg.RosPack()
         self.graph_path = (pack.get_path('PyRacecarSimulator') +
                 rospy.get_param("~graph_path"))
         self.ps = Policy(self.graph_path)
@@ -81,15 +100,15 @@ class MCTSdriver:
         # read and create OMap
         map_service_name = rospy.get_param("~static_map", "static_map")
         rospy.wait_for_service(map_service_name)
-        map_msg = rospy.ServiceProxy(map_service_name, GetMap)().map
+        self.map_msg = rospy.ServiceProxy(map_service_name, GetMap)().map
         new_map = []
-        for i in xrange(len(map_msg.data)):
-            if map_msg.data[i] > 0:
+        for i in xrange(len(self.map_msg.data)):
+            if self.map_msg.data[i] > 0:
                 new_map.append(255)
             else:
                 new_map.append(0)
-        map_msg.data = tuple(new_map)
-        self.mapCallback(map_msg)
+        self.map_msg.data = tuple(new_map)
+        self.mapCallback(self.map_msg)
 
         # set ray tracing method
         self.rcs.setRaytracingMethod(rospy.get_param("~scan_method"))
@@ -115,6 +134,174 @@ class MCTSdriver:
 
         self.action_update = rospy.Timer(rospy.Duration(self.update_action_rate), self.createActionCallback)
 
+    def readGlobalPath(self):
+        wp = []
+        file = open(self.csv_path, 'rb')
+        for line in file:
+            point = line.split(', ')
+            wp.append((float(point[0]),float(point[1])))
+        if self.verbose:
+            print "Global path read"
+        return wp
+
+
+    #Find best point to track with a lookahead, for validating position in map
+    def findBestPoint(self, current_pose):
+
+        closest_distance = self.lookahead_distance*2
+
+        for track_point in self.global_path:
+            distance = math.sqrt(
+            (track_point[0] - current_pose[0])**2 +
+            (track_point[1] - current_pose[1])**2)
+
+            diff_distance = abs(self.lookahead_distance - distance)
+
+            if diff_distance < closest_distance :
+                closest_distance = diff_distance
+                closest_point = track_point
+
+        print "best distance: ", closest_distance
+
+
+        return closest_point
+
+
+    def findBestGlobal(self, current_pose):
+        try:
+            tf_map_to_laser = self.tf_buffer.lookup_transform("laser", "map", rospy.Time())
+        except:
+            print "Transform Error"
+
+        best_point_index = -1
+        best_point_distance = self.lookahead_distance*2
+
+        for i in range(len(self.global_path)):
+            goal_wp = PoseStamped()
+            goal_wp.pose.position.x = self.global_path[i][0];
+            goal_wp.pose.position.y = self.global_path[i][1];
+            goal_wp.pose.position.z = 0;
+            goal_wp.pose.orientation.x = 0;
+            goal_wp.pose.orientation.y = 0;
+            goal_wp.pose.orientation.z = 0;
+            goal_wp.pose.orientation.w = 1;
+
+            goal_wp = tf2_geometry_msgs.do_transform_pose(goal_wp, tf_map_to_laser)
+
+            #if (goal_wp.pose.position.x == 0):
+            #    continue
+            distance = abs( self.lookahead_distance - math.sqrt( goal_wp.pose.position.x**2 + goal_wp.pose.position.y**2 ))
+
+            if distance < best_point_distance:
+                best_point_distance = distance
+                best_point_index = i
+
+        print "best distance: ", best_point_distance
+
+        return self.global_path[best_point_index]
+
+
+    #Callbacks
+    def createActionCallback(self, event):
+        """
+            Updates simulatio one step
+        """
+        speed = 2.0
+
+        # create new MCTS instance
+        self.rcs.setState(self.odom_state)
+
+        if self.with_global:
+            if self.unique_id == 0:
+                self.visualize_waypoint_data()
+
+            closest_point = self.findBestPoint((self.odom_state[0], self.odom_state[1]))
+
+            print "Closest point: ", closest_point
+            mcts_run = MCTS(self.rcs, self.ps, self.action,
+                                        self.car_config['batch_size'],
+                                        closest_point, self.with_global, self.budget)
+
+        else:
+            mcts_run = MCTS(self.rcs, self.ps, self.action,
+                                        self.car_config['batch_size'], self.budget)
+
+        self.action = mcts_run.mcts()
+
+        # logg the tree
+        """
+        if self.beta ==  5:
+            print os.path.abspath(os.getcwd())
+
+            with open('logg_mcts_01_FG_RO.txt', 'w') as f:
+                self.writeTreePoints(f, mcts_run.root)
+
+        self.printDepth(mcts_run.root)"""
+
+        self.beta += 1
+
+        # update rcs
+        self.rcs.drive(speed, self.action)
+        self.rcs.updatePose()
+
+        # ackerman cmd stuf
+        #timestamp = rospy.get_rostime()
+        self.action = np.clip(self.action, -0.4189, 0.4189)
+        print("Action: ", self.action)
+        print("============================NEW ITERATION=============================")
+
+        drive_msg = AckermannDriveStamped()
+        drive_msg.header.stamp = rospy.Time.now()
+        drive_msg.header.frame_id = "laser"
+        drive_msg.drive.steering_angle = self.action
+        drive_msg.drive.speed = speed
+
+        self.drive_pub.publish(drive_msg)
+
+
+        #if self.rcs.isCrashed(self.scan, self.num_rays):
+            #self.rcs.stop()
+
+    def mapCallback(self, map):
+        """
+            Map is changed, pass new map 2d-scanner,
+
+            fix this for dynamic map updates, origin is not important
+            if its changes to the original map
+        """
+
+        ros_omap = range_libc.PyOMap(map)
+
+        quat = np.array((map.info.origin.orientation.x,
+                         map.info.origin.orientation.y,
+                         map.info.origin.orientation.z,
+                         map.info.origin.orientation.w))
+        (_,_,yaw) = euler_from_quaternion(quat)
+
+        origin = (map.info.origin.position.x,
+                  map.info.origin.position.y,
+                  yaw)
+
+        # pass map info to racecar instance
+        self.rcs.setMap(ros_omap, map.info.resolution, origin)
+
+    def odomCallback(self, odom_msg):
+        self.odom_state = self.rcs.getState()
+        quat = euler_from_quaternion((odom_msg.pose.pose.orientation.x,
+                                     odom_msg.pose.pose.orientation.y,
+                                     odom_msg.pose.pose.orientation.z,
+                                     odom_msg.pose.pose.orientation.w))
+        self.odom_state[0] = odom_msg.pose.pose.position.x
+        self.odom_state[1] = odom_msg.pose.pose.position.y
+        self.odom_state[2] = quat[2]
+        self.odom_state[3] = odom_msg.twist.twist.linear.x
+        self.odom_state[4] = odom_msg.twist.twist.linear.z
+
+    def lidarCallback(self, lidar_msg):
+
+        self.scan = lidar_msg.ranges
+
+    #Prints
     def writeTreePoints(self, file, tree_node):
 
         if not tree_node.hasChildren():
@@ -147,102 +334,56 @@ class MCTSdriver:
                 print(max)
             return max
 
-    def createActionCallback(self, event):
-        """
-            Updates simulatio one step
-        """
-        speed = 4.0
-        # create timestamp
 
-        # create new MCTS instance
-        self.rcs.setState(self.odom_state)
-        mcts_run = MCTS(self.rcs, self.ps, self.action,
-                                    self.car_config['batch_size'], self.budget)
-        self.action = mcts_run.mcts()
+    #VISUALIZATION
+    def add_waypoint_visualization(self, point, frame_id, r,  g, b,
+                transparency = 0.5, scale_x = 0.2,scale_y = 0.2,scale_z = 0.2):
 
-        # logg the tree
-        if self.beta ==  5:
-            print os.path.abspath(os.getcwd())
+        waypoint_marker = Marker()
+        waypoint_marker.header.frame_id = frame_id
+        waypoint_marker.header.stamp =  rospy.Time(0)
+        waypoint_marker.ns = "pure_pursuit"
+        waypoint_marker.id = self.unique_id
+        waypoint_marker.type = 2
+        waypoint_marker.action = 0
+        waypoint_marker.pose.position.x = point[0]
+        waypoint_marker.pose.position.y = point[1]
+        waypoint_marker.pose.position.z = 0
+        waypoint_marker.pose.orientation.x = 0.0
+        waypoint_marker.pose.orientation.y = 0.0
+        waypoint_marker.pose.orientation.z = 0.0
+        waypoint_marker.pose.orientation.w = 1.0
+        waypoint_marker.scale.x = 0.5
+        waypoint_marker.scale.y = 0.5
+        waypoint_marker.scale.z = 0.5
+        waypoint_marker.color.a = transparency
+        waypoint_marker.color.r = r
+        waypoint_marker.color.g = g
+        waypoint_marker.color.b = b
 
-            with open('logg_mcts_01_FG_RO.txt', 'w') as f:
-                self.writeTreePoints(f, mcts_run.root)
-
-        self.printDepth(mcts_run.root)
-
-        self.beta += 1
-
-        # update rcs
-        self.rcs.drive(speed, self.action)
-        self.rcs.updatePose()
-
-        # ackerman cmd stuf
-        timestamp = rospy.get_rostime()
-        self.action = np.clip(self.action, -0.4189, 0.4189)
-        print("Action: ", self.action)
-        print("============================NEW ITERATION=============================")
-
-        drive_msg = AckermannDriveStamped()
-        drive_msg.header.stamp = rospy.Time.now()
-        drive_msg.header.frame_id = "laser"
-        drive_msg.drive.steering_angle = self.action
-        drive_msg.drive.speed = speed
-
-        self.drive_pub.publish(drive_msg)
+        self.wp_viz_pub.publish(waypoint_marker)
+        rospy.sleep(0.1)
+        self.unique_id = self.unique_id+ 1
 
 
-        #if self.rcs.isCrashed(self.scan, self.num_rays):
-            #self.rcs.stop()
+    # visualize all way points in the global path
+    def visualize_waypoint_data(self):
+        print "Number of waypoints: ",  len(self.global_path)
+        self.add_waypoint_visualization((0,0), "map", 0.0, 0.0, 1.0, 0.5)
+        for  i in  range(0,len(self.global_path)):
+            self.add_waypoint_visualization(self.global_path[i], "map", 0.0, 1.0, 0.0, 0.5)
 
-
-    def mapCallback(self, map_msg):
-        """
-            Map is changed, pass new map 2d-scanner,
-
-            fix this for dynamic map updates, origin is not important
-            if its changes to the original map
-        """
-
-        ros_omap = range_libc.PyOMap(map_msg)
-
-        quat = np.array((map_msg.info.origin.orientation.x,
-                         map_msg.info.origin.orientation.y,
-                         map_msg.info.origin.orientation.z,
-                         map_msg.info.origin.orientation.w))
-        (_,_,yaw) = euler_from_quaternion(quat)
-
-        origin = (map_msg.info.origin.position.x,
-                  map_msg.info.origin.position.y,
-                  yaw)
-
-        # pass map info to racecar instance
-        self.rcs.setMap(ros_omap, map_msg.info.resolution, origin)
-
-    def odomCallback(self, odom_msg):
-        #self.odom_state = self.rcs.getState()
-        quat = euler_from_quaternion((odom_msg.pose.pose.orientation.x,
-                                     odom_msg.pose.pose.orientation.y,
-                                     odom_msg.pose.pose.orientation.z,
-                                     odom_msg.pose.pose.orientation.w))
-        self.odom_state[0] = odom_msg.pose.pose.position.x
-        self.odom_state[1] = odom_msg.pose.pose.position.y
-        self.odom_state[2] = quat[2]
-        self.odom_state[3] = odom_msg.twist.twist.linear.x
-        self.odom_state[4] = odom_msg.twist.twist.linear.z
-
-    def lidarCallback(self, lidar_msg):
-
-        self.scan = lidar_msg.ranges
+        print "Published All Global WayPoints."
 
 def run():
     """
         Main func
     """
-
     rospy.init_node('mcts_driver', anonymous=True)
-    MCTSdriver(verbose=False)
+
+    MCTSdriver(verbose=False, with_global=True)
     rospy.sleep(0.1)
     rospy.spin()
 
 if __name__ == '__main__':
     run()
-
