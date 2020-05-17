@@ -21,11 +21,11 @@ mass:  3.17 # kg (measured on car 'lidart')
 moment_inertia: .0398378 # kg m^2 (estimated as a rectangle with width and height of car and evenly distributed mass, then shifted to account for center of mass location)
 
 # The rate at which the pose and the lidar publish
-update_pose_rate: 0.1
-update_action_rate: 0.1
+update_pose_rate: 0.01
+update_action_rate: 0.01
 
 # Lidar simulation parameters
-scan_beams: 1080
+scan_beams: 1081
 scan_fov: 4.71 #6.2831853 #4.71 # radians
 # The standard deviation of the noise applied
 # to the lidar simulation
@@ -44,7 +44,7 @@ scan_max_range: 15.0
 free_thresh: 0.8
 
 # Time to collision cutoff value
-ttc_thresh: 0.01
+ttc_thresh: 0.05
 
 # Indices for mux controller
 mux_size: 5
@@ -124,7 +124,7 @@ publish_ground_truth_pose: true
 
 buffer_length: 10
 batch_size: 100 # rollout
-budget: 0.5
+budget: 0.1
 speed_clip_diff: 0.5
 
 scan_method: "RMGPU" #"CDDT" #RMGPU #RM

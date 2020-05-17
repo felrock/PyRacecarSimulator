@@ -86,7 +86,7 @@ class MCTS:
     """
 
     def __init__(self, simulator, policy_session, recent_action, roll_out_itr,
-                            track_point=None, with_global=False, budget=1.0):
+                            budget=1.0, track_point=None, with_global=False):
 
         self.point_to_follow = track_point
         self.with_global = with_global
@@ -239,7 +239,7 @@ class MCTS:
         self.simulator.setState(prev_state)
         node.ro = self.all_sim_states
 
-        if index < 0:
+        if index == 0:
             return np.sum(rewards)
         else:
             return np.sum(rewards[:index])

@@ -41,7 +41,7 @@ class MCTSdriver:
             self.csv_path = (pack.get_path('PyRacecarSimulator') +
                                 rospy.get_param("~csv_path"))
             self.global_path = self.readGlobalPath()
-            self.lookahead_distance = 0.75
+            self.lookahead_distance = 1.5
             self.unique_id = 0
             #transformations
             self.tf_buffer = Buffer()
@@ -220,11 +220,14 @@ class MCTSdriver:
             print "Closest point: ", closest_point
             mcts_run = MCTS(self.rcs, self.ps, self.action,
                                         self.car_config['batch_size'],
-                                        closest_point, self.with_global, self.budget)
+                                        budget=self.budget,
+                                        track_point=closest_point,
+                                        with_global=self.with_global)
 
         else:
             mcts_run = MCTS(self.rcs, self.ps, self.action,
-                                        self.car_config['batch_size'], self.budget)
+                                        self.car_config['batch_size'],
+                                        budget=self.budget)
 
         self.action = mcts_run.mcts()
 
@@ -381,7 +384,7 @@ def run():
     """
     rospy.init_node('mcts_driver', anonymous=True)
 
-    MCTSdriver(verbose=False, with_global=True)
+    MCTSdriver(verbose=False, with_global=False)
     rospy.sleep(0.1)
     rospy.spin()
 
