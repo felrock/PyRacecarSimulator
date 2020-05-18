@@ -2,6 +2,7 @@ import numpy as np
 import range_libc
 import math
 import sys
+import time
 
 """
     A 2D Lidar scan simulator using ray marching

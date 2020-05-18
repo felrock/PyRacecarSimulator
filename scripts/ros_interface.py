@@ -245,14 +245,15 @@ class RunSimulationViz:
         ts = TransformStamped()
         ts.header.stamp = timestamp
         ts.header.frame_id = self.map_frame
-        ts.child_frame_id = self.base_frame
+        ts.child_frame_id =  self.base_frame
         ts.transform = pt_msg
 
         if self.broadcast_transform:
             self.br.sendTransform(ts)
 
         if self.pub_gt_pose:
-            self.pose_pub.publish(ps)
+            pass
+            #self.pose_pub.publish(ps)
 
 
     def steerAngTransformPub(self, timestamp):

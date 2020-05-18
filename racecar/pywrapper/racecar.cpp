@@ -1047,7 +1047,7 @@ struct __pyx_vtabstruct_7racecar_PyCar {
   void (*getScanPose)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch);
   double (*getMeanVelocity)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch);
   double (*getTravelDistance)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch);
-  void (*getCarPixels)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch);
+  void (*getBound)(struct __pyx_obj_7racecar_PyCar *, int, PyArrayObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_7racecar_PyCar *__pyx_vtabptr_7racecar_PyCar;
 
@@ -1500,7 +1500,7 @@ static void __pyx_f_7racecar_5PyCar_setState(struct __pyx_obj_7racecar_PyCar *__
 static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_scan_dist_to_base, PyArrayObject *__pyx_v_pose, int __pyx_skip_dispatch); /* proto*/
 static double __pyx_f_7racecar_5PyCar_getMeanVelocity(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
 static double __pyx_f_7racecar_5PyCar_getTravelDistance(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
-static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels, int __pyx_skip_dispatch); /* proto*/
+static void __pyx_f_7racecar_5PyCar_getBound(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, PyArrayObject *__pyx_v_bound_points, int __pyx_skip_dispatch); /* proto*/
 
 /* Module declarations from 'libcpp' */
 
@@ -1572,10 +1572,10 @@ static const char __pyx_k_speed[] = "speed";
 static const char __pyx_k_steer[] = "steer";
 static const char __pyx_k_LENGTH[] = "LENGTH";
 static const char __pyx_k_import[] = "__import__";
-static const char __pyx_k_pixels[] = "pixels";
 static const char __pyx_k_reduce[] = "__reduce__";
 static const char __pyx_k_ang_min[] = "ang_min";
 static const char __pyx_k_control[] = "control";
+static const char __pyx_k_getBound[] = "getBound";
 static const char __pyx_k_getState[] = "getState";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_num_rays[] = "num_rays";
@@ -1593,7 +1593,7 @@ static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_getScanPose[] = "getScanPose";
 static const char __pyx_k_CRASH_THRESH[] = "CRASH_THRESH";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
-static const char __pyx_k_getCarPixels[] = "getCarPixels";
+static const char __pyx_k_bound_points[] = "bound_points";
 static const char __pyx_k_scan_ang_inc[] = "scan_ang_inc";
 static const char __pyx_k_MAX_STEER_ANG[] = "MAX_STEER_ANG";
 static const char __pyx_k_MAX_STEER_VEL[] = "MAX_STEER_VEL";
@@ -1640,10 +1640,11 @@ static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_WB;
 static PyObject *__pyx_n_s_WIDTH;
 static PyObject *__pyx_n_s_ang_min;
+static PyObject *__pyx_n_s_bound_points;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_computeFromInput;
 static PyObject *__pyx_n_s_control;
-static PyObject *__pyx_n_s_getCarPixels;
+static PyObject *__pyx_n_s_getBound;
 static PyObject *__pyx_n_s_getMeanVelocity;
 static PyObject *__pyx_n_s_getScanPose;
 static PyObject *__pyx_n_s_getState;
@@ -1661,7 +1662,6 @@ static PyObject *__pyx_n_s_num_rays;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
-static PyObject *__pyx_n_s_pixels;
 static PyObject *__pyx_n_s_pose;
 static PyObject *__pyx_n_s_poses;
 static PyObject *__pyx_n_s_pyx_vtable;
@@ -1693,7 +1693,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_16setState(struct __pyx_obj_7racecar_P
 static PyObject *__pyx_pf_7racecar_5PyCar_18getScanPose(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_scan_dist_to_base, PyArrayObject *__pyx_v_pose); /* proto */
 static PyObject *__pyx_pf_7racecar_5PyCar_20getMeanVelocity(struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7racecar_5PyCar_22getTravelDistance(struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7racecar_5PyCar_24getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels); /* proto */
+static PyObject *__pyx_pf_7racecar_5PyCar_24getBound(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, PyArrayObject *__pyx_v_bound_points); /* proto */
 static PyObject *__pyx_pf_7racecar_5PyCar_26__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7racecar_PyCar *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7racecar_5PyCar_28__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7racecar_PyCar *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
@@ -3791,7 +3791,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_20getMeanVelocity(struct __pyx_obj_7ra
  *         return self.thisptr.getMeanVelocity()
  *     cpdef double getTravelDistance(self):             # <<<<<<<<<<<<<<
  *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,
+ *     cpdef void getBound(self, int num_rays,
  */
 
 static PyObject *__pyx_pw_7racecar_5PyCar_23getTravelDistance(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
@@ -3843,8 +3843,8 @@ static double __pyx_f_7racecar_5PyCar_getTravelDistance(struct __pyx_obj_7raceca
  *         return self.thisptr.getMeanVelocity()
  *     cpdef double getTravelDistance(self):
  *         return self.thisptr.getTravelDistance()             # <<<<<<<<<<<<<<
- *     cpdef void getCarPixels(self, double num_rays,
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
+ *     cpdef void getBound(self, int num_rays,
+ *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
  */
   __pyx_r = __pyx_v_self->thisptr->getTravelDistance();
   goto __pyx_L0;
@@ -3854,7 +3854,7 @@ static double __pyx_f_7racecar_5PyCar_getTravelDistance(struct __pyx_obj_7raceca
  *         return self.thisptr.getMeanVelocity()
  *     cpdef double getTravelDistance(self):             # <<<<<<<<<<<<<<
  *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,
+ *     cpdef void getBound(self, int num_rays,
  */
 
   /* function exit code */
@@ -3909,15 +3909,15 @@ static PyObject *__pyx_pf_7racecar_5PyCar_22getTravelDistance(struct __pyx_obj_7
 /* "racecar.pyx":112
  *     cpdef double getTravelDistance(self):
  *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,             # <<<<<<<<<<<<<<
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- *         self.thisptr.getCarPixels(num_rays, &pixels[0])
+ *     cpdef void getBound(self, int num_rays,             # <<<<<<<<<<<<<<
+ *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *         self.thisptr.getBound(num_rays, &bound_points[0])
  */
 
-static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels, int __pyx_skip_dispatch) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_pixels;
-  __Pyx_Buffer __pyx_pybuffer_pixels;
+static PyObject *__pyx_pw_7racecar_5PyCar_25getBound(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static void __pyx_f_7racecar_5PyCar_getBound(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, PyArrayObject *__pyx_v_bound_points, int __pyx_skip_dispatch) {
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_bound_points;
+  __Pyx_Buffer __pyx_pybuffer_bound_points;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -3927,24 +3927,24 @@ static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar
   int __pyx_t_6;
   PyObject *__pyx_t_7 = NULL;
   Py_ssize_t __pyx_t_8;
-  __Pyx_RefNannySetupContext("getCarPixels", 0);
-  __pyx_pybuffer_pixels.pybuffer.buf = NULL;
-  __pyx_pybuffer_pixels.refcount = 0;
-  __pyx_pybuffernd_pixels.data = NULL;
-  __pyx_pybuffernd_pixels.rcbuffer = &__pyx_pybuffer_pixels;
+  __Pyx_RefNannySetupContext("getBound", 0);
+  __pyx_pybuffer_bound_points.pybuffer.buf = NULL;
+  __pyx_pybuffer_bound_points.refcount = 0;
+  __pyx_pybuffernd_bound_points.data = NULL;
+  __pyx_pybuffernd_bound_points.rcbuffer = &__pyx_pybuffer_bound_points;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer, (PyObject*)__pyx_v_pixels, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer, (PyObject*)__pyx_v_bound_points, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
   }
-  __pyx_pybuffernd_pixels.diminfo[0].strides = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pixels.diminfo[0].shape = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_bound_points.diminfo[0].strides = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_bound_points.diminfo[0].shape = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.shape[0];
   /* Check if called by wrapper */
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getCarPixels); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 112, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getBound); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_25getCarPixels)) {
-      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_num_rays); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 112, __pyx_L1_error)
+    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7racecar_5PyCar_25getBound)) {
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_num_rays); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 112, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_t_1);
       __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -3961,7 +3961,7 @@ static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_pixels)};
+        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_bound_points)};
         __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 112, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
@@ -3970,7 +3970,7 @@ static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_pixels)};
+        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, ((PyObject *)__pyx_v_bound_points)};
         __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 112, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
@@ -3985,9 +3985,9 @@ static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar
         }
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_6, __pyx_t_3);
-        __Pyx_INCREF(((PyObject *)__pyx_v_pixels));
-        __Pyx_GIVEREF(((PyObject *)__pyx_v_pixels));
-        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, ((PyObject *)__pyx_v_pixels));
+        __Pyx_INCREF(((PyObject *)__pyx_v_bound_points));
+        __Pyx_GIVEREF(((PyObject *)__pyx_v_bound_points));
+        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, ((PyObject *)__pyx_v_bound_points));
         __pyx_t_3 = 0;
         __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 112, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -4002,28 +4002,28 @@ static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar
   }
 
   /* "racecar.pyx":114
- *     cpdef void getCarPixels(self, double num_rays,
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- *         self.thisptr.getCarPixels(num_rays, &pixels[0])             # <<<<<<<<<<<<<<
+ *     cpdef void getBound(self, int num_rays,
+ *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *         self.thisptr.getBound(num_rays, &bound_points[0])             # <<<<<<<<<<<<<<
  */
   __pyx_t_8 = 0;
   __pyx_t_6 = -1;
   if (__pyx_t_8 < 0) {
-    __pyx_t_8 += __pyx_pybuffernd_pixels.diminfo[0].shape;
+    __pyx_t_8 += __pyx_pybuffernd_bound_points.diminfo[0].shape;
     if (unlikely(__pyx_t_8 < 0)) __pyx_t_6 = 0;
-  } else if (unlikely(__pyx_t_8 >= __pyx_pybuffernd_pixels.diminfo[0].shape)) __pyx_t_6 = 0;
+  } else if (unlikely(__pyx_t_8 >= __pyx_pybuffernd_bound_points.diminfo[0].shape)) __pyx_t_6 = 0;
   if (unlikely(__pyx_t_6 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_6);
     __PYX_ERR(1, 114, __pyx_L1_error)
   }
-  __pyx_v_self->thisptr->getCarPixels(__pyx_v_num_rays, (&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_pixels.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_pixels.diminfo[0].strides))));
+  __pyx_v_self->thisptr->getBound(__pyx_v_num_rays, (&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_bound_points.diminfo[0].strides))));
 
   /* "racecar.pyx":112
  *     cpdef double getTravelDistance(self):
  *         return self.thisptr.getTravelDistance()
- *     cpdef void getCarPixels(self, double num_rays,             # <<<<<<<<<<<<<<
- *                                 np.ndarray[float, ndim=1, mode="c"] pixels):
- *         self.thisptr.getCarPixels(num_rays, &pixels[0])
+ *     cpdef void getBound(self, int num_rays,             # <<<<<<<<<<<<<<
+ *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *         self.thisptr.getBound(num_rays, &bound_points[0])
  */
 
   /* function exit code */
@@ -4039,26 +4039,26 @@ static void __pyx_f_7racecar_5PyCar_getCarPixels(struct __pyx_obj_7racecar_PyCar
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("racecar.PyCar.getCarPixels", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("racecar.PyCar.getBound", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_RefNannyFinishContext();
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  double __pyx_v_num_rays;
-  PyArrayObject *__pyx_v_pixels = 0;
+static PyObject *__pyx_pw_7racecar_5PyCar_25getBound(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_7racecar_5PyCar_25getBound(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  int __pyx_v_num_rays;
+  PyArrayObject *__pyx_v_bound_points = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getCarPixels (wrapper)", 0);
+  __Pyx_RefNannySetupContext("getBound (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_num_rays,&__pyx_n_s_pixels,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_num_rays,&__pyx_n_s_bound_points,0};
     PyObject* values[2] = {0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -4078,13 +4078,13 @@ static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self,
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_pixels)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_bound_points)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getCarPixels", 1, 2, 2, 1); __PYX_ERR(1, 112, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getBound", 1, 2, 2, 1); __PYX_ERR(1, 112, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getCarPixels") < 0)) __PYX_ERR(1, 112, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getBound") < 0)) __PYX_ERR(1, 112, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -4092,19 +4092,19 @@ static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self,
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_num_rays = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_num_rays == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 112, __pyx_L3_error)
-    __pyx_v_pixels = ((PyArrayObject *)values[1]);
+    __pyx_v_num_rays = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_num_rays == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 112, __pyx_L3_error)
+    __pyx_v_bound_points = ((PyArrayObject *)values[1]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getCarPixels", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 112, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getBound", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 112, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("racecar.PyCar.getCarPixels", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("racecar.PyCar.getBound", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pixels), __pyx_ptype_5numpy_ndarray, 1, "pixels", 0))) __PYX_ERR(1, 113, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7racecar_5PyCar_24getCarPixels(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_num_rays, __pyx_v_pixels);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bound_points), __pyx_ptype_5numpy_ndarray, 1, "bound_points", 0))) __PYX_ERR(1, 113, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7racecar_5PyCar_24getBound(((struct __pyx_obj_7racecar_PyCar *)__pyx_v_self), __pyx_v_num_rays, __pyx_v_bound_points);
 
   /* function exit code */
   goto __pyx_L0;
@@ -4115,24 +4115,24 @@ static PyObject *__pyx_pw_7racecar_5PyCar_25getCarPixels(PyObject *__pyx_v_self,
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7racecar_5PyCar_24getCarPixels(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, double __pyx_v_num_rays, PyArrayObject *__pyx_v_pixels) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_pixels;
-  __Pyx_Buffer __pyx_pybuffer_pixels;
+static PyObject *__pyx_pf_7racecar_5PyCar_24getBound(struct __pyx_obj_7racecar_PyCar *__pyx_v_self, int __pyx_v_num_rays, PyArrayObject *__pyx_v_bound_points) {
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_bound_points;
+  __Pyx_Buffer __pyx_pybuffer_bound_points;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("getCarPixels", 0);
-  __pyx_pybuffer_pixels.pybuffer.buf = NULL;
-  __pyx_pybuffer_pixels.refcount = 0;
-  __pyx_pybuffernd_pixels.data = NULL;
-  __pyx_pybuffernd_pixels.rcbuffer = &__pyx_pybuffer_pixels;
+  __Pyx_RefNannySetupContext("getBound", 0);
+  __pyx_pybuffer_bound_points.pybuffer.buf = NULL;
+  __pyx_pybuffer_bound_points.refcount = 0;
+  __pyx_pybuffernd_bound_points.data = NULL;
+  __pyx_pybuffernd_bound_points.rcbuffer = &__pyx_pybuffer_bound_points;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer, (PyObject*)__pyx_v_pixels, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer, (PyObject*)__pyx_v_bound_points, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
   }
-  __pyx_pybuffernd_pixels.diminfo[0].strides = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pixels.diminfo[0].shape = __pyx_pybuffernd_pixels.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_bound_points.diminfo[0].strides = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_bound_points.diminfo[0].shape = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_getCarPixels(__pyx_v_self, __pyx_v_num_rays, __pyx_v_pixels, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 112, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_7racecar_5PyCar_getBound(__pyx_v_self, __pyx_v_num_rays, __pyx_v_bound_points, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4145,13 +4145,13 @@ static PyObject *__pyx_pf_7racecar_5PyCar_24getCarPixels(struct __pyx_obj_7racec
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("racecar.PyCar.getCarPixels", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("racecar.PyCar.getBound", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pixels.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -6826,7 +6826,7 @@ static PyMethodDef __pyx_methods_7racecar_PyCar[] = {
   {"getScanPose", (PyCFunction)__pyx_pw_7racecar_5PyCar_19getScanPose, METH_VARARGS|METH_KEYWORDS, 0},
   {"getMeanVelocity", (PyCFunction)__pyx_pw_7racecar_5PyCar_21getMeanVelocity, METH_NOARGS, 0},
   {"getTravelDistance", (PyCFunction)__pyx_pw_7racecar_5PyCar_23getTravelDistance, METH_NOARGS, 0},
-  {"getCarPixels", (PyCFunction)__pyx_pw_7racecar_5PyCar_25getCarPixels, METH_VARARGS|METH_KEYWORDS, 0},
+  {"getBound", (PyCFunction)__pyx_pw_7racecar_5PyCar_25getBound, METH_VARARGS|METH_KEYWORDS, 0},
   {"__reduce_cython__", (PyCFunction)__pyx_pw_7racecar_5PyCar_27__reduce_cython__, METH_NOARGS, 0},
   {"__setstate_cython__", (PyCFunction)__pyx_pw_7racecar_5PyCar_29__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
@@ -6938,10 +6938,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_WB, __pyx_k_WB, sizeof(__pyx_k_WB), 0, 0, 1, 1},
   {&__pyx_n_s_WIDTH, __pyx_k_WIDTH, sizeof(__pyx_k_WIDTH), 0, 0, 1, 1},
   {&__pyx_n_s_ang_min, __pyx_k_ang_min, sizeof(__pyx_k_ang_min), 0, 0, 1, 1},
+  {&__pyx_n_s_bound_points, __pyx_k_bound_points, sizeof(__pyx_k_bound_points), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_computeFromInput, __pyx_k_computeFromInput, sizeof(__pyx_k_computeFromInput), 0, 0, 1, 1},
   {&__pyx_n_s_control, __pyx_k_control, sizeof(__pyx_k_control), 0, 0, 1, 1},
-  {&__pyx_n_s_getCarPixels, __pyx_k_getCarPixels, sizeof(__pyx_k_getCarPixels), 0, 0, 1, 1},
+  {&__pyx_n_s_getBound, __pyx_k_getBound, sizeof(__pyx_k_getBound), 0, 0, 1, 1},
   {&__pyx_n_s_getMeanVelocity, __pyx_k_getMeanVelocity, sizeof(__pyx_k_getMeanVelocity), 0, 0, 1, 1},
   {&__pyx_n_s_getScanPose, __pyx_k_getScanPose, sizeof(__pyx_k_getScanPose), 0, 0, 1, 1},
   {&__pyx_n_s_getState, __pyx_k_getState, sizeof(__pyx_k_getState), 0, 0, 1, 1},
@@ -6959,7 +6960,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
   {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
-  {&__pyx_n_s_pixels, __pyx_k_pixels, sizeof(__pyx_k_pixels), 0, 0, 1, 1},
   {&__pyx_n_s_pose, __pyx_k_pose, sizeof(__pyx_k_pose), 0, 0, 1, 1},
   {&__pyx_n_s_poses, __pyx_k_poses, sizeof(__pyx_k_poses), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
@@ -7221,7 +7221,7 @@ PyMODINIT_FUNC PyInit_racecar(void)
   __pyx_vtable_7racecar_PyCar.getScanPose = (void (*)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getScanPose;
   __pyx_vtable_7racecar_PyCar.getMeanVelocity = (double (*)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getMeanVelocity;
   __pyx_vtable_7racecar_PyCar.getTravelDistance = (double (*)(struct __pyx_obj_7racecar_PyCar *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getTravelDistance;
-  __pyx_vtable_7racecar_PyCar.getCarPixels = (void (*)(struct __pyx_obj_7racecar_PyCar *, double, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getCarPixels;
+  __pyx_vtable_7racecar_PyCar.getBound = (void (*)(struct __pyx_obj_7racecar_PyCar *, int, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_7racecar_5PyCar_getBound;
   if (PyType_Ready(&__pyx_type_7racecar_PyCar) < 0) __PYX_ERR(1, 75, __pyx_L1_error)
   __pyx_type_7racecar_PyCar.tp_print = 0;
   if (__Pyx_SetVtable(__pyx_type_7racecar_PyCar.tp_dict, __pyx_vtabptr_7racecar_PyCar) < 0) __PYX_ERR(1, 75, __pyx_L1_error)

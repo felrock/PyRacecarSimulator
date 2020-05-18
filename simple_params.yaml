@@ -89,7 +89,7 @@ obstacle_size: 2
 
 # The names of topics to listen and publish to
 joy_topic: "/joy"
-drive_topic_simple: "/drive_simple"
+drive_topic_simple: "/drive_one"
 map_topic: "/map"
 distance_transform_topic_simple: "/dt_simple"
 scan_topic_simple: "/scan_simple"
@@ -98,19 +98,6 @@ ground_truth_pose_topic_simple: "/gt_pose_simple"
 odom_topic: "/odom_simple"
 imu_topic: "/imu"
 pose_rviz_topic: "/initialpose_simple"
-keyboard_topic: "/key"
-brake_bool_topic: "/brake_bool"
-mux_topic: "/mux"
-
-# Topic names of various drive channels
-rand_drive_topic: "/rand_drive"
-brake_drive_topic: "/brake"
-nav_drive_topic: "/nav"
-# **Add name for new planning method here**
-new_drive_topic: "/new_drive"
-
-# name of file to write collision log to
-collision_file: "collision_file"
 
 # The names of the transformation frames published to
 map_frame: "map"

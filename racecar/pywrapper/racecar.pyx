@@ -31,7 +31,7 @@ cdef extern from "include/racecar.hpp":
         void getScanPose(double scan_dist_to_base, float* pose)
         double getMeanVelocity()
         double getTravelDistance()
-        void getCarPixels(double num_rays, float* pixels)
+        void getBound(int num_rays, float* bound_points)
 
         # for driving
         double total_velo
@@ -109,6 +109,6 @@ cdef class PyCar:
         return self.thisptr.getMeanVelocity()
     cpdef double getTravelDistance(self):
         return self.thisptr.getTravelDistance()
-    cpdef void getCarPixels(self, double num_rays,
-                                np.ndarray[float, ndim=1, mode="c"] pixels):
-        self.thisptr.getCarPixels(num_rays, &pixels[0])
+    cpdef void getBound(self, int num_rays,
+                                np.ndarray[float, ndim=1, mode="c"] bound_points):
+        self.thisptr.getBound(num_rays, &bound_points[0])

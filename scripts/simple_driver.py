@@ -18,11 +18,11 @@ class SimpleDriver:
 
     def __init__(self):
         #Topics & Subs, Pubs
-        lidarscan_topic = rospy.get_param('~scan_topic')
-        drive_topic = rospy.get_param('~drive_topic')
+        lidarscan_topic = rospy.get_param('~scan_topic')+ "two"
+        drive_topic = rospy.get_param('~drive_topic') + "two"
         self.max_steer = rospy.get_param('~max_steer_ang')
-        self.fov = rospy.get_param('~fov')
-        self.num_rays = rospy.get_param('~num_rays')
+        self.fov = rospy.get_param('~scan_fov')
+        self.num_rays = rospy.get_param('~scan_beams')
 
         self.lidar_sub = rospy.Subscriber(lidarscan_topic, LaserScan, self.lidar_callback)
         self.drive_pub = rospy.Publisher(drive_topic, AckermannDriveStamped, queue_size=20)
@@ -47,14 +47,14 @@ class SimpleDriver:
 
     def lidar_callback(self, data):
 
-        lidar_np = np.array(data.ranges)
+        lidar_np = np.array(data.ranges, dtype=np.float32)
         prediction = self.fg.eval(lidar_np, len(lidar_np))
         print(prediction)
         self.steer(prediction)
 
 def main(args):
     rospy.init_node("Simple_driver_node", anonymous=True)
-    pd = PolicyDriver()
+    pd = SimpleDriver()
 
     rospy.sleep(0.1)
     rospy.spin()

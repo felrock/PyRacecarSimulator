@@ -54,10 +54,11 @@ class MCTSdriver:
         self.update_action_rate = rospy.get_param("~update_action_rate")
         self.budget = rospy.get_param("~budget")
 
-        self.drive_topic = rospy.get_param("~drive_topic")
+        self.drive_topic = rospy.get_param("~drive_topic") + "one"
         self.map_topic = rospy.get_param("~map_topic")
-        self.scan_topic = rospy.get_param("~scan_topic")
-        self.odom_topic = rospy.get_param("~odom_topic")
+        self.scan_topic = rospy.get_param("~scan_topic") + "one"
+        self.odom_topic = rospy.get_param("~odom_topic") + "one"
+        #self.odom_topic = "/pf/pose/odom"
 
         # parameters for car/s
         self.car_config = {

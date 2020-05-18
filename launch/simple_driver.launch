@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <launch>
 
-  <!-- Launch the racecar model -->
-  <include file="$(find PyRacecarSimulator)/launch/racecar_model.launch"/>
 
   <!-- Begin the simulator with the parameters from params.yaml -->
   <node pkg="PyRacecarSimulator" name="simple_driver" type="simple_driver.py" output="screen">
-    <rosparam command="load" file="$(find PyRacecarSimulator)/params_simple.yaml"/>
+    <rosparam command="load" file="$(find PyRacecarSimulator)/params.yaml"/>
   </node>
 
   <!-- -->

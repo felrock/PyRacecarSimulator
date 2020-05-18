@@ -383,14 +383,14 @@ void Car::getScanPose(double scan_dist_to_base, float* pose)
     pose[2] = cs.theta;
 }
 
-void Car::getCarPixels(int num_rays, float* pixels)
+void Car::getBound(int num_rays, float* bound_points)
 {
     /*
-     * Similar to setCarEdge but the edge ecloses the car with pixels
+     * Similar to setCarEdge but the edge ecloses the car with bound_points
      * with the density specified with num_rays
      */
 
-    // get the pixels that enclose the car
+    // get the bound_points that enclose the car
     double dx, dy, t_dist;
     double dist_to_side = WIDTH / 2.0;
     double dist_to_front = LENGTH / 2.0;
@@ -408,16 +408,22 @@ void Car::getCarPixels(int num_rays, float* pixels)
             {
                 t_dist = std::min(dist_to_side / std::sin(cur_ang),\
                                  dist_to_front / std::cos(cur_ang));
-                pixels[i] = static_cast<float>(dx);
-                pixels[i+1] = static_cast<float>(dy);
+                dx = t_dist * std::cos(cur_ang);
+                dy = t_dist * std::sin(cur_ang);
+
+                bound_points[i] = dx;
+                bound_points[i+1] = dy;
 
             }
             else
             {
                 t_dist = std::min(dist_to_side / std::sin(cur_ang-PI/2.0),\
                                  dist_to_back / std::cos(cur_ang-PI/2.0));
-                pixels[i] = static_cast<float>(dx);
-                pixels[i+1] = static_cast<float>(dy);
+                dx = t_dist * std::cos(cur_ang);
+                dy = t_dist * std::sin(cur_ang);
+
+                bound_points[i] = dx;
+                bound_points[i+1] = dy;
             }
         }
         else
@@ -429,8 +435,11 @@ void Car::getCarPixels(int num_rays, float* pixels)
             {
                 t_dist = std::min(dist_to_side / std::sin(-cur_ang),\
                                 dist_to_front / std::cos(-cur_ang));
-                pixels[i] = static_cast<float>(dx);
-                pixels[i+1] = static_cast<float>(dy);
+                dx = t_dist * std::cos(cur_ang);
+                dy = t_dist * std::sin(cur_ang);
+
+                bound_points[i] = dx;
+                bound_points[i+1] = dy;
             }
             else
             {
@@ -438,8 +447,8 @@ void Car::getCarPixels(int num_rays, float* pixels)
                                 dist_to_back / std::cos(-cur_ang-PI/2.0));
                 dx = t_dist * std::cos(cur_ang);
                 dy = t_dist * std::sin(cur_ang);
-                pixels[i] = static_cast<float>(dx);
-                pixels[i+1] = static_cast<float>(dy);
+                bound_points[i] = dx;
+                bound_points[i+1] = dy;
             }
         }
     }

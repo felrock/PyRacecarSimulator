@@ -59,7 +59,7 @@ class Car
         double getTravelDistance();
 
         // for drawing
-        void getCarPixels(int num_rays, float* pixels);
+        void getBound(int num_rays, float* bound_points);
 
     private:
 
