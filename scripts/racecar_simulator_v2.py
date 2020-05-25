@@ -56,7 +56,7 @@ class RacecarSimulator():
                                     self.scan_std,
                                     self.batch_size)
 
-        self.scan = np.zeros(self.num_rays)
+        self.scan = np.zeros(self.num_rays, dtype=np.float32)
 
         # user input
         self.desired_speed = 0.0
@@ -78,10 +78,25 @@ class RacecarSimulator():
         """
             Maybe use this w/o deep copy
         """
-        state = np.zeros(8, dtype=np.float32)
+
+        state = np.zeros(11, dtype=np.float64)
         self.car.getState(state)
 
         return state
+
+    def getMeanVelocity(self):
+        """
+            The mean velocity of the current state
+        """
+
+        return self.car.getMeanVelocity()
+
+    def getTravelDistance(self):
+        """
+            Distance traveled, acumulate over updatePose's
+        """
+
+        return self.car.getTravelDistance()
 
     def getScan(self):
         """
@@ -95,7 +110,7 @@ class RacecarSimulator():
             Run a scan
         """
 
-        pose = np.zeros(3, dtype=np.float32)
+        pose = np.zeros(3, dtype=np.float64)
         self.car.getScanPose(self.scan_dist_to_base, pose)
 
         self.scan = self.scan_simulator.scan(*pose)
@@ -165,6 +180,9 @@ class RacecarSimulator():
         state[5] = 0.0
         state[6] = 0.0
         state[7] = 0.0
+        state[8] = 0.0
+        state[9] = 0.0
+        state[10] = 0.0
         self.setState(state)
         self.desired_speed = 0.0
         self.desired_steer_ang = 0.0

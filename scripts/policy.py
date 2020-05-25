@@ -4,7 +4,7 @@ from tensorflow.python.platform import gfile
 import numpy as np
 import time
 
-TRT_MODEL_PATH = '../model/TensorRT_model.pb'
+TRT_MODEL_PATH = '../model/frozen_model.pb'
 
 class Policy():
 
@@ -14,7 +14,7 @@ class Policy():
             graph_def.ParseFromString(f.read())
         return graph_def
 
-    def __init__(self, graph_path=''):
+    def __init__(self, graph_path='../model/frozen_model.pb'):
         self.graph = tf.Graph().as_default()
         self.sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(
                         gpu_options=tf.compat.v1.GPUOptions(

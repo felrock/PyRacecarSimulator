@@ -26,12 +26,12 @@ cdef extern from "include/racecar.hpp":
         void updateSingle(double dt)
         void updateNormal(double dt)
 
-        void setState(float* state)
-        void getState(float* state)
-        void getScanPose(double scan_dist_to_base, float* pose)
+        void setState(double* state)
+        void getState(double* state)
+        void getScanPose(double scan_dist_to_base, double* pose)
         double getMeanVelocity()
         double getTravelDistance()
-        void getBound(int num_rays, float* bound_points)
+        void getBound(int num_rays, double* bound_points)
 
         # for driving
         double total_velo
@@ -98,17 +98,17 @@ cdef class PyCar:
                                   double scan_ang_inc, double scan_dist_to_base):
         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
                                         scan_dist_to_base)
-    cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
+    cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):
         self.thisptr.getState(&state[0])
-    cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+    cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
         self.thisptr.setState(&state[0])
     cpdef void getScanPose(self, double scan_dist_to_base,
-                          np.ndarray[float, ndim=1, mode="c"] pose):
+                          np.ndarray[double, ndim=1, mode="c"] pose):
         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
     cpdef double getMeanVelocity(self):
         return self.thisptr.getMeanVelocity()
     cpdef double getTravelDistance(self):
         return self.thisptr.getTravelDistance()
     cpdef void getBound(self, int num_rays,
-                                np.ndarray[float, ndim=1, mode="c"] bound_points):
+                                np.ndarray[double, ndim=1, mode="c"] bound_points):
         self.thisptr.getBound(num_rays, &bound_points[0])

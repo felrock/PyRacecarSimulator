@@ -104,7 +104,6 @@ class RunSimulationViz:
         self.pose_pub = rospy.Publisher(self.gt_pose_topic, PoseStamped, queue_size=1)
 
         # subscribers
-        self.update_simulation = rospy.Timer(rospy.Duration(self.update_pose_rate), self.updateSimulationCallback)
         self.drive_sub = rospy.Subscriber(self.drive_topic, AckermannDriveStamped, self.driveCallback, queue_size=1)
         self.map_sub = rospy.Subscriber(self.map_topic, OccupancyGrid, self.mapCallback)
         self.pose_sub = rospy.Subscriber(self.pose_topic, PoseStamped, self.poseCallback)
@@ -112,6 +111,10 @@ class RunSimulationViz:
 
         if self.verbose:
             print "Driver constructed"
+
+        self.update_simulation = rospy.Timer(rospy.Duration(self.update_pose_rate), self.updateSimulationCallback)
+        self.t_start = 0
+        self.t_started = False
 
     def updateSimulationCallback(self, event):
         """
@@ -139,8 +142,11 @@ class RunSimulationViz:
         self.rcs.runScan()
 
         if self.rcs.checkCollision() >= 0:
+
+            print "crash %f" % (time.time() - self.t_start)
             # do other things here too
             self.rcs.stop()
+            self.t_started = False
 
         if self.visualize:
             # publish lidar
@@ -153,6 +159,10 @@ class RunSimulationViz:
         """
             Pass actions for driving
         """
+
+        if not self.t_started:
+            self.t_started = True
+            self.t_start = time.time()
 
         self.rcs.drive(msg.drive.speed, msg.drive.steering_angle)
 

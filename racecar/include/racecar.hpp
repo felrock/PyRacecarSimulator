@@ -17,6 +17,10 @@ typedef struct CarState
     double angular_velocity;
     double slip_angle;
     bool st_dyn;
+    // extended
+    double travel_dist;
+    double total_velo;
+    int update_count;
 };
 
 class Car
@@ -52,14 +56,14 @@ class Car
 
         // get and set states, handles as double arrays becuase of
         // cython
-        void getState(float* state);
-        void setState(float* state);
-        void getScanPose(double scan_dist_to_base, float* pose);
+        void getState(double* state);
+        void setState(double* state);
+        void getScanPose(double scan_dist_to_base, double* pose);
         double getMeanVelocity();
         double getTravelDistance();
 
         // for drawing
-        void getBound(int num_rays, float* bound_points);
+        void getBound(int num_rays, double* bound_points);
 
     private:
 

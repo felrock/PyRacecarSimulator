@@ -134,17 +134,5 @@ class ScanSimulator2D:
 
         return self.output_vector_many
 
-    def transformToGrid(self, x, y, theta):
-        """
-            Range_libc seems to already do this..
-        """
-        x_t = x - self.origin_x
-        y_t = y - self.origin_x
-
-        x_rot = x_t*self.origin_c + y_t*self.origin_s
-        y_rot = -x_t*self.origin_s + y_t*self.origin_c
-
-        return x_rot, y_rot
-
 if __name__ == '__main__':
     pass

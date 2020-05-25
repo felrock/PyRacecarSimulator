@@ -1540,6 +1540,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 /* Module declarations from 'racecar' */
 static PyTypeObject *__pyx_ptype_7racecar_PyCar = 0;
 static __Pyx_TypeInfo __Pyx_TypeInfo_float = { "float", NULL, sizeof(float), { 0 }, 0, 'R', 0, 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "racecar"
 int __pyx_module_is_main_racecar = 0;
 
@@ -2881,7 +2882,7 @@ static void __pyx_f_7racecar_5PyCar_setCarEdgeDistances(struct __pyx_obj_7raceca
  *                                   double scan_ang_inc, double scan_dist_to_base):
  *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,             # <<<<<<<<<<<<<<
  *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):
  */
   __pyx_v_self->thisptr->setCarEdgeDistances(__pyx_v_num_rays, __pyx_v_ang_min, __pyx_v_scan_ang_inc, __pyx_v_scan_dist_to_base);
 
@@ -3019,9 +3020,9 @@ static PyObject *__pyx_pf_7racecar_5PyCar_12setCarEdgeDistances(struct __pyx_obj
 /* "racecar.pyx":101
  *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
  *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
+ *     cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
  *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
  */
 
 static PyObject *__pyx_pw_7racecar_5PyCar_15getState(PyObject *__pyx_v_self, PyObject *__pyx_v_state); /*proto*/
@@ -3043,7 +3044,7 @@ static void __pyx_f_7racecar_5PyCar_getState(struct __pyx_obj_7racecar_PyCar *__
   __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 101, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 101, __pyx_L1_error)
   }
   __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
   /* Check if called by wrapper */
@@ -3106,9 +3107,9 @@ static void __pyx_f_7racecar_5PyCar_getState(struct __pyx_obj_7racecar_PyCar *__
 
   /* "racecar.pyx":102
  *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.getState(&state[0])             # <<<<<<<<<<<<<<
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.setState(&state[0])
  */
   __pyx_t_6 = 0;
@@ -3121,14 +3122,14 @@ static void __pyx_f_7racecar_5PyCar_getState(struct __pyx_obj_7racecar_PyCar *__
     __Pyx_RaiseBufferIndexError(__pyx_t_7);
     __PYX_ERR(1, 102, __pyx_L1_error)
   }
-  __pyx_v_self->thisptr->getState((&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_state.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_state.diminfo[0].strides))));
+  __pyx_v_self->thisptr->getState((&(*__Pyx_BufPtrCContig1d(double *, __pyx_pybuffernd_state.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_state.diminfo[0].strides))));
 
   /* "racecar.pyx":101
  *         self.thisptr.setCarEdgeDistances(num_rays, ang_min, scan_ang_inc,
  *                                         scan_dist_to_base)
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
+ *     cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
  *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
  */
 
   /* function exit code */
@@ -3184,7 +3185,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_14getState(struct __pyx_obj_7racecar_P
   __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 101, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 101, __pyx_L1_error)
   }
   __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
@@ -3215,9 +3216,9 @@ static PyObject *__pyx_pf_7racecar_5PyCar_14getState(struct __pyx_obj_7racecar_P
 }
 
 /* "racecar.pyx":103
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
  *         self.thisptr.setState(&state[0])
  *     cpdef void getScanPose(self, double scan_dist_to_base,
  */
@@ -3241,7 +3242,7 @@ static void __pyx_f_7racecar_5PyCar_setState(struct __pyx_obj_7racecar_PyCar *__
   __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 103, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 103, __pyx_L1_error)
   }
   __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
   /* Check if called by wrapper */
@@ -3304,10 +3305,10 @@ static void __pyx_f_7racecar_5PyCar_setState(struct __pyx_obj_7racecar_PyCar *__
 
   /* "racecar.pyx":104
  *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.setState(&state[0])             # <<<<<<<<<<<<<<
  *     cpdef void getScanPose(self, double scan_dist_to_base,
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
+ *                           np.ndarray[double, ndim=1, mode="c"] pose):
  */
   __pyx_t_6 = 0;
   __pyx_t_7 = -1;
@@ -3319,12 +3320,12 @@ static void __pyx_f_7racecar_5PyCar_setState(struct __pyx_obj_7racecar_PyCar *__
     __Pyx_RaiseBufferIndexError(__pyx_t_7);
     __PYX_ERR(1, 104, __pyx_L1_error)
   }
-  __pyx_v_self->thisptr->setState((&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_state.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_state.diminfo[0].strides))));
+  __pyx_v_self->thisptr->setState((&(*__Pyx_BufPtrCContig1d(double *, __pyx_pybuffernd_state.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_state.diminfo[0].strides))));
 
   /* "racecar.pyx":103
- *     cpdef void getState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void getState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.getState(&state[0])
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):             # <<<<<<<<<<<<<<
  *         self.thisptr.setState(&state[0])
  *     cpdef void getScanPose(self, double scan_dist_to_base,
  */
@@ -3382,7 +3383,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_16setState(struct __pyx_obj_7racecar_P
   __pyx_pybuffernd_state.rcbuffer = &__pyx_pybuffer_state;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 103, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_state.rcbuffer->pybuffer, (PyObject*)__pyx_v_state, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 103, __pyx_L1_error)
   }
   __pyx_pybuffernd_state.diminfo[0].strides = __pyx_pybuffernd_state.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_state.diminfo[0].shape = __pyx_pybuffernd_state.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
@@ -3413,10 +3414,10 @@ static PyObject *__pyx_pf_7racecar_5PyCar_16setState(struct __pyx_obj_7racecar_P
 }
 
 /* "racecar.pyx":105
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.setState(&state[0])
  *     cpdef void getScanPose(self, double scan_dist_to_base,             # <<<<<<<<<<<<<<
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
+ *                           np.ndarray[double, ndim=1, mode="c"] pose):
  *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
  */
 
@@ -3440,7 +3441,7 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
   __pyx_pybuffernd_pose.rcbuffer = &__pyx_pybuffer_pose;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pose.rcbuffer->pybuffer, (PyObject*)__pyx_v_pose, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 105, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pose.rcbuffer->pybuffer, (PyObject*)__pyx_v_pose, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 105, __pyx_L1_error)
   }
   __pyx_pybuffernd_pose.diminfo[0].strides = __pyx_pybuffernd_pose.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pose.diminfo[0].shape = __pyx_pybuffernd_pose.rcbuffer->pybuffer.shape[0];
   /* Check if called by wrapper */
@@ -3509,7 +3510,7 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
 
   /* "racecar.pyx":107
  *     cpdef void getScanPose(self, double scan_dist_to_base,
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
+ *                           np.ndarray[double, ndim=1, mode="c"] pose):
  *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])             # <<<<<<<<<<<<<<
  *     cpdef double getMeanVelocity(self):
  *         return self.thisptr.getMeanVelocity()
@@ -3524,13 +3525,13 @@ static void __pyx_f_7racecar_5PyCar_getScanPose(struct __pyx_obj_7racecar_PyCar 
     __Pyx_RaiseBufferIndexError(__pyx_t_6);
     __PYX_ERR(1, 107, __pyx_L1_error)
   }
-  __pyx_v_self->thisptr->getScanPose(__pyx_v_scan_dist_to_base, (&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_pose.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_pose.diminfo[0].strides))));
+  __pyx_v_self->thisptr->getScanPose(__pyx_v_scan_dist_to_base, (&(*__Pyx_BufPtrCContig1d(double *, __pyx_pybuffernd_pose.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_pose.diminfo[0].strides))));
 
   /* "racecar.pyx":105
- *     cpdef void setState(self, np.ndarray[float, ndim=1, mode="c"] state):
+ *     cpdef void setState(self, np.ndarray[double, ndim=1, mode="c"] state):
  *         self.thisptr.setState(&state[0])
  *     cpdef void getScanPose(self, double scan_dist_to_base,             # <<<<<<<<<<<<<<
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
+ *                           np.ndarray[double, ndim=1, mode="c"] pose):
  *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
  */
 
@@ -3636,7 +3637,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_18getScanPose(struct __pyx_obj_7raceca
   __pyx_pybuffernd_pose.rcbuffer = &__pyx_pybuffer_pose;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pose.rcbuffer->pybuffer, (PyObject*)__pyx_v_pose, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 105, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pose.rcbuffer->pybuffer, (PyObject*)__pyx_v_pose, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 105, __pyx_L1_error)
   }
   __pyx_pybuffernd_pose.diminfo[0].strides = __pyx_pybuffernd_pose.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pose.diminfo[0].shape = __pyx_pybuffernd_pose.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
@@ -3667,7 +3668,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_18getScanPose(struct __pyx_obj_7raceca
 }
 
 /* "racecar.pyx":108
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
+ *                           np.ndarray[double, ndim=1, mode="c"] pose):
  *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
  *     cpdef double getMeanVelocity(self):             # <<<<<<<<<<<<<<
  *         return self.thisptr.getMeanVelocity()
@@ -3730,7 +3731,7 @@ static double __pyx_f_7racecar_5PyCar_getMeanVelocity(struct __pyx_obj_7racecar_
   goto __pyx_L0;
 
   /* "racecar.pyx":108
- *                           np.ndarray[float, ndim=1, mode="c"] pose):
+ *                           np.ndarray[double, ndim=1, mode="c"] pose):
  *         self.thisptr.getScanPose(scan_dist_to_base, &pose[0])
  *     cpdef double getMeanVelocity(self):             # <<<<<<<<<<<<<<
  *         return self.thisptr.getMeanVelocity()
@@ -3844,7 +3845,7 @@ static double __pyx_f_7racecar_5PyCar_getTravelDistance(struct __pyx_obj_7raceca
  *     cpdef double getTravelDistance(self):
  *         return self.thisptr.getTravelDistance()             # <<<<<<<<<<<<<<
  *     cpdef void getBound(self, int num_rays,
- *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *                                 np.ndarray[double, ndim=1, mode="c"] bound_points):
  */
   __pyx_r = __pyx_v_self->thisptr->getTravelDistance();
   goto __pyx_L0;
@@ -3910,7 +3911,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_22getTravelDistance(struct __pyx_obj_7
  *     cpdef double getTravelDistance(self):
  *         return self.thisptr.getTravelDistance()
  *     cpdef void getBound(self, int num_rays,             # <<<<<<<<<<<<<<
- *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *                                 np.ndarray[double, ndim=1, mode="c"] bound_points):
  *         self.thisptr.getBound(num_rays, &bound_points[0])
  */
 
@@ -3934,7 +3935,7 @@ static void __pyx_f_7racecar_5PyCar_getBound(struct __pyx_obj_7racecar_PyCar *__
   __pyx_pybuffernd_bound_points.rcbuffer = &__pyx_pybuffer_bound_points;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer, (PyObject*)__pyx_v_bound_points, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer, (PyObject*)__pyx_v_bound_points, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
   }
   __pyx_pybuffernd_bound_points.diminfo[0].strides = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_bound_points.diminfo[0].shape = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.shape[0];
   /* Check if called by wrapper */
@@ -4003,7 +4004,7 @@ static void __pyx_f_7racecar_5PyCar_getBound(struct __pyx_obj_7racecar_PyCar *__
 
   /* "racecar.pyx":114
  *     cpdef void getBound(self, int num_rays,
- *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *                                 np.ndarray[double, ndim=1, mode="c"] bound_points):
  *         self.thisptr.getBound(num_rays, &bound_points[0])             # <<<<<<<<<<<<<<
  */
   __pyx_t_8 = 0;
@@ -4016,13 +4017,13 @@ static void __pyx_f_7racecar_5PyCar_getBound(struct __pyx_obj_7racecar_PyCar *__
     __Pyx_RaiseBufferIndexError(__pyx_t_6);
     __PYX_ERR(1, 114, __pyx_L1_error)
   }
-  __pyx_v_self->thisptr->getBound(__pyx_v_num_rays, (&(*__Pyx_BufPtrCContig1d(float *, __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_bound_points.diminfo[0].strides))));
+  __pyx_v_self->thisptr->getBound(__pyx_v_num_rays, (&(*__Pyx_BufPtrCContig1d(double *, __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_bound_points.diminfo[0].strides))));
 
   /* "racecar.pyx":112
  *     cpdef double getTravelDistance(self):
  *         return self.thisptr.getTravelDistance()
  *     cpdef void getBound(self, int num_rays,             # <<<<<<<<<<<<<<
- *                                 np.ndarray[float, ndim=1, mode="c"] bound_points):
+ *                                 np.ndarray[double, ndim=1, mode="c"] bound_points):
  *         self.thisptr.getBound(num_rays, &bound_points[0])
  */
 
@@ -4128,7 +4129,7 @@ static PyObject *__pyx_pf_7racecar_5PyCar_24getBound(struct __pyx_obj_7racecar_P
   __pyx_pybuffernd_bound_points.rcbuffer = &__pyx_pybuffer_bound_points;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer, (PyObject*)__pyx_v_bound_points, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bound_points.rcbuffer->pybuffer, (PyObject*)__pyx_v_bound_points, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 112, __pyx_L1_error)
   }
   __pyx_pybuffernd_bound_points.diminfo[0].strides = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_bound_points.diminfo[0].shape = __pyx_pybuffernd_bound_points.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);

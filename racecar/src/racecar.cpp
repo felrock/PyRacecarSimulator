@@ -20,7 +20,8 @@ Car::Car(double WB, double FC, double H_CG, double L_F, double L_R, double CS_F,
 
     // Init car state
     cs = {.x=0.0, .y=0.0, .theta=0.0, .velocity=0.0, .steer_angle=0.0,\
-          .angular_velocity=0.0, .slip_angle=0.0, .st_dyn=false};
+          .angular_velocity=0.0, .slip_angle=0.0, .st_dyn=false,\
+          .travel_dist=0.0, total_velo=0.0, update_count=0};
     accel = 0.0;
     steer_ang_vel = 0.0;
     input_speed = 0.0;
@@ -47,10 +48,6 @@ Car::Car(double WB, double FC, double H_CG, double L_F, double L_R, double CS_F,
 
     // speed regulate
     KP = 2.0 * MAX_ACCEL / MAX_SPEED;
-
-    total_velo = 0.0;
-    travel_dist = 0.0;
-    update_count = 0;
 }
 
 void Car::updatePosition(double dt)
@@ -90,9 +87,9 @@ void Car::updatePosition(double dt)
     // get difference for travel distance
     double d_x = p_x - cs.x;
     double d_y = p_y - cs.y;
-    travel_dist += std::sqrt(d_x*d_x + d_y*d_y);
-    total_velo += cs.velocity;
-    update_count++;
+    cs.travel_dist += std::sqrt(d_x*d_x + d_y*d_y);
+    cs.total_velo += cs.velocity;
+    cs.update_count++;
 
     // limit values steering and speed
     cs.velocity = std::min(std::max(cs.velocity, -MAX_SPEED), MAX_SPEED);
@@ -106,7 +103,7 @@ double Car::getMeanVelocity()
      * The mean value over all the velo's seen in updatePose
      */
 
-    return total_velo / static_cast<double>(update_count);
+    return cs.total_velo / static_cast<double>(cs.update_count);
 }
 
 double Car::getTravelDistance()
@@ -115,7 +112,7 @@ double Car::getTravelDistance()
      * The total distance travel from car init
      */
 
-    return travel_dist;
+    return cs.travel_dist;
 }
 
 void Car::computeFromInput()
@@ -316,13 +313,13 @@ int Car::isCrashed(float* rays, int num_rays, int poses)
      * more than one scene for crashes faster
      */
     int i;
-    for(i=0; i < poses; ++i)
+    for(i=1; i < poses+1; ++i)
     {
         for(size_t j=0; j < num_rays; ++j)
         {
-            if(rays[i*num_rays + j] - edge_distances[j] < CRASH_THRESH)
+            if((rays[(i-1)*num_rays + j] - edge_distances[j]) < CRASH_THRESH)
             {
-                return i;
+                return i-1;
             }
         }
     }
@@ -330,7 +327,7 @@ int Car::isCrashed(float* rays, int num_rays, int poses)
     return -i;
 }
 
-void Car::setState(float *state)
+void Car::setState(double *state)
 {
     /*
      * Set state to the CarState, used as a float array to
@@ -352,9 +349,12 @@ void Car::setState(float *state)
     {
         cs.st_dyn = false;
     }
+    cs.travel_dist = state[8];
+    cs.total_velo = state[9];
+    cs.update_count = static_cast<int>(state[10]);
 }
 
-void Car::getState(float *state)
+void Car::getState(double *state)
 {
     /*
      * Same as the set function
@@ -368,11 +368,14 @@ void Car::getState(float *state)
     state[4] = cs.steer_angle;
     state[5] = cs.angular_velocity;
     state[6] = cs.slip_angle;
-    state[7] = static_cast<double>(cs.st_dyn);
+    state[7] = static_cast<bool>(cs.st_dyn);
+    state[8] = cs.travel_dist;
+    state[9] = cs.total_velo;
+    state[10] = static_cast<int>(cs.update_count);
 
 }
 
-void Car::getScanPose(double scan_dist_to_base, float* pose)
+void Car::getScanPose(double scan_dist_to_base, double* pose)
 {
     /*
      * Get a position with an offset to the center
@@ -383,7 +386,7 @@ void Car::getScanPose(double scan_dist_to_base, float* pose)
     pose[2] = cs.theta;
 }
 
-void Car::getBound(int num_rays, float* bound_points)
+void Car::getBound(int num_rays, double* bound_points)
 {
     /*
      * Similar to setCarEdge but the edge ecloses the car with bound_points

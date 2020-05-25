@@ -32,6 +32,7 @@ class MCTSdriver:
 
     def __init__(self, verbose=True, with_global=False):
         self.beta = 0
+        self.fex = 1
         pack = rospkg.RosPack()
         self.verbose = verbose
         self.with_global = with_global
@@ -54,10 +55,10 @@ class MCTSdriver:
         self.update_action_rate = rospy.get_param("~update_action_rate")
         self.budget = rospy.get_param("~budget")
 
-        self.drive_topic = rospy.get_param("~drive_topic") + "one"
+        self.drive_topic = rospy.get_param("~drive_topic") #+ "one"
         self.map_topic = rospy.get_param("~map_topic")
-        self.scan_topic = rospy.get_param("~scan_topic") + "one"
-        self.odom_topic = rospy.get_param("~odom_topic") + "one"
+        self.scan_topic = rospy.get_param("~scan_topic") #+ "one"
+        self.odom_topic = rospy.get_param("~odom_topic") #+ "one"
         #self.odom_topic = "/pf/pose/odom"
 
         # parameters for car/s
@@ -234,16 +235,16 @@ class MCTSdriver:
 
         # logg the tree
         """
-        if self.beta ==  5:
+        if self.beta %5  == 0:
             print os.path.abspath(os.getcwd())
 
-            with open('logg_mcts_01_FG_RO.txt', 'w') as f:
+            with open('logg_mcts_01_FG_RO-%i' % self.fex, 'w') as f:
                 self.writeTreePoints(f, mcts_run.root)
-
-        self.printDepth(mcts_run.root)"""
+            self.fex += 1
+        self.printDepth(mcts_run.root)
 
         self.beta += 1
-
+        """
         # update rcs
         self.rcs.drive(speed, self.action)
         self.rcs.updatePose()

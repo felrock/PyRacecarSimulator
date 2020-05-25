@@ -230,19 +230,19 @@ class MCTS:
             self.all_sim_states[i][1] = new_state[1]
             self.all_sim_states[i][2] = new_state[2]
 
-            if self.with_global:
-                rewards[i] = new_state[3] / self.calculateDistance((new_state[0],new_state[1]))
-            else:
-                rewards[i] = new_state[3]
+            #if self.with_global:
+            #rewards[i] = new_state[3] / self.calculateDistance((new_state[0],new_state[1]))
+            rewards[i] = new_state[3]
 
         index = self.simulator.checkCollisionMany(self.all_sim_states)
         self.simulator.setState(prev_state)
-        node.ro = self.all_sim_states
 
-        if index == 0:
-            return np.sum(rewards)
+        if index < 0:
+            node.ro = self.all_sim_states
+            return np.sum(rewards) / abs(node.action)
         else:
-            return np.sum(rewards[:index])
+            node.ro = self.all_sim_states[:index]
+            return np.sum(rewards[:index]) / abs(node.action)
 
     def calculateDistance(self, current_pose):
         return math.sqrt(
