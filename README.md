@@ -7,18 +7,22 @@ for lidar simulations. Implemented to facilitate a Monte-Carlo Tree Search agent
 ## Depends
 
 ### ROS
-ROS melodic
-Ackermann Messeges
-LaserScan Messeges
-Pose Messges
 
-### Tensorflow
 
-Tensorflow 1.13, with cudaNN 7.3
+* ROS melodic
+* Ackermann Messeges
+* LaserScan Messeges
+* Pose Messges
+* Geometry Messages
+* RViz
 
 ### Other libs
 
-Clone range_libc and put the folder in this projects root.
+
+* [range_libc](https://github.com/felrock/range_libc)
+* Tensorflow 1.13, with cudaNN 7.3
+* Numpy
+
 
 ## Installing
 
@@ -49,10 +53,13 @@ roslaunch PyRacecarSimulator simulate.launch
 
 ### Simulation with MCTS
 
+Build the libraries, 
 
-Build racecar
-Build range_libc
-Build followthegap
+```
+bash racecar/compile.sh
+bash range_libc/pywrapper/compile_with_cuda.sh
+bash followthegap/compile.sh
+```
 
 
 To run the simulation as a ROS node run, 
