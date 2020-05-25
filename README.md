@@ -74,5 +74,14 @@ roslaunch PyRacecarSimulator mcts_driver.launch
 ```
 
 # TODO
-fix this readme
-seperate mcts stuff and racecar simulator stuff
+* Add multi-agent capabilities
+* Add support for incremental map updates
+* Try other roll-out policies
+
+# Acknowledgements
+Thanks to the code below we were able to create this project.
+
+
+* [mit-racecar](https://mit-racecar.github.io)
+* [range_libc](https://github.com/kctess5/range_libc)
+* [racecar_simulator](https://github.com/mlab-upenn/racecar_simulator)
